@@ -5,6 +5,10 @@
 
 name: Dart
 
+defaults:
+  run:
+    working-directory: api
+
 on:
   push:
     branches: [ "main" ]
