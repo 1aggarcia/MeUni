@@ -6,7 +6,6 @@ defaults:
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -22,8 +21,12 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
+          cache: 'gradle'
 
       - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
 
       - name: Install dependencies
         run: flutter pub get
