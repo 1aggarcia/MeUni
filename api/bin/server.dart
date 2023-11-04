@@ -5,6 +5,7 @@ import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import 'controllers/article_controller.dart';
+import 'controllers/event_controller.dart';
 
 Response _rootHandler(Request req) {
   return Response.ok('Hello, World!\n');
@@ -14,6 +15,7 @@ void main(List<String> args) async {
   // Configure routes.
   var router = Router()..get('/', _rootHandler);
   router = ArticleController().setUpRoutes(router, '/articles');
+  router = EventController().setUpRoutes(router, '/events');
 
   // Use any available host or container IP (usually `0.0.0.0`).
   final ip = InternetAddress.anyIPv4;
