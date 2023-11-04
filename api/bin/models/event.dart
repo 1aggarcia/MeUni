@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-Event eventFromJson(String str) {
+Event eventFromJson(String str, int eventId) {
   var decode = json.decode(str);
-  return Event.fromJson(decode);
+  return Event.fromJson(decode, eventId);
 }
 
 String eventToJson(Event data) => json.encode(data.toJson());
 
 List<Event> eventsFromJson(String str) =>
-    List<Event>.from(json.decode(str).map((x) => Event.fromJson(x)));
+    List<Event>.from(json.decode(str).map((x) => Event.fromJson(x, -1)));
 
-String articlesToJson(List<Event> data) =>
+String eventsToJson(List<Event> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Event {
@@ -36,8 +36,8 @@ class Event {
   final int hostId;
   final List<int> attendees;
 
-  factory Event.fromJson(Map<String, dynamic> json) => Event(
-        id: -1,
+  factory Event.fromJson(Map<String, dynamic> json, int eventId) => Event(
+        id: eventId,
         title: json['title'],
         desc: json['desc'],
         location: json['location'],

@@ -7,6 +7,7 @@ import '../models/event.dart';
 class EventController extends Controller {
   //* Private Properties
   final List<Event> _events = [];
+  int availableId = 0;
 
   //* Overriden Methods
   @override
@@ -22,7 +23,24 @@ class EventController extends Controller {
 
   // GET /
   Response getEventsHandler(Request request) {
-    return Response.ok(articlesToJson(_events));
+    return Response.ok(eventsToJson(_events));
+
+// Code to get specific event by Id, probably not needed
+    // String body = await request.readAsString();
+
+    // try {
+    //   Map<String, dynamic> decode= json.decode(body);
+    //   int eventId = decode['id'];
+    //   dynamic event = findEvent(eventId);
+    //   if (event is Event) {
+    //     return Response.ok(eventToJson(event));
+    //   } else {
+    //     return Response(400);
+    //   }
+    // } catch (e) {
+    //   print("Failed to get event");
+    //   return Response(400);
+    // }
   }
 
   // POST /
@@ -30,13 +48,32 @@ class EventController extends Controller {
     String body = await request.readAsString();
 
     try {
-      Event event = eventFromJson(body);
-      print(event.title);
+      Event event = eventFromJson(body, availableId);
       _events.add(event);
+      availableId++;
       return Response.ok(eventToJson(event));
     } catch (e) {
-      print('oh no');
       return Response(400);
     }
   }
 }
+
+// Helper function for get request by Id
+//   /// Return the event with given eventId, if it exists
+//   /// @param eventId of event
+//   /// @returns event if found, false otherwise
+//   dynamic findEvent(int eventId) {
+//     int i = 0;
+//     Event e = _events[i];
+//     // _events will be exausted or desired event found
+//     while (i < _events.length && e.id != eventId) {
+//       i++;
+//       e = _events[i];
+//     }
+
+//     if (e.id == eventId) {
+//       return e;
+//     } else {
+//       return false;
+//     }
+//   }
