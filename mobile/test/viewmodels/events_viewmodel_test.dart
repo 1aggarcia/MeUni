@@ -8,4 +8,10 @@ void main() {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
   });
+
+  group('incrementCounter -', () {
+    test('Helloworld Test', () {
+      expect(true, true);
+    });
+  });
 }
