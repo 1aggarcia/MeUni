@@ -16,7 +16,20 @@ class EventsView extends StackedView<EventsViewModel> {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Container(
         padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-        child: const Placeholder(),
+        child: viewModel.events.isEmpty
+            ? MaterialButton(
+                color: Colors.black,
+                onPressed: () async => await viewModel.getEventsAsync(),
+                child: const Text(
+                  'Get Events',
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            : ListView.builder(
+                itemCount: viewModel.events.length,
+                itemBuilder: (context, index) {
+                  return ListTile(title: Text(viewModel.events[index].title));
+                }),
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'package:meuni_mobile/repository/events_repo.dart';
+import 'package:meuni_mobile/repository/mock/mock_events_repo.dart';
 import 'package:meuni_mobile/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:meuni_mobile/ui/dialogs/info_alert/info_alert_dialog.dart';
 import 'package:meuni_mobile/ui/views/startup/startup_view.dart';
@@ -16,6 +18,7 @@ import 'package:meuni_mobile/ui/views/events/events_view.dart';
     LazySingleton(classType: BottomSheetService),
     LazySingleton(classType: DialogService),
     LazySingleton(classType: NavigationService),
+    LazySingleton(classType: EventsRepo, asType: MockEventsRepo)
     // @stacked-service
   ],
   bottomsheets: [
