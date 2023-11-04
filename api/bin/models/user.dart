@@ -21,7 +21,8 @@ class User {
     required this.lastName,
     required this.year,
     required this.pronouns,
-    required this.admin
+    required this.admin,
+    required this.id
   });
 
   final String firstName;
@@ -29,13 +30,15 @@ class User {
   final int year;
   final String pronouns;
   final bool admin;
+  final int id;
 
   factory User.fromJson(Map<String, dynamic> json, int userId) => User(
         firstName: json['firstName'],
         lastName: json['lastName'],
         year: json['year'],
         pronouns: json['pronouns'],
-        admin: json['admin']
+        admin: json['admin'],
+        id: id['id']
       );
 
   Map<String, dynamic> toJson() => {
@@ -43,6 +46,7 @@ class User {
         'lastName': lastName,
         'year': year,
         'pronouns' : pronouns,
-        'admin' : admin
+        'admin' : admin,
+        'id' : id
       };
 }
