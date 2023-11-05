@@ -6,6 +6,7 @@ import 'package:test/test.dart';
 void main() {
   final port = '8080';
   final host = 'http://localhost:$port';
+  final String mockEvents = '{"id":-3,"title":"Pizza","desc":"need ppl to chip in for pizza","location":"The crib","max":4,"startTime":"2023-11-04T03:04:15.537017Z","endTime":"2023-11-04T03:24:15.537017Z","hostId":1,"attendees":[1,2]},{"id":-2,"title":"Event 1","desc":"This is a sample description for this event","location":"UW CSE2 G21","max":3,"startTime":"2023-11-04T02:24:25.537017Z","endTime":"2023-11-07T03:24:15.537017Z","hostId":2,"attendees":[1,2]},{"id":-1,"title":"Another event","desc":"This time i really need people","location":"[Redacted]","max":2,"startTime":"2023-11-05T03:04:15.537017Z","endTime":"2023-11-05T03:24:15.537017Z","hostId":1,"attendees":[1]}';
   late Process p;
 
   setUp(() async {
@@ -122,7 +123,8 @@ void main() {
     );
     expect(response.statusCode, 200);
     expect(response.body,
-        '[{"id":0,'
+        '[$mockEvents,'
+        '{"id":0,'
         '"title":"Tennis",'
         '"desc":"At the IMA tennis court! Hang out with me!",'
         '"location":"IMA tennis court",'

@@ -2,24 +2,24 @@ import '../models/user.dart';
 
 class MockUsersRepo {
 
-  List<Event> getMockUsers() {
+  List<User> getMockUsers() {
     return mockUsers;
   }
 
-  final List<Event> mockUsers = [
+  final List<User> mockUsers = [
         User(
             firstName: 'John',
             lastName: 'Doe',
-            year: '2',
+            year: 2,
             pronouns: 'He/Him',
             admin: true,
-            id: 1),
+            id: -1),
         User(
             firstName: 'John',
             lastName: 'Stuart',
-            year: '3',
+            year: 3,
             pronouns: 'He/Him',
             admin: false,
-            id: 2)
+            id: -2)
       ];
 }

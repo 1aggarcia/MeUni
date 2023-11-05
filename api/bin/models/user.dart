@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-enum Year { freshman, sophmore, junior, senior }
-
 User userFromJson(String str, int userId) {
   var decode = json.decode(str);
   return User.fromJson(decode, userId);
@@ -17,36 +15,36 @@ String usersToJson(List<User> data) =>
 
 class User {
   User({
+    required this.id,
     required this.firstName,
     required this.lastName,
     required this.year,
     required this.pronouns,
-    required this.admin,
-    required this.id
+    required this.admin
   });
 
+  final int id;
   final String firstName;
   final String lastName;
   final int year;
   final String pronouns;
   final bool admin;
-  final int id;
 
   factory User.fromJson(Map<String, dynamic> json, int userId) => User(
+        id: json['id'],
         firstName: json['firstName'],
         lastName: json['lastName'],
         year: json['year'],
         pronouns: json['pronouns'],
         admin: json['admin'],
-        id: id['id']
       );
 
   Map<String, dynamic> toJson() => {
+        'id' : id,
         'firstName' : firstName,
         'lastName': lastName,
         'year': year,
         'pronouns' : pronouns,
         'admin' : admin,
-        'id' : id
       };
 }

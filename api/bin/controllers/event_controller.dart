@@ -3,10 +3,11 @@ import 'package:shelf/shelf.dart';
 
 import 'controller.dart';
 import '../models/event.dart';
+import 'mock_events.dart';
 
 class EventController extends Controller {
   //* Private Properties
-  final List<Event> _events = [];
+  final List<Event> _events = MockEventsRepo().getMockEvents();
   int availableId = 0;
 
   //* Overriden Methods
