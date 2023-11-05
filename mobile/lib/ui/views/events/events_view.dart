@@ -34,7 +34,8 @@ class EventsView extends StackedView<EventsViewModel> {
                       ),
                       MaterialButton(
                         color: Colors.black,
-                        onPressed: () async => await viewModel.getEventsAsync(),
+                        onPressed: () async =>
+                            await viewModel.goToCreateEventPageAsync(),
                         child: const Text(
                           'Add Event',
                           style: TextStyle(color: Colors.white),

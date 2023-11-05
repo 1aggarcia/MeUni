@@ -6,12 +6,14 @@ import 'package:meuni_mobile/ui/views/startup/startup_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:meuni_mobile/ui/views/events/events_view.dart';
+import 'package:meuni_mobile/ui/views/create_event/create_event_view.dart';
 // @stacked-import
 
 @StackedApp(
   routes: [
     MaterialRoute(page: StartupView),
     MaterialRoute(page: EventsView),
+    MaterialRoute(page: CreateEventView),
 // @stacked-route
   ],
   dependencies: [
