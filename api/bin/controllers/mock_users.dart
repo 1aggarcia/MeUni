@@ -8,18 +8,18 @@ class MockUsersRepo {
 
   final List<User> mockUsers = [
         User(
-            firstName: 'John',
-            lastName: 'Doe',
-            year: 2,
+            firstName: 'Fei',
+            lastName: 'Huang',
+            year: 4,
             pronouns: 'He/Him',
             admin: true,
-            id: -1),
+            id: 1),
         User(
             firstName: 'John',
             lastName: 'Stuart',
             year: 3,
             pronouns: 'He/Him',
             admin: false,
-            id: -2)
+            id: 2)
       ];
 }

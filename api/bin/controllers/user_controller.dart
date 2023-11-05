@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf/shelf.dart';
 
@@ -10,6 +7,7 @@ import 'mock_users.dart';
 
 class UserController extends Controller {
   //* Private Properties
+  // _users must be sorted in order of increasing id
   final List<User> _users = MockUsersRepo().getMockUsers();
 
   //* Overriden Methods
@@ -25,7 +23,6 @@ class UserController extends Controller {
   // GET /
   Response getUsersHandler(Request request) {
     Map<String, dynamic> params = request.url.queryParameters;
-    print(_users);
     
     try {
       int userId = int.parse(params['id']);
@@ -45,7 +42,6 @@ class UserController extends Controller {
   /// @param userId of user
   /// @returns user if found, false otherwise
   dynamic findUser(int userId) {
-    print(userId);
     int i = 0;
     User u = _users[i];
     // _users will be exausted or desired user found
@@ -59,5 +55,9 @@ class UserController extends Controller {
     } else {
       return false;
     }
+  }
+
+  List<User> getUsers() {
+    return _users;
   }
 }
