@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../widgets/event_card.dart';
 import '../../widgets/round_button.dart';
 import 'events_viewmodel.dart';
 
@@ -41,7 +42,7 @@ class EventsView extends StackedView<EventsViewModel> {
                       ),
                     ],
                   ),
-                  for (var event in viewModel.events) Text(event.title)
+                  for (var event in viewModel.events) EventCard(event: event)
                 ],
               )),
     );
