@@ -20,7 +20,7 @@ import 'package:meuni_mobile/ui/views/create_event/create_event_view.dart';
     LazySingleton(classType: BottomSheetService),
     LazySingleton(classType: DialogService),
     LazySingleton(classType: NavigationService),
-    LazySingleton(classType: EventsRepo, asType: MockEventsRepo)
+    LazySingleton(classType: MockEventsRepo, asType: EventsRepo)
     // @stacked-service
   ],
   bottomsheets: [

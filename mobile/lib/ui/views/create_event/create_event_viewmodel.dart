@@ -1,33 +1,60 @@
 import 'package:meuni_mobile/models/event.dart';
+import 'package:meuni_mobile/ui/views/create_event/create_event_view.form.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
 import '../../../repository/events_repo.dart';
 
-class CreateEventViewModel extends BaseViewModel {
+class CreateEventViewModel extends FormViewModel {
   //* Private Properties
   final _eventsRepo = locator<EventsRepo>();
 
   final _navigationService = locator<NavigationService>();
 
-  //* Public Methods
-  void addEventAsync(String eventName) async {
-    Event event = Event(
-        id: -1,
-        title: eventName,
-        desc: 'invalid',
-        location: 'invalid',
-        max: -1,
-        startTime: DateTime.now(),
-        endTime: DateTime.now(),
-        hostId: -1,
-        attendees: []);
+  //* Public Properties
+  bool isLoading = false;
 
-    await _eventsRepo.addEventAsync(event);
+  //* Public Methods
+  Future addEventAsync() async {
+    if (isFormValid && eventNameValue != null) {
+      Event event = Event(
+          id: -1,
+          title: eventNameValue ?? '',
+          desc: eventNameValue ?? '',
+          location: 'invalid',
+          max: -1,
+          startTime: DateTime.now(),
+          endTime: DateTime.now(),
+          hostId: -1,
+          attendees: []);
+
+      isLoading = true;
+      rebuildUi();
+
+      await _eventsRepo.addEventAsync(event);
+
+      isLoading = false;
+    }
+
+    goToPrevPage();
   }
 
   void goToPrevPage() {
     _navigationService.back();
+  }
+}
+
+class CreateEventValidators {
+  static String? validateEventName(String? value) {
+    if (value == null) {
+      return null;
+    }
+
+    if (value.length > 20) {
+      return 'Event Name too long';
+    }
+
+    return null;
   }
 }
