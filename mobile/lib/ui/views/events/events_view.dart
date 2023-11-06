@@ -11,41 +11,44 @@ class EventsView extends StackedView<EventsViewModel> {
   @override
   Widget builder(
       BuildContext context, EventsViewModel viewModel, Widget? child) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: viewModel.isLoading
-          ? const Text('Loading...')
-          : Container(
-              padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const RoundButton(
-                        label: 'Logout',
-                      ),
-                      MaterialButton(
-                        color: Colors.black,
-                        onPressed: () async => await viewModel.getEventsAsync(),
-                        child: const Text(
-                          'Get Events',
-                          style: TextStyle(color: Colors.white),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: viewModel.isLoading
+            ? const Text('Loading...')
+            : Container(
+                padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const RoundButton(
+                          label: 'Logout',
                         ),
-                      ),
-                      MaterialButton(
-                        color: Colors.black,
-                        onPressed: () async =>
-                            await viewModel.goToCreateEventPageAsync(),
-                        child: const Text(
-                          'Add Event',
-                          style: TextStyle(color: Colors.white),
+                        MaterialButton(
+                          color: Colors.black,
+                          onPressed: () async =>
+                              await viewModel.getEventsAsync(),
+                          child: const Text(
+                            'Get Events',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  for (var event in viewModel.events) EventCard(event: event)
-                ],
-              )),
+                        MaterialButton(
+                          color: Colors.black,
+                          onPressed: () async =>
+                              await viewModel.goToCreateEventPageAsync(),
+                          child: const Text(
+                            'Add Event',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                    for (var event in viewModel.events) EventCard(event: event)
+                  ],
+                )),
+      ),
     );
   }
 
