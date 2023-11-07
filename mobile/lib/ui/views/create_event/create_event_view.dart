@@ -9,6 +9,8 @@ import 'create_event_viewmodel.dart';
 @FormView(fields: [
   FormTextField(
       name: 'eventName', validator: CreateEventValidators.validateEventName),
+  FormTextField(name: 'eventDescription', validator: CreateEventValidators.validateEventDescription),
+  FormTextField(name: 'eventLocation', validator: CreateEventValidators.validateEventLocation),
 ])
 class CreateEventView extends StackedView<CreateEventViewModel>
     with $CreateEventView {
@@ -43,6 +45,44 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                         verticalSpaceTiny,
                         Text(
                           viewModel.eventNameValidationMessage!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                      verticalSpaceSmall,
+                      const Text(
+                        'Event Description',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w700),
+                      ),
+                      verticalSpaceSmall,
+                      TextFormField(controller: eventDescriptionController),
+                      if (viewModel.hasEventDescriptionValidationMessage) ...[
+                        verticalSpaceTiny,
+                        Text(
+                          viewModel.eventDescriptionValidationMessage!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                      verticalSpaceSmall,
+                      const Text(
+                        'Event Location',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w700),
+                      ),
+                      verticalSpaceSmall,
+                      TextFormField(controller: eventLocationController),
+                      if (viewModel.hasEventLocationValidationMessage) ...[
+                        verticalSpaceTiny,
+                        Text(
+                          viewModel.eventLocationValidationMessage!,
                           style: const TextStyle(
                             color: Colors.red,
                             fontSize: 12,

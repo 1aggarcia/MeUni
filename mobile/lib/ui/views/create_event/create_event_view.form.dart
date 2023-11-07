@@ -13,6 +13,8 @@ import 'package:stacked/stacked.dart';
 const bool _autoTextFieldValidation = true;
 
 const String EventNameValueKey = 'eventName';
+const String EventDescriptionValueKey = 'eventDescription';
+const String EventLocationValueKey = 'eventLocation';
 
 final Map<String, TextEditingController>
     _CreateEventViewTextEditingControllers = {};
@@ -22,13 +24,23 @@ final Map<String, FocusNode> _CreateEventViewFocusNodes = {};
 final Map<String, String? Function(String?)?> _CreateEventViewTextValidations =
     {
   EventNameValueKey: CreateEventValidators.validateEventName,
+  EventDescriptionValueKey: CreateEventValidators.validateEventDescription,
+  EventLocationValueKey: CreateEventValidators.validateEventLocation,
 };
 
 mixin $CreateEventView {
   TextEditingController get eventNameController =>
       _getFormTextEditingController(EventNameValueKey);
+  TextEditingController get eventDescriptionController =>
+      _getFormTextEditingController(EventDescriptionValueKey);
+  TextEditingController get eventLocationController =>
+      _getFormTextEditingController(EventLocationValueKey);
 
   FocusNode get eventNameFocusNode => _getFormFocusNode(EventNameValueKey);
+  FocusNode get eventDescriptionFocusNode =>
+      _getFormFocusNode(EventDescriptionValueKey);
+  FocusNode get eventLocationFocusNode =>
+      _getFormFocusNode(EventLocationValueKey);
 
   TextEditingController _getFormTextEditingController(
     String key, {
@@ -55,6 +67,8 @@ mixin $CreateEventView {
   /// with the latest textController values
   void syncFormWithViewModel(FormStateHelper model) {
     eventNameController.addListener(() => _updateFormData(model));
+    eventDescriptionController.addListener(() => _updateFormData(model));
+    eventLocationController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -67,6 +81,8 @@ mixin $CreateEventView {
   )
   void listenToFormUpdated(FormViewModel model) {
     eventNameController.addListener(() => _updateFormData(model));
+    eventDescriptionController.addListener(() => _updateFormData(model));
+    eventLocationController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -77,6 +93,8 @@ mixin $CreateEventView {
       model.formValueMap
         ..addAll({
           EventNameValueKey: eventNameController.text,
+          EventDescriptionValueKey: eventDescriptionController.text,
+          EventLocationValueKey: eventLocationController.text,
         }),
     );
 
@@ -119,6 +137,10 @@ extension ValueProperties on FormStateHelper {
   }
 
   String? get eventNameValue => this.formValueMap[EventNameValueKey] as String?;
+  String? get eventDescriptionValue =>
+      this.formValueMap[EventDescriptionValueKey] as String?;
+  String? get eventLocationValue =>
+      this.formValueMap[EventLocationValueKey] as String?;
 
   set eventNameValue(String? value) {
     this.setData(
@@ -131,30 +153,78 @@ extension ValueProperties on FormStateHelper {
     }
   }
 
+  set eventDescriptionValue(String? value) {
+    this.setData(
+      this.formValueMap..addAll({EventDescriptionValueKey: value}),
+    );
+
+    if (_CreateEventViewTextEditingControllers.containsKey(
+        EventDescriptionValueKey)) {
+      _CreateEventViewTextEditingControllers[EventDescriptionValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set eventLocationValue(String? value) {
+    this.setData(
+      this.formValueMap..addAll({EventLocationValueKey: value}),
+    );
+
+    if (_CreateEventViewTextEditingControllers.containsKey(
+        EventLocationValueKey)) {
+      _CreateEventViewTextEditingControllers[EventLocationValueKey]?.text =
+          value ?? '';
+    }
+  }
+
   bool get hasEventName =>
       this.formValueMap.containsKey(EventNameValueKey) &&
       (eventNameValue?.isNotEmpty ?? false);
+  bool get hasEventDescription =>
+      this.formValueMap.containsKey(EventDescriptionValueKey) &&
+      (eventDescriptionValue?.isNotEmpty ?? false);
+  bool get hasEventLocation =>
+      this.formValueMap.containsKey(EventLocationValueKey) &&
+      (eventLocationValue?.isNotEmpty ?? false);
 
   bool get hasEventNameValidationMessage =>
       this.fieldsValidationMessages[EventNameValueKey]?.isNotEmpty ?? false;
+  bool get hasEventDescriptionValidationMessage =>
+      this.fieldsValidationMessages[EventDescriptionValueKey]?.isNotEmpty ??
+      false;
+  bool get hasEventLocationValidationMessage =>
+      this.fieldsValidationMessages[EventLocationValueKey]?.isNotEmpty ?? false;
 
   String? get eventNameValidationMessage =>
       this.fieldsValidationMessages[EventNameValueKey];
+  String? get eventDescriptionValidationMessage =>
+      this.fieldsValidationMessages[EventDescriptionValueKey];
+  String? get eventLocationValidationMessage =>
+      this.fieldsValidationMessages[EventLocationValueKey];
 }
 
 extension Methods on FormStateHelper {
   setEventNameValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[EventNameValueKey] = validationMessage;
+  setEventDescriptionValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[EventDescriptionValueKey] =
+          validationMessage;
+  setEventLocationValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[EventLocationValueKey] = validationMessage;
 
   /// Clears text input fields on the Form
   void clearForm() {
     eventNameValue = '';
+    eventDescriptionValue = '';
+    eventLocationValue = '';
   }
 
   /// Validates text input fields on the Form
   void validateForm() {
     this.setValidationMessages({
       EventNameValueKey: getValidationMessage(EventNameValueKey),
+      EventDescriptionValueKey: getValidationMessage(EventDescriptionValueKey),
+      EventLocationValueKey: getValidationMessage(EventLocationValueKey),
     });
   }
 }
@@ -175,4 +245,6 @@ String? getValidationMessage(String key) {
 void updateValidationData(FormStateHelper model) =>
     model.setValidationMessages({
       EventNameValueKey: getValidationMessage(EventNameValueKey),
+      EventDescriptionValueKey: getValidationMessage(EventDescriptionValueKey),
+      EventLocationValueKey: getValidationMessage(EventLocationValueKey),
     });

@@ -21,8 +21,8 @@ class CreateEventViewModel extends FormViewModel {
       Event event = Event(
           id: -1,
           title: eventNameValue ?? '',
-          desc: eventNameValue ?? '',
-          location: 'invalid',
+          desc: eventDescriptionValue ?? '',
+          location: eventLocationValue ?? '',
           max: -1,
           startTime: DateTime.now(),
           endTime: DateTime.now(),
@@ -53,6 +53,30 @@ class CreateEventValidators {
 
     if (value.length > 20) {
       return 'Event Name too long';
+    }
+
+    return null;
+  }
+
+  static String? validateEventDescription(String? value) {
+    if (value == null) {
+      return null;
+    }
+
+    if (value.isEmpty) {
+      return 'Event Description Cannot be Empty';
+    }
+
+    return null;
+  }
+
+  static String? validateEventLocation(String? value) {
+    if (value == null) {
+      return null;
+    }
+
+    if (value.isEmpty) {
+      return 'Event Location Cannot be Empty';
     }
 
     return null;
