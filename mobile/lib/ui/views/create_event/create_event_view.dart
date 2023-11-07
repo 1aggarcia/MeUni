@@ -11,6 +11,10 @@ import 'create_event_viewmodel.dart';
       name: 'eventName', validator: CreateEventValidators.validateEventName),
   FormTextField(name: 'eventDescription', validator: CreateEventValidators.validateEventDescription),
   FormTextField(name: 'eventLocation', validator: CreateEventValidators.validateEventLocation),
+  FormTextField(name: 'eventDate', validator: CreateEventValidators.validateEventDate),
+  FormTextField(name: 'eventStartTime', validator: CreateEventValidators.validateEventStartTime),
+  FormTextField(name: 'eventEndTime', validator: CreateEventValidators.validateEventEndTime),
+
 ])
 class CreateEventView extends StackedView<CreateEventViewModel>
     with $CreateEventView {
@@ -40,7 +44,12 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                             fontSize: 18, fontWeight: FontWeight.w700),
                       ),
                       verticalSpaceSmall,
-                      TextFormField(controller: eventNameController),
+                      TextFormField(
+                        controller: eventNameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Name',
+                        ),
+                      ),
                       if (viewModel.hasEventNameValidationMessage) ...[
                         verticalSpaceTiny,
                         Text(
@@ -59,7 +68,12 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                             fontSize: 18, fontWeight: FontWeight.w700),
                       ),
                       verticalSpaceSmall,
-                      TextFormField(controller: eventDescriptionController),
+                      TextFormField(
+                        controller: eventDescriptionController,
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                        ),
+                      ),
                       if (viewModel.hasEventDescriptionValidationMessage) ...[
                         verticalSpaceTiny,
                         Text(
@@ -78,11 +92,119 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                             fontSize: 18, fontWeight: FontWeight.w700),
                       ),
                       verticalSpaceSmall,
-                      TextFormField(controller: eventLocationController),
+                      TextFormField(
+                          controller: eventLocationController,
+                          decoration: const InputDecoration(
+                            labelText: 'Location',
+                          ),
+                      ),
                       if (viewModel.hasEventLocationValidationMessage) ...[
                         verticalSpaceTiny,
                         Text(
                           viewModel.eventLocationValidationMessage!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                      verticalSpaceSmall,
+                      const Text(
+                        'Event Date (yyyy-mm-dd)',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w700),
+                      ),
+                      verticalSpaceSmall,
+                      TextFormField(
+                        controller: eventDateController,  // add this line.
+                        decoration: const InputDecoration(
+                          labelText: 'Date',
+                        ),
+                        onTap: () async {
+                          DateTime? picked = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2016),
+                              lastDate: DateTime(2019)
+                          );
+                          if (picked != null) {
+                            eventDateController.text = picked.toString();
+                          }
+                        },
+                      ),
+                      if (viewModel.hasEventDateValidationMessage) ...[
+                        verticalSpaceTiny,
+                        Text(
+                          viewModel.eventDateValidationMessage!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                      verticalSpaceSmall,
+                      const Text(
+                        'Event Start Time',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w700),
+                      ),
+                      verticalSpaceSmall,
+                      TextFormField(
+                        controller: eventStartTimeController,  // add this line.
+                        decoration: const InputDecoration(
+                          labelText: 'Start Time',
+                        ),
+                        onTap: () async {
+                          TimeOfDay time = TimeOfDay.now();
+                          FocusScope.of(context).requestFocus(new FocusNode());
+
+                          TimeOfDay? picked =
+                          await showTimePicker(context: context, initialTime: time);
+                          if (picked != null && picked != time) {
+                            eventStartTimeController.text = picked.format(context);  // add this line.
+                          }
+                        },
+                      ),
+                      if (viewModel.hasEventStartTimeValidationMessage) ...[
+                        verticalSpaceTiny,
+                        Text(
+                          viewModel.eventStartTimeValidationMessage!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                      verticalSpaceSmall,
+                      const Text(
+                        'Event End Time',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w700),
+                      ),
+                      verticalSpaceSmall,
+                      TextFormField(
+                        controller: eventEndTimeController,  // add this line.
+                        decoration: const InputDecoration(
+                          labelText: 'End Time',
+                        ),
+                        onTap: () async {
+                          TimeOfDay time = TimeOfDay.now();
+                          FocusScope.of(context).requestFocus(new FocusNode());
+
+                          TimeOfDay? picked =
+                          await showTimePicker(context: context, initialTime: time);
+                          if (picked != null && picked != time) {
+                            eventEndTimeController.text = picked.format(context);  // add this line.
+                          }
+                        },
+                      ),
+                      if (viewModel.hasEventEndTimeValidationMessage) ...[
+                        verticalSpaceTiny,
+                        Text(
+                          viewModel.eventEndTimeValidationMessage!,
                           style: const TextStyle(
                             color: Colors.red,
                             fontSize: 12,
