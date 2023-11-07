@@ -36,6 +36,7 @@ How to Build, Test, and Run this System Application (Instructions are for Setup 
 - Clone this repo and run `flutter pub get` within this repository directory
 - Set Flutter SDK Path and Dart SDK Path in IDE Language Settings
 - Create a configuration that points to `MeUni/mobile/lib/main.dart` to run application
-- Create an emulator to run application on. We recommend Pixel 2 API 29.
-- Run Application (which can be done via the play button), or via the command `flutter run` within this repository directory
-- Application testing can be done via the command `flutter test` which is to be run within this repository directory
+- Create an emulator to run application on. We recommend Pixel 2 API 29
+- Run the mobile application (which can be done via the play button), or via the command `flutter run` within the `MeUni/mobile` directory
+- Run the server application via the command `flutter run` within the `MeUni/api` directory
+- Application testing can be done via the command `flutter test` which is to be run either within the `MeUni/mobile` or `MeUni/api` directories to run the corresponding mobile or api tests
