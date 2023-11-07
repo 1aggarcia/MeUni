@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meuni_mobile/ui/common/ui_helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:meuni_mobile/ui/common/app_colors.dart';
 import '../../widgets/event_card.dart';
@@ -20,10 +21,17 @@ class EventsView extends StackedView<EventsViewModel> {
                 padding: const EdgeInsets.only(left: 25.0, right: 25.0),
                 child: Column(
                   children: [
+                    Text('Hi! ${viewModel.userName}'),
+                    verticalSpaceLarge,
                     Row(
                       children: [
-                        RoundButton(
-                          label: 'Logout',
+                        MaterialButton(
+                          color: Colors.black,
+                          onPressed: () async => await viewModel.logoutAsync(),
+                          child: const Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                         MaterialButton(
                           color: Colors.black,
