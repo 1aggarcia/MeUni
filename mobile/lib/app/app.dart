@@ -11,6 +11,7 @@ import 'package:meuni_mobile/ui/views/login/login_view.dart';
 
 import '../repository/mock/mock_users_repo.dart';
 import '../repository/users_repo.dart';
+import 'package:meuni_mobile/services/api_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -26,8 +27,9 @@ import '../repository/users_repo.dart';
     LazySingleton(classType: DialogService),
     LazySingleton(classType: NavigationService),
     LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
-    LazySingleton(classType: MockUsersRepo, asType: UsersRepo)
-    // @stacked-service
+    LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
+    LazySingleton(classType: ApiService),
+// @stacked-service
   ],
   bottomsheets: [
     StackedBottomsheet(classType: NoticeSheet),
