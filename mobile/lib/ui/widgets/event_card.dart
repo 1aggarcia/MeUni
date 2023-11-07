@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/event.dart';
 
@@ -12,10 +13,14 @@ class EventCard extends StatelessWidget {
   //* Overriden Methods
   @override
   Widget build(BuildContext context) {
+
+    String startDate = DateFormat.MMMEd().format(event.startTime);
+    String startTime = DateFormat.jm().format(event.startTime);
+    String endTime = DateFormat.jm().format(event.endTime);
     return Column(
       children: [
         const SizedBox(
-          height: 20,
+          height: 60,
         ),
         Container(
             decoration: ShapeDecoration(
@@ -46,7 +51,7 @@ class EventCard extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
                   child: Text(
-                    'Time: ${event.startTime} - ${event.endTime}',
+                    'Time: $startDate @ $startTime - $endTime',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.black,
