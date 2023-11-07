@@ -53,7 +53,10 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
               ),
               verticalSpaceSmall,
-              TextFormField(controller: passwordController),
+              TextFormField(controller: passwordController,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false),
               if (viewModel.hasPasswordValidationMessage) ...[
                 verticalSpaceTiny,
                 Text(
@@ -64,8 +67,8 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+                verticalSpaceSmall,
               ],
-              verticalSpaceSmall,
               MaterialButton(
                 color: Colors.black,
                 onPressed: () async => await viewModel.loginUser(),
