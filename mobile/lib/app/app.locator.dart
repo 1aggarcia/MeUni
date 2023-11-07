@@ -13,6 +13,8 @@ import 'package:stacked_shared/stacked_shared.dart';
 
 import '../repository/events_repo.dart';
 import '../repository/mock/mock_events_repo.dart';
+import '../repository/mock/mock_users_repo.dart';
+import '../repository/users_repo.dart';
 
 final locator = StackedLocator.instance;
 
@@ -29,4 +31,5 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton<EventsRepo>(() => MockEventsRepo());
+  locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
 }

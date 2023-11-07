@@ -8,6 +8,9 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:meuni_mobile/ui/views/events/events_view.dart';
 import 'package:meuni_mobile/ui/views/create_event/create_event_view.dart';
 import 'package:meuni_mobile/ui/views/login/login_view.dart';
+
+import '../repository/mock/mock_users_repo.dart';
+import '../repository/users_repo.dart';
 // @stacked-import
 
 @StackedApp(
@@ -22,7 +25,8 @@ import 'package:meuni_mobile/ui/views/login/login_view.dart';
     LazySingleton(classType: BottomSheetService),
     LazySingleton(classType: DialogService),
     LazySingleton(classType: NavigationService),
-    LazySingleton(classType: MockEventsRepo, asType: EventsRepo)
+    LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
+    LazySingleton(classType: MockUsersRepo, asType: UsersRepo)
     // @stacked-service
   ],
   bottomsheets: [
