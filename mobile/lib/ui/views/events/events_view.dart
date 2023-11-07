@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-
+import 'package:meuni_mobile/ui/common/app_colors.dart';
 import '../../widgets/event_card.dart';
 import '../../widgets/round_button.dart';
 import 'events_viewmodel.dart';
@@ -13,7 +13,7 @@ class EventsView extends StackedView<EventsViewModel> {
       BuildContext context, EventsViewModel viewModel, Widget? child) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: kcBackgroundColor,
         body: viewModel.isLoading
             ? const Text('Loading...')
             : Container(
@@ -22,7 +22,7 @@ class EventsView extends StackedView<EventsViewModel> {
                   children: [
                     Row(
                       children: [
-                        const RoundButton(
+                        RoundButton(
                           label: 'Logout',
                         ),
                         MaterialButton(

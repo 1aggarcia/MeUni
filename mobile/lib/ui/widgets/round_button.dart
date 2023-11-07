@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class RoundButton extends StatelessWidget {
+class RoundButton extends MaterialButton {
   //* Public Properties
   final String label;
+  final VoidCallback? onPressed;
 
   //* Constructors
-  const RoundButton({Key? key, required this.label}) : super(key: key);
+  RoundButton({required this.label, this.onPressed}) : super(onPressed: onPressed);
 
   //* Overriden Methods
   @override
