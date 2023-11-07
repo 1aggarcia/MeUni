@@ -158,7 +158,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                         ),
                         onTap: () async {
                           TimeOfDay time = TimeOfDay.now();
-                          FocusScope.of(context).requestFocus(new FocusNode());
+                          FocusScope.of(context).requestFocus(FocusNode());
 
                           TimeOfDay? picked =
                           await showTimePicker(context: context, initialTime: time);
@@ -192,7 +192,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                         ),
                         onTap: () async {
                           TimeOfDay time = TimeOfDay.now();
-                          FocusScope.of(context).requestFocus(new FocusNode());
+                          FocusScope.of(context).requestFocus(FocusNode());
 
                           TimeOfDay? picked =
                           await showTimePicker(context: context, initialTime: time);
