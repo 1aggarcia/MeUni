@@ -35,9 +35,9 @@ class CreateEventViewModel extends FormViewModel {
       await _eventsRepo.addEventAsync(event);
 
       isLoading = false;
+      goToPrevPage();
     }
 
-    goToPrevPage();
   }
 
   void goToPrevPage() {

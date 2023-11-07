@@ -63,7 +63,7 @@ class EventCard extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
                   child: Text(
-                    'Where: ${event.location}',
+                    'Location: ${event.location}',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.black,
