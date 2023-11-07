@@ -20,6 +20,20 @@ class MockUsersRepo {
             year: 3,
             pronouns: 'He/Him',
             admin: false,
-            id: 2)
+            id: 2),
+        User(
+            firstName: 'Hannah',
+            lastName: 'Brown',
+            year: 1,
+            pronouns: 'She/Her',
+            admin: false,
+            id: 3),
+        User(
+            firstName: 'Ronald',
+            lastName: 'McDonald',
+            year: 2,
+            pronouns: 'He/Him',
+            admin: false,
+            id: 4)
       ];
 }

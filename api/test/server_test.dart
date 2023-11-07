@@ -65,7 +65,7 @@ void articleRouteTests(String host) {
 }
 
 void eventRouteTests(String host) {
-  final String mockEvents = '{"id":-3,"title":"Pizza","desc":"need ppl to chip in for pizza","location":"The crib","max":4,"startTime":"2023-11-04T03:04:15.537017Z","endTime":"2023-11-04T03:24:15.537017Z","hostId":1,"attendees":[1,2]},{"id":-2,"title":"Event 1","desc":"This is a sample description for this event","location":"UW CSE2 G21","max":3,"startTime":"2023-11-04T02:24:25.537017Z","endTime":"2023-11-07T03:24:15.537017Z","hostId":2,"attendees":[1,2]},{"id":-1,"title":"Another event","desc":"This time i really need people","location":"[Redacted]","max":2,"startTime":"2023-11-05T03:04:15.537017Z","endTime":"2023-11-05T03:24:15.537017Z","hostId":1,"attendees":[1]}';
+  final String mockEvents = '{"id":-3,"title":"Pizza","desc":"need ppl to chip in for pizza","location":"The crib","max":4,"startTime":"2023-11-04T03:04:15.537017Z","endTime":"2023-11-04T03:24:15.537017Z","hostId":1,"hostName":"Fei","attendees":[2,3],"attendeeNames":["John","Hannah"]},{"id":-2,"title":"Event 1","desc":"This is a sample description for this event","location":"UW CSE2 G21","max":3,"startTime":"2023-11-04T02:24:25.537017Z","endTime":"2023-11-07T03:24:15.537017Z","hostId":2,"hostName":"John","attendees":[1,3],"attendeeNames":["Fei","Hannah"]},{"id":-1,"title":"Another event","desc":"This time i really need people","location":"[Redacted]","max":2,"startTime":"2023-11-05T03:04:15.537017Z","endTime":"2023-11-05T03:24:15.537017Z","hostId":3,"hostName":"Hannah","attendees":[1],"attendeeNames":["Fei"]}';
 
   test('POST events', () async {
     final response = await post(
@@ -77,7 +77,7 @@ void eventRouteTests(String host) {
         '"startTime":"2023-11-04T03:04:15.537017Z",'
         '"endTime":"2023-11-04T03:24:15.537017Z",'
         '"hostId":1,'
-        '"attendees":[1,2]}',
+        '"attendees":[]}',
     );
     expect(response.statusCode, 200);
     expect(response.body,
@@ -89,7 +89,9 @@ void eventRouteTests(String host) {
         '"startTime":"2023-11-04T03:04:15.537017Z",'
         '"endTime":"2023-11-04T03:24:15.537017Z",'
         '"hostId":1,'
-        '"attendees":[1,2]}');
+        '"hostName":"Fei",'
+        '"attendees":[],'
+        '"attendeeNames":[]}');
   });
 
   test('POST events with no body', () async {
@@ -125,7 +127,7 @@ void eventRouteTests(String host) {
         '"startTime":"2024-01-04T15:14:15.537017Z",'
         '"endTime":"2023-11-04T16:14:15.567017Z",'
         '"hostId":2,'
-        '"attendees":[3]}',
+        '"attendees":[]}',
     );
     final response = await get(
       Uri.parse('$host/events/get'),
@@ -141,7 +143,9 @@ void eventRouteTests(String host) {
         '"startTime":"2024-01-04T15:14:15.537017Z",'
         '"endTime":"2023-11-04T16:14:15.567017Z",'
         '"hostId":2,'
-        '"attendees":[3]}]');
+        '"hostName":"John",'
+        '"attendees":[],'
+        '"attendeeNames":[]}]');
   });
 
   test('GET events with id param', () async {
@@ -154,7 +158,7 @@ void eventRouteTests(String host) {
         '"startTime":"2024-01-04T15:14:15.537017Z",'
         '"endTime":"2023-11-04T16:14:15.567017Z",'
         '"hostId":2,'
-        '"attendees":[3]}',
+        '"attendees":[]}',
     );
     final response = await get(
       Uri.parse('$host/events/get?id=0'),
@@ -169,7 +173,9 @@ void eventRouteTests(String host) {
         '"startTime":"2024-01-04T15:14:15.537017Z",'
         '"endTime":"2023-11-04T16:14:15.567017Z",'
         '"hostId":2,'
-        '"attendees":[3]}');
+        '"hostName":"John",'
+        '"attendees":[],'
+        '"attendeeNames":[]}');
   });
 
   test('GET events with bad id', () async {
