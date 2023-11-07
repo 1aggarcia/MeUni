@@ -12,6 +12,7 @@ class Event {
   final DateTime endTime;
 
   final int hostId;
+  final String hostName;
   final List<int> attendees;
 
   //* Constructors
@@ -24,5 +25,6 @@ class Event {
       required this.startTime,
       required this.endTime,
       required this.hostId,
+      required this.hostName,
       required this.attendees});
 }

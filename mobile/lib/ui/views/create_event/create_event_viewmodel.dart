@@ -27,6 +27,7 @@ class CreateEventViewModel extends FormViewModel {
           startTime: DateTime.now(),
           endTime: DateTime.now(),
           hostId: -1,
+          hostName: "Ronals",
           attendees: []);
 
       isLoading = true;
