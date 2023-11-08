@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:meuni_mobile/models/event.dart';
-import 'package:meuni_mobile/ui/views/create_event/create_event_view.form.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../models/event.dart';
 import '../../../repository/events_repo.dart';
+import './create_event_view.form.dart';
 
 class CreateEventViewModel extends FormViewModel {
   //* Private Properties
@@ -17,34 +16,33 @@ class CreateEventViewModel extends FormViewModel {
   //* Public Properties
   bool isLoading = false;
 
-  TimeOfDay fromString(String time) {
-    int hh = 0;
-    if (time.endsWith('PM')) hh = 12;
-    time = time.split(' ')[0];
-    return TimeOfDay(
-      hour: hh + int.parse(time.split(":")[0]) % 24, // in case of a bad time format entered manually by the user
-      minute: int.parse(time.split(":")[1]) % 60,
-    );
-  }
-
   //* Public Methods
   Future addEventAsync() async {
-    if (isFormValid && eventNameValue != null) {
+    if (isFormValid) {
       DateTime dateTime = DateTime.parse(eventDateValue!);
-      TimeOfDay startTime = fromString(eventStartTimeValue!);
-      TimeOfDay endTime = fromString(eventEndTimeValue!);
-
+      TimeOfDay startTime = _fromString(eventStartTimeValue!);
+      TimeOfDay endTime = _fromString(eventEndTimeValue!);
 
       Event event = Event(
           id: -1,
-          title: eventNameValue ?? '',
-          desc: eventDescriptionValue ?? '',
-          location: eventLocationValue ?? '',
+          title: eventNameValue!,
+          desc: eventDescriptionValue!,
+          location: eventLocationValue!,
           max: -1,
-          startTime: DateTime(dateTime.year, dateTime.month, dateTime.day,
-              startTime.hour, startTime.minute),
-          endTime: DateTime(dateTime.year, dateTime.month, dateTime.day,
-              endTime.hour, endTime.minute),
+          startTime: DateTime(
+            dateTime.year,
+            dateTime.month,
+            dateTime.day,
+            startTime.hour,
+            startTime.minute,
+          ),
+          endTime: DateTime(
+            dateTime.year,
+            dateTime.month,
+            dateTime.day,
+            endTime.hour,
+            endTime.minute,
+          ),
           hostId: -1,
           hostName: "Ronals",
           attendees: []);
@@ -57,85 +55,55 @@ class CreateEventViewModel extends FormViewModel {
       isLoading = false;
       goToPrevPage();
     }
-
   }
 
-  void goToPrevPage() {
-    _navigationService.back();
+  void goToPrevPage() => _navigationService.back();
+
+  //* Private Methods
+  TimeOfDay _fromString(String time) {
+    int hh = 0;
+    if (time.endsWith('PM')) hh = 12;
+
+    time = time.split(' ')[0];
+
+    return TimeOfDay(
+      // in case of a bad time format entered manually by the user
+      hour: hh + int.parse(time.split(":")[0]) % 24,
+      minute: int.parse(time.split(":")[1]) % 60,
+    );
   }
 }
 
 class CreateEventValidators {
-  static String? validateEventName(String? value) {
-    if (value == null) {
-      return null;
-    }
+  //* Public Methods
+  static String? validateEventName(String? value) =>
+      _validateNotEmpty(value, 'Event Name');
 
-    if (value.length > 20) {
-      return 'Event Name too long';
-    }
+  static String? validateEventDescription(String? value) =>
+      _validateNotEmpty(value, 'Event Description');
 
-    return null;
-  }
+  static String? validateEventLocation(String? value) =>
+      _validateNotEmpty(value, 'Event Location');
 
-  static String? validateEventDescription(String? value) {
-    if (value == null) {
-      return null;
-    }
+  static String? validateEventStartTime(String? value) =>
+      _validateNotEmpty(value, 'Event Start Time');
 
-    if (value.isEmpty) {
-      return 'Event Description Cannot be Empty';
-    }
+  static String? validateEventEndTime(String? value) =>
+      _validateNotEmpty(value, 'Event End Time');
 
-    return null;
-  }
+  static String? validateEventDate(String? value) =>
+      _validateNotEmpty(value, 'Event Date');
 
-  static String? validateEventLocation(String? value) {
-    if (value == null) {
-      return null;
-    }
-
-    if (value.isEmpty) {
-      return 'Event Location Cannot be Empty';
-    }
-
-    return null;
-  }
-
-  static String? validateEventStartTime(String? value) {
+  //* Private Methods
+  static String? _validateNotEmpty(String? value, String fieldName) {
     if (value == null) {
       return null;
     }
 
     if (value.isEmpty) {
-      return 'Event Start Time Cannot be Empty';
+      return '$fieldName Cannot be Empty';
     }
 
     return null;
   }
-
-  static String? validateEventEndTime(String? value) {
-    if (value == null) {
-      return null;
-    }
-
-    if (value.isEmpty) {
-      return 'Event End Time Cannot be Empty';
-    }
-
-    return null;
-  }
-
-  static String? validateEventDate(String? value) {
-    if (value == null) {
-      return null;
-    }
-
-    if (value.isEmpty) {
-      return 'Event Date Cannot be Empty';
-    }
-
-    return null;
-  }
-
 }

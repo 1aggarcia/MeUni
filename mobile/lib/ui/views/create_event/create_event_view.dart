@@ -73,8 +73,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                         controller: eventNameController,
                         hasValidationMessage:
                             viewModel.hasEventNameValidationMessage,
-                        validationMessage:
-                            viewModel.eventDateValidationMessage!,
+                        validationMessage: viewModel.eventNameValidationMessage,
                       ),
 
                       verticalSpaceSmall,
@@ -89,7 +88,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                         hasValidationMessage:
                             viewModel.hasEventDescriptionValidationMessage,
                         validationMessage:
-                            viewModel.eventDescriptionValidationMessage!,
+                            viewModel.eventDescriptionValidationMessage,
                       ),
 
                       verticalSpaceSmall,
@@ -104,7 +103,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                         hasValidationMessage:
                             viewModel.hasEventLocationValidationMessage,
                         validationMessage:
-                            viewModel.eventLocationValidationMessage!,
+                            viewModel.eventLocationValidationMessage,
                       ),
 
                       verticalSpaceSmall,
@@ -116,16 +115,18 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                       ),
                       verticalSpaceSmall,
                       TextFormField(
-                        controller: eventDateController, // add this line.
+                        controller: eventDateController,
                         decoration: const InputDecoration(
                           labelText: 'Date',
                         ),
                         onTap: () async {
                           DateTime? picked = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2016),
-                              lastDate: DateTime(2019));
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 365)),
+                          );
                           if (picked != null) {
                             eventDateController.text = picked.toString();
                           }
@@ -148,7 +149,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                       ),
                       verticalSpaceSmall,
                       TextFormField(
-                        controller: eventStartTimeController, // add this line.
+                        controller: eventStartTimeController,
                         decoration: const InputDecoration(
                           labelText: 'Start Time',
                         ),
@@ -157,10 +158,13 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                           FocusScope.of(context).requestFocus(FocusNode());
 
                           TimeOfDay? picked = await showTimePicker(
-                              context: context, initialTime: time);
+                            context: context,
+                            initialTime: time,
+                          );
                           if (picked != null && picked != time) {
                             eventStartTimeController.text =
-                                picked.format(context); // add this line.
+                                // ignore: use_build_context_synchronously
+                                picked.format(context);
                           }
                         },
                       ),
@@ -181,7 +185,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                       ),
                       verticalSpaceSmall,
                       TextFormField(
-                        controller: eventEndTimeController, // add this line.
+                        controller: eventEndTimeController,
                         decoration: const InputDecoration(
                           labelText: 'End Time',
                         ),
@@ -190,10 +194,13 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                           FocusScope.of(context).requestFocus(FocusNode());
 
                           TimeOfDay? picked = await showTimePicker(
-                              context: context, initialTime: time);
+                            context: context,
+                            initialTime: time,
+                          );
                           if (picked != null && picked != time) {
                             eventEndTimeController.text =
-                                picked.format(context); // add this line.
+                                // ignore: use_build_context_synchronously
+                                picked.format(context);
                           }
                         },
                       ),

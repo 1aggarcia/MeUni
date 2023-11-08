@@ -10,7 +10,7 @@ class TextInput extends StatelessWidget {
   final TextEditingController controller;
 
   final bool hasValidationMessage;
-  final String validationMessage;
+  final String? validationMessage;
 
   final String label;
   final String placeholder;
@@ -46,7 +46,7 @@ class TextInput extends StatelessWidget {
         if (hasValidationMessage) ...[
           verticalSpaceTiny,
           Text(
-            validationMessage,
+            validationMessage!,
             style: errorTextStyle,
           ),
         ],
