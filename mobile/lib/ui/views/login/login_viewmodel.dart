@@ -1,15 +1,14 @@
-import 'package:meuni_mobile/app/app.router.dart';
-import 'package:meuni_mobile/repository/users_repo.dart';
 import 'package:stacked/stacked.dart';
-import '../../../app/app.locator.dart';
-import 'package:meuni_mobile/ui/views/login/login_view.form.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../../app/app.locator.dart';
+import '../../../app/app.router.dart';
 import '../../../models/user.dart';
-
+import '../../../repository/users_repo.dart';
+import './login_view.form.dart';
 
 class LoginViewModel extends FormViewModel {
-
+  //* Private Properties
   final _userRepo = locator<UsersRepo>();
 
   final _navigationService = locator<NavigationService>();
@@ -19,11 +18,12 @@ class LoginViewModel extends FormViewModel {
 
   //* Public Methods
   Future loginUser() async {
-    if (isFormValid && usernameValue != null && passwordValue != null) {
+    if (isFormValid) {
       isLoading = true;
       rebuildUi();
+
       int id = 0;
-      String userName = usernameValue ?? '';
+      String userName = usernameValue!;
       if (userName == 'Fei') {
         id = 1;
       } else if (usernameValue == 'John') {
@@ -31,6 +31,7 @@ class LoginViewModel extends FormViewModel {
       } else {
         return null;
       }
+
       User user = await _userRepo.getUserAsync(id);
       _userRepo.loggedInUser = user;
 
@@ -38,7 +39,6 @@ class LoginViewModel extends FormViewModel {
       _navigationService.replaceWithEventsView();
     }
   }
-
 }
 
 class LoginValidators {

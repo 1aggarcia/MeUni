@@ -1,3 +1,4 @@
+import '../../app/app.dart';
 import '../../models/user.dart';
 import '../users_repo.dart';
 
@@ -9,26 +10,28 @@ class MockUsersRepo extends UsersRepo {
   MockUsersRepo() {
     _users = [
       User(
-          firstName: 'Fei',
-          lastName: 'Huang',
-          year: 4,
-          pronouns: 'He/Him',
-          admin: true,
-          id: 1),
+        firstName: 'Fei',
+        lastName: 'Huang',
+        year: 4,
+        pronouns: 'He/Him',
+        admin: true,
+        id: 1,
+      ),
       User(
-          firstName: 'John',
-          lastName: 'Stuart',
-          year: 3,
-          pronouns: 'He/Him',
-          admin: false,
-          id: 2)
+        firstName: 'John',
+        lastName: 'Stuart',
+        year: 3,
+        pronouns: 'He/Him',
+        admin: false,
+        id: 2,
+      )
     ];
   }
 
   //* Public Properties
   @override
   Future<User> getUserAsync(int id) async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(App.demoDuration);
 
     return _users.singleWhere((u) => u.id == id);
   }
