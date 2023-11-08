@@ -9,19 +9,21 @@ class MockUsersRepo extends UsersRepo {
   MockUsersRepo() {
     _users = [
       User(
-          firstName: 'Fei',
-          lastName: 'Huang',
-          year: 4,
-          pronouns: 'He/Him',
-          admin: true,
-          id: 1),
+        firstName: 'Fei',
+        lastName: 'Huang',
+        year: 4,
+        pronouns: 'He/Him',
+        admin: true,
+        id: 1,
+      ),
       User(
-          firstName: 'John',
-          lastName: 'Stuart',
-          year: 3,
-          pronouns: 'He/Him',
-          admin: false,
-          id: 2)
+        firstName: 'John',
+        lastName: 'Stuart',
+        year: 3,
+        pronouns: 'He/Him',
+        admin: false,
+        id: 2,
+      )
     ];
   }
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:meuni_mobile/ui/common/ui_helpers.dart';
 import 'package:stacked/stacked.dart';
-import 'package:meuni_mobile/ui/common/app_colors.dart';
+
+import '../../common/app_colors.dart';
+import '../../common/ui_helpers.dart';
 import '../../widgets/event_card.dart';
-import '../../widgets/round_button.dart';
 import 'events_viewmodel.dart';
 
 class EventsView extends StackedView<EventsViewModel> {

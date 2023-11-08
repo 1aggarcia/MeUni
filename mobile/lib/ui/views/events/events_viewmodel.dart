@@ -1,11 +1,11 @@
-import 'package:meuni_mobile/app/app.locator.dart';
-import 'package:meuni_mobile/app/app.router.dart';
-import 'package:meuni_mobile/repository/events_repo.dart';
-import 'package:meuni_mobile/repository/users_repo.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../../app/app.router.dart';
+import '../../../app/app.locator.dart';
 import '../../../models/event.dart';
+import '../../../repository/events_repo.dart';
+import '../../../repository/users_repo.dart';
 
 class EventsViewModel extends BaseViewModel {
   //* Private Properties

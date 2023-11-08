@@ -1,4 +1,4 @@
-import 'package:meuni_mobile/models/event.dart';
+import '../models/event.dart';
 
 abstract class EventsRepo {
   //* Public Methods
