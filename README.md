@@ -1,4 +1,7 @@
 # MeUni
+
+**Beta Milestone version name id: v0.1**
+
 MeUni is a mobile-based application where customers will meet new friends based on their hobbies and interests. Users can also meet based on similar school schedules or interest in school events/organization, and form study groups. Our target customers are university students who have a hard time looking for friends to do particular hobbies or activities with, or studying with others in the same classes. The goal of our product is to help them get connected with other previously-unknown fellow students who would participate in the activities. For example, let’s say a student wants to play a golf game with someone, but he or she doesn’t know anyone who would be interested in playing golf. Then he or she can make a post saying that he or she is looking for someone to play a golf game with. Given that this product is geared towards college students, it will incorporate some aspects of their academics. Users may input their class schedules to connect to other users with similar schedules, or even find other students in the same class. This way students may form study groups and organize meetings through MeUni.
 
 Our goal is to provide the following features. Currently operational features will be identified with an operational tag.
