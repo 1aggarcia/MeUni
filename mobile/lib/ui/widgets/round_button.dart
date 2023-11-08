@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 class RoundButton extends MaterialButton {
   //* Public Properties
   final String label;
-  final VoidCallback? onPressed;
 
   //* Constructors
-  RoundButton({required this.label, this.onPressed}) : super(onPressed: onPressed);
+  const RoundButton({
+    required super.key,
+    required this.label,
+    VoidCallback? onPressed,
+  }) : super(onPressed: onPressed);
 
   //* Overriden Methods
   @override

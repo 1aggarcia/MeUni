@@ -53,7 +53,9 @@ class EventsView extends StackedView<EventsViewModel> {
                         ),
                       ],
                     ),
-                    for (var event in viewModel.events) EventCard(event: event)
+                    for (var event in viewModel.events) ...[
+                      EventCard(event: event)
+                    ]
                   ],
                 )),
       ),

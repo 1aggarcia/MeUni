@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/event.dart';
+import '../common/ui_helpers.dart';
 
 class EventCard extends StatelessWidget {
   //* Public Properties
@@ -13,15 +14,21 @@ class EventCard extends StatelessWidget {
   //* Overriden Methods
   @override
   Widget build(BuildContext context) {
+    final startDate = DateFormat.MMMEd().format(event.startTime);
+    final startTime = DateFormat.jm().format(event.startTime);
+    final endTime = DateFormat.jm().format(event.endTime);
 
-    String startDate = DateFormat.MMMEd().format(event.startTime);
-    String startTime = DateFormat.jm().format(event.startTime);
-    String endTime = DateFormat.jm().format(event.endTime);
+    const textStyle = TextStyle(
+      color: Colors.black,
+      fontSize: 15,
+      fontFamily: 'Hind Siliguri',
+      fontWeight: FontWeight.w600,
+      letterSpacing: 0.07,
+    );
+
     return Column(
       children: [
-        const SizedBox(
-          height: 60,
-        ),
+        verticalSpaceLarge,
         Container(
             decoration: ShapeDecoration(
               color: Colors.white,
@@ -36,14 +43,7 @@ class EventCard extends StatelessWidget {
                   child: Text(
                     'Description: ${event.desc}',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontFamily: 'Hind Siliguri',
-                      fontWeight: FontWeight.w600,
-                      // height: 0.03,
-                      letterSpacing: 0.07,
-                    ),
+                    style: textStyle,
                   ),
                 ),
               ),
@@ -53,14 +53,7 @@ class EventCard extends StatelessWidget {
                   child: Text(
                     'Time: $startDate @ $startTime - $endTime',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontFamily: 'Hind Siliguri',
-                      fontWeight: FontWeight.w600,
-                      // height: 0.03,
-                      letterSpacing: 0.07,
-                    ),
+                    style: textStyle,
                   ),
                 ),
               ),
@@ -70,14 +63,7 @@ class EventCard extends StatelessWidget {
                   child: Text(
                     'Location: ${event.location}',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontFamily: 'Hind Siliguri',
-                      fontWeight: FontWeight.w600,
-                      // height: 0.03,
-                      letterSpacing: 0.07,
-                    ),
+                    style: textStyle,
                   ),
                 ),
               ),

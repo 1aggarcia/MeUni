@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'login_view.form.dart';
-import '../../common/ui_helpers.dart';
-
-
-import 'login_viewmodel.dart';
-
 import 'package:stacked/stacked_annotations.dart';
+
+import '../../common/ui_helpers.dart';
+import 'login_view.form.dart';
+import 'login_viewmodel.dart';
 
 @FormView(fields: [
   FormTextField(name: 'Username', validator: LoginValidators.validateUsername),
@@ -17,10 +15,18 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
 
   @override
   Widget builder(
-      BuildContext context,
-      LoginViewModel viewModel,
-      Widget? child,
-      ) {
+      BuildContext context, LoginViewModel viewModel, Widget? child) {
+    const labelTextStyle = TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w700,
+    );
+
+    const errorTextStyle = TextStyle(
+      color: Colors.red,
+      fontSize: 12,
+      fontWeight: FontWeight.w700,
+    );
+
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
       body: Container(
@@ -30,9 +36,11 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               verticalSpaceMedium,
+
+              // UserName
               const Text(
                 'UserName',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                style: labelTextStyle,
               ),
               verticalSpaceSmall,
               TextFormField(controller: usernameController),
@@ -40,35 +48,34 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
                 verticalSpaceTiny,
                 Text(
                   viewModel.usernameValidationMessage!,
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: errorTextStyle,
                 ),
               ],
+
               verticalSpaceMedium,
+
+              // Password
               const Text(
                 'Password',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                style: labelTextStyle,
               ),
               verticalSpaceSmall,
-              TextFormField(controller: passwordController,
+              TextFormField(
+                controller: passwordController,
                 obscureText: true,
                 enableSuggestions: false,
-                autocorrect: false),
+                autocorrect: false,
+              ),
               if (viewModel.hasPasswordValidationMessage) ...[
                 verticalSpaceTiny,
                 Text(
                   viewModel.passwordValidationMessage!,
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: errorTextStyle,
                 ),
                 verticalSpaceSmall,
               ],
+
+              // Login Button
               MaterialButton(
                 color: Colors.black,
                 onPressed: () async => await viewModel.loginUser(),
@@ -85,13 +92,9 @@ class LoginView extends StackedView<LoginViewModel> with $LoginView {
   }
 
   @override
-  void onViewModelReady(LoginViewModel viewModel) {
-    syncFormWithViewModel(viewModel);
-  }
+  void onViewModelReady(LoginViewModel viewModel) =>
+      syncFormWithViewModel(viewModel);
 
   @override
-  LoginViewModel viewModelBuilder(
-    BuildContext context,
-  ) =>
-      LoginViewModel();
+  LoginViewModel viewModelBuilder(BuildContext context) => LoginViewModel();
 }

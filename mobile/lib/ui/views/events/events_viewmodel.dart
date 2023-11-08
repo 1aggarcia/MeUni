@@ -17,7 +17,7 @@ class EventsViewModel extends BaseViewModel {
   //* Public Properties
   bool isLoading = false;
 
-  String get userName => _usersRepo.loggedInUser?.firstName ?? '[INVALID]';
+  String get userName => _usersRepo.loggedInUser!.firstName;
 
   List<Event> events = [];
 
@@ -27,15 +27,13 @@ class EventsViewModel extends BaseViewModel {
     rebuildUi();
 
     events = await _eventsRepo.getEventsAsync();
+
     isLoading = false;
     rebuildUi();
   }
 
-  Future goToCreateEventPageAsync() async {
-    await _navigationService.navigateToCreateEventView();
-  }
+  Future goToCreateEventPageAsync() async =>
+      await _navigationService.navigateToCreateEventView();
 
-  Future logoutAsync() async {
-    await _navigationService.replaceWithLoginView();
-  }
+  Future logoutAsync() async => await _navigationService.replaceWithLoginView();
 }

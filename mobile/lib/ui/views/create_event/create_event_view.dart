@@ -46,7 +46,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
     );
 
     const errorTextStyle = TextStyle(
-      color: Colors.blue,
+      color: Colors.red,
       fontSize: 12,
       fontWeight: FontWeight.w700,
     );
