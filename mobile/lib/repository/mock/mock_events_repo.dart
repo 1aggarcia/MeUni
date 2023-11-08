@@ -1,3 +1,4 @@
+import '../../app/app.dart';
 import '../../models/event.dart';
 import '../events_repo.dart';
 
@@ -50,14 +51,14 @@ class MockEventsRepo extends EventsRepo {
   //* Public Properties
   @override
   Future<List<Event>> getEventsAsync() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(App.demoDuration);
 
     return _events;
   }
 
   @override
   Future addEventAsync(Event event) async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(App.demoDuration);
 
     _events.add(event);
   }

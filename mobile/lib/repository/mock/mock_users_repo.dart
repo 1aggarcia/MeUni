@@ -1,3 +1,4 @@
+import '../../app/app.dart';
 import '../../models/user.dart';
 import '../users_repo.dart';
 
@@ -30,7 +31,7 @@ class MockUsersRepo extends UsersRepo {
   //* Public Properties
   @override
   Future<User> getUserAsync(int id) async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(App.demoDuration);
 
     return _users.singleWhere((u) => u.id == id);
   }

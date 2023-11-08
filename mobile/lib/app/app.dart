@@ -43,4 +43,6 @@ import '../ui/views/startup/startup_view.dart';
     // @stacked-dialog
   ],
 )
-class App {}
+class App {
+  static const demoDuration = Duration(seconds: 3);
+}
