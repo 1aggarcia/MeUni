@@ -7,12 +7,15 @@ import 'package:shelf_router/shelf_router.dart';
 import 'controllers/article_controller.dart';
 import 'controllers/event_controller.dart';
 import 'controllers/user_controller.dart';
+import 'locator.dart';
 
 Response _rootHandler(Request req) {
   return Response.ok('Hello, World!\n');
 }
 
 void main(List<String> args) async {
+  setupLocator();
+
   // Configure routes.
   var router = Router()..get('/', _rootHandler);
   router = ArticleController().setUpRoutes(router, '/articles');
@@ -24,6 +27,7 @@ void main(List<String> args) async {
 
   // Configure a pipeline that logs requests.
   final handler = Pipeline().addMiddleware(logRequests()).addHandler(router);
+
   // For running in containers, we respect the PORT environment variable.
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
   final server = await serve(handler, ip, port);
