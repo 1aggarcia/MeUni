@@ -1,9 +1,7 @@
 import 'package:test/test.dart';
 
 import '../bin/controllers/user_controller.dart';
-import '../bin/controllers/event_controller.dart';
 import '../bin/models/user.dart';
-import '../bin/models/event.dart';
 
 void main() {
   userControllerTests();
