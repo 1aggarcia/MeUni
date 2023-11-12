@@ -4,21 +4,15 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-import 'controllers/article_controller.dart';
 import 'controllers/event_controller.dart';
 import 'controllers/user_controller.dart';
 import 'locator.dart';
-
-Response _rootHandler(Request req) {
-  return Response.ok('Hello, World!\n');
-}
 
 void main(List<String> args) async {
   setupLocator();
 
   // Configure routes.
-  var router = Router()..get('/', _rootHandler);
-  router = ArticleController().setUpRoutes(router, '/articles');
+  var router = Router();
   router = EventController().setUpRoutes(router, '/events');
   router = UserController().setUpRoutes(router, '/users');
 

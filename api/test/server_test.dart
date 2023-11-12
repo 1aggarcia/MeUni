@@ -20,67 +20,29 @@ void main() {
 
   tearDown(() => p.kill());
 
-  test('Root', () async {
-    final response = await get(Uri.parse('$host/'));
-    expect(response.statusCode, 200);
-    expect(response.body, 'Hello, World!\n');
-  });
-
-  articleRouteTests(host);
   eventRouteTests(host);
   userRouteTests(host);
 }
 
-void articleRouteTests(String host) {
-  test('POST articles', () async {
-    final response = await post(
-      Uri.parse('$host/articles'),
-      body: '{"title":"My super article","content":"My super content"}',
-    );
-    expect(response.statusCode, 200);
-    expect(response.body,
-        '{"title":"My super article","content":"My super content"}');
-  });
-
-  test('POST articles with empty string', () async {
-    final response = await post(
-      Uri.parse('$host/articles'),
-      body: '',
-    );
-    expect(response.statusCode, 400);
-  });
-
-  test('GET articles', () async {
-    await post(
-      Uri.parse('$host/articles'),
-      body: '{"title":"My super article","content":"My super content"}',
-    );
-    final response = await get(
-      Uri.parse('$host/articles'),
-    );
-    expect(response.statusCode, 200);
-    expect(response.body,
-        '[{"title":"My super article","content":"My super content"}]');
-  });
-}
-
 void eventRouteTests(String host) {
-  final String mockEvents = '{"id":-3,"title":"Pizza","desc":"need ppl to chip in for pizza","location":"The crib","max":4,"startTime":"2023-11-04T03:04:15.537017Z","endTime":"2023-11-04T03:24:15.537017Z","hostId":1,"hostName":"Fei","attendees":[2,3],"attendeeNames":["John","Hannah"]},{"id":-2,"title":"Event 1","desc":"This is a sample description for this event","location":"UW CSE2 G21","max":3,"startTime":"2023-11-04T02:24:25.537017Z","endTime":"2023-11-07T03:24:15.537017Z","hostId":2,"hostName":"John","attendees":[1,3],"attendeeNames":["Fei","Hannah"]},{"id":-1,"title":"Another event","desc":"This time i really need people","location":"[Redacted]","max":2,"startTime":"2023-11-05T03:04:15.537017Z","endTime":"2023-11-05T03:24:15.537017Z","hostId":3,"hostName":"Hannah","attendees":[1],"attendeeNames":["Fei"]}';
+  final String mockEvents =
+      '{"id":-3,"title":"Pizza","desc":"need ppl to chip in for pizza","location":"The crib","max":4,"startTime":"2023-11-04T03:04:15.537017Z","endTime":"2023-11-04T03:24:15.537017Z","hostId":1,"hostName":"Fei","attendees":[2,3],"attendeeNames":["John","Hannah"]},{"id":-2,"title":"Event 1","desc":"This is a sample description for this event","location":"UW CSE2 G21","max":3,"startTime":"2023-11-04T02:24:25.537017Z","endTime":"2023-11-07T03:24:15.537017Z","hostId":2,"hostName":"John","attendees":[1,3],"attendeeNames":["Fei","Hannah"]},{"id":-1,"title":"Another event","desc":"This time i really need people","location":"[Redacted]","max":2,"startTime":"2023-11-05T03:04:15.537017Z","endTime":"2023-11-05T03:24:15.537017Z","hostId":3,"hostName":"Hannah","attendees":[1],"attendeeNames":["Fei"]}';
 
   test('POST events', () async {
     final response = await post(
       Uri.parse('$host/events/create'),
       body: '{"title":"Pizza",'
-        '"desc":"need ppl to chip in for pizza",'
-        '"location":"The crib",'
-        '"max":4,'
-        '"startTime":"2023-11-04T03:04:15.537017Z",'
-        '"endTime":"2023-11-04T03:24:15.537017Z",'
-        '"hostId":1,'
-        '"attendees":[]}',
+          '"desc":"need ppl to chip in for pizza",'
+          '"location":"The crib",'
+          '"max":4,'
+          '"startTime":"2023-11-04T03:04:15.537017Z",'
+          '"endTime":"2023-11-04T03:24:15.537017Z",'
+          '"hostId":1,'
+          '"attendees":[]}',
     );
     expect(response.statusCode, 200);
-    expect(response.body,
+    expect(
+        response.body,
         '{"id":0,'
         '"title":"Pizza",'
         '"desc":"need ppl to chip in for pizza",'
@@ -106,13 +68,13 @@ void eventRouteTests(String host) {
     final response = await post(
       Uri.parse('$host/events/create'),
       body: '{"title":0,'
-        '"desc":"need ppl to chip in for pizza",'
-        '"location":"The crib",'
-        '"max":"",'
-        '"startTime":"12/25/23",'
-        '"endTime":"2023-11-04T03:24:15.537017Z",'
-        '"hostId":1,'
-        '"attendees":25}',
+          '"desc":"need ppl to chip in for pizza",'
+          '"location":"The crib",'
+          '"max":"",'
+          '"startTime":"12/25/23",'
+          '"endTime":"2023-11-04T03:24:15.537017Z",'
+          '"hostId":1,'
+          '"attendees":25}',
     );
     expect(response.statusCode, 400);
   });
@@ -121,19 +83,20 @@ void eventRouteTests(String host) {
     await post(
       Uri.parse('$host/events/create'),
       body: '{"title":"Tennis",'
-        '"desc":"At the IMA tennis court! Hang out with me!",'
-        '"location":"IMA tennis court",'
-        '"max":3,'
-        '"startTime":"2024-01-04T15:14:15.537017Z",'
-        '"endTime":"2023-11-04T16:14:15.567017Z",'
-        '"hostId":2,'
-        '"attendees":[]}',
+          '"desc":"At the IMA tennis court! Hang out with me!",'
+          '"location":"IMA tennis court",'
+          '"max":3,'
+          '"startTime":"2024-01-04T15:14:15.537017Z",'
+          '"endTime":"2023-11-04T16:14:15.567017Z",'
+          '"hostId":2,'
+          '"attendees":[]}',
     );
     final response = await get(
       Uri.parse('$host/events/get'),
     );
     expect(response.statusCode, 200);
-    expect(response.body,
+    expect(
+        response.body,
         '[$mockEvents,'
         '{"id":0,'
         '"title":"Tennis",'
@@ -152,19 +115,20 @@ void eventRouteTests(String host) {
     await post(
       Uri.parse('$host/events/create'),
       body: '{"title":"Tennis",'
-        '"desc":"At the IMA tennis court! Hang out with me!",'
-        '"location":"IMA tennis court",'
-        '"max":3,'
-        '"startTime":"2024-01-04T15:14:15.537017Z",'
-        '"endTime":"2023-11-04T16:14:15.567017Z",'
-        '"hostId":2,'
-        '"attendees":[]}',
+          '"desc":"At the IMA tennis court! Hang out with me!",'
+          '"location":"IMA tennis court",'
+          '"max":3,'
+          '"startTime":"2024-01-04T15:14:15.537017Z",'
+          '"endTime":"2023-11-04T16:14:15.567017Z",'
+          '"hostId":2,'
+          '"attendees":[]}',
     );
     final response = await get(
       Uri.parse('$host/events/get?id=0'),
     );
     expect(response.statusCode, 200);
-    expect(response.body,
+    expect(
+        response.body,
         '{"id":0,'
         '"title":"Tennis",'
         '"desc":"At the IMA tennis court! Hang out with me!",'
@@ -192,7 +156,8 @@ void userRouteTests(String host) {
       Uri.parse('$host/users/profile/get?id=1'),
     );
     expect(response.statusCode, 200);
-    expect(response.body,
+    expect(
+        response.body,
         '{"id":1,'
         '"firstName":"Fei",'
         '"lastName":"Huang",'
@@ -200,5 +165,4 @@ void userRouteTests(String host) {
         '"pronouns":"He/Him",'
         '"admin":true}');
   });
-
 }
