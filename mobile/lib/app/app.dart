@@ -44,5 +44,5 @@ import '../ui/views/startup/startup_view.dart';
   ],
 )
 class App {
-  static const demoDuration = Duration(seconds: 3);
+  static const demoDuration = Duration(seconds: 0);
 }
