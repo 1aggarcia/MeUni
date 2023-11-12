@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "807288899830",
+    "firebase_url": "https://meuni-9d616-default-rtdb.firebaseio.com",
+    "project_id": "meuni-9d616",
+    "storage_bucket": "meuni-9d616.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807288899830:android:5407e991c85f0d9c6dc4d7",
+        "android_client_info": {
+          "package_name": "com.example.meuni_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "807288899830-e8k2sv60078kjod45d51e33rqe66e5kp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.meuni_mobile",
+            "certificate_hash": "dfdbf0e03b3fb4f59b2d56b5100df0cf8e836a02"
+          }
+        },
+        {
+          "client_id": "807288899830-4q66ufaa3duchsbb6096qjh57higqjcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyqaA7zfo3HeqjspDHMjZLBYJf7SY4y-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "807288899830-4q66ufaa3duchsbb6096qjh57higqjcu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

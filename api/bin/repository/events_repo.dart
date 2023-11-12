@@ -1,3 +1,5 @@
+import 'package:firebase_dart/database.dart' as db;
+
 import '../models/event.dart';
 
 abstract class EventsRepo {
@@ -9,7 +11,7 @@ abstract class EventsRepo {
   Future<Event?> getEventAsync(int id);
 
   /// Returns [] if no events
-  Future<List<Event>> getEventsAsync();
+  Future<List<Event>> getEventsAsync(db.DatabaseReference database);
 }
 
 class EventsRepoImpl extends EventsRepo {
@@ -26,8 +28,15 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   @override
-  Future<List<Event>> getEventsAsync() {
-    // TODO: implement getEventsAsync
-    throw UnimplementedError();
+  Future<List<Event>> getEventsAsync(db.DatabaseReference database) async {
+    final db.DataSnapshot snapshot = await database.child('events').once();
+    print(snapshot.value);
+    final List<Object>? value = snapshot.value;
+    if (value != null) {
+      // TODO: Convert List<Object>? to List<Event> 
+      throw UnimplementedError();
+    } else {
+      throw [];
+    }
   }
 }

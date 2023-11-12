@@ -1,3 +1,5 @@
+import 'package:firebase_dart/database.dart' as db;
+
 import '../../models/event.dart';
 import '../events_repo.dart';
 
@@ -90,7 +92,7 @@ class MockEventsRepo extends EventsRepo {
   }
 
   @override
-  Future<List<Event>> getEventsAsync() async {
+  Future<List<Event>> getEventsAsync(db.DatabaseReference database) async {
     return _events;
   }
 }

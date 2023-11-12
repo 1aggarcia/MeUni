@@ -1,3 +1,4 @@
+import 'package:firebase_dart/database.dart' as db;
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf/shelf.dart';
 
@@ -9,6 +10,9 @@ import '../models/event.dart';
 class EventController extends Controller {
   //* Private Properties
   final _eventsRepo = locator<EventsRepo>();
+  final db.DatabaseReference database;
+
+  EventController(this.database);
 
   //* Overriden Methods
   @override
@@ -41,7 +45,7 @@ class EventController extends Controller {
         return Response(400);
       }
     } else {
-      List<Event> events = await _eventsRepo.getEventsAsync();
+      List<Event> events = await _eventsRepo.getEventsAsync(database);
       return Response.ok(eventsToJson(events));
     }
   }
