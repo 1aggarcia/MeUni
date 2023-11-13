@@ -50,7 +50,7 @@ class EventsRepoImpl extends EventsRepo {
       // TODO: Convert List<Object>? to List<Event>
       throw UnimplementedError();
     } else {
-      throw [];
+      return [];
     }
   }
 }
