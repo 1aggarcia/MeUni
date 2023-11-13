@@ -1,4 +1,5 @@
 import 'package:stacked/stacked_annotations.dart';
+import 'package:stacked_firebase_auth/stacked_firebase_auth.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../repository/events_repo.dart';
@@ -13,8 +14,8 @@ import '../ui/dialogs/info_alert/info_alert_dialog.dart';
 
 import '../ui/views/create_event/create_event_view.dart';
 import '../ui/views/events/events_view.dart';
-import '../ui/views/login/login_view.dart';
 import '../ui/views/startup/startup_view.dart';
+import 'package:meuni_mobile/ui/views/login/login_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -32,6 +33,8 @@ import '../ui/views/startup/startup_view.dart';
     LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
     LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
     LazySingleton(classType: ApiService),
+
+    Singleton(classType: FirebaseAuthenticationService)
 // @stacked-service
   ],
   bottomsheets: [

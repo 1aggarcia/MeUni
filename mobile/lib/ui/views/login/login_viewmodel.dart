@@ -1,68 +1,34 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:meuni_mobile/app/app.locator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import '../../../app/app.locator.dart';
-import '../../../app/app.router.dart';
-import '../../../models/user.dart';
-import '../../../repository/users_repo.dart';
-import './login_view.form.dart';
-
-class LoginViewModel extends FormViewModel {
+class LoginViewModel extends BaseViewModel {
   //* Private Properties
-  final _userRepo = locator<UsersRepo>();
-
-  final _navigationService = locator<NavigationService>();
-
-  //* Public Properties
-  bool isLoading = false;
+  final _dialogService = locator<DialogService>();
 
   //* Public Methods
-  Future loginUser() async {
-    if (isFormValid) {
-      isLoading = true;
-      rebuildUi();
+  Future signInWithGoogleAsync() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-      int id = 0;
-      String userName = usernameValue!;
-      if (userName == 'Fei') {
-        id = 1;
-      } else if (usernameValue == 'John') {
-        id = 2;
-      } else {
-        return null;
-      }
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
 
-      User user = await _userRepo.getUserAsync(id);
-      _userRepo.loggedInUser = user;
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
 
-      isLoading = false;
-      _navigationService.replaceWithEventsView();
-    }
-  }
-}
+    UserCredential user =
+        await FirebaseAuth.instance.signInWithCredential(credential);
 
-class LoginValidators {
-  static String? validateUsername(String? username) {
-    if (username == null) {
-      return null;
-    }
-
-    if (username.isEmpty) {
-      return 'Username not recognized';
-    }
-
-    return null;
-  }
-
-  static String? validatePassword(String? password) {
-    if (password == null) {
-      return null;
-    }
-
-    if (password.isEmpty) {
-      return 'Incorrect Password';
-    }
-
-    return null;
+    _dialogService.showDialog(
+      title: user.user!.email,
+      description: user.user!.uid,
+    );
   }
 }
