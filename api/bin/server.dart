@@ -1,12 +1,12 @@
 import 'dart:io' as io;
 
-import 'package:shelf/shelf.dart';
-import 'package:shelf/shelf_io.dart';
-import 'package:shelf_router/shelf_router.dart';
+import 'package:dotenv/dotenv.dart';
 import 'package:firebase_dart/core.dart';
 import 'package:firebase_dart/database.dart';
 import 'package:firebase_dart/implementation/pure_dart.dart';
-import 'package:dotenv/dotenv.dart';
+import 'package:shelf_router/shelf_router.dart';
+import 'package:shelf/shelf_io.dart';
+import 'package:shelf/shelf.dart';
 
 import 'controllers/event_controller.dart';
 import 'controllers/user_controller.dart';
@@ -22,16 +22,17 @@ void main(List<String> args) async {
     projectId: env['PROJECT_ID'] as String,
     messagingSenderId: env['SENDER_ID'] as String,
     authDomain: env['DATABASE_URL'] as String,
-    databaseURL: env['DATABASE_URL'] as String);
+    databaseURL: env['DATABASE_URL'] as String,
+  );
   final app = await Firebase.initializeApp(options: options);
-  final database = FirebaseDatabase(app: app).reference();
+  final DatabaseReference database = FirebaseDatabase(app: app).reference();
 
-  setupLocator();
+  setupLocator(database);
 
   // Configure routes.
   // TODO : modify UserController to use database
   var router = Router();
-  router = EventController(database).setUpRoutes(router, '/events');
+  router = EventController().setUpRoutes(router, '/events');
   router = UserController().setUpRoutes(router, '/users');
 
   // Use any available host or container IP (usually `0.0.0.0`).
