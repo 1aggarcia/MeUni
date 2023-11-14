@@ -21,7 +21,7 @@ void main(List<String> args) async {
     apiKey: env['API_KEY'] as String,
     projectId: env['PROJECT_ID'] as String,
     messagingSenderId: env['SENDER_ID'] as String,
-    authDomain: env['DATABASE_URL'] as String,
+    authDomain: env['AUTH_DOMAIN'] as String,
     databaseURL: env['DATABASE_URL'] as String,
   );
   final app = await Firebase.initializeApp(options: options);
@@ -30,7 +30,6 @@ void main(List<String> args) async {
   setupLocator(database);
 
   // Configure routes.
-  // TODO : modify UserController to use database
   var router = Router();
   router = EventController().setUpRoutes(router, '/events');
   router = UserController().setUpRoutes(router, '/users');

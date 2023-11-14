@@ -41,20 +41,20 @@ class EventController extends Controller {
         return Response(400);
       }
     } else {
-      List<Event> events = await _eventsRepo.getEventsAsync();
+      Map<int, Event> events = await _eventsRepo.getEventsAsync();
       return Response.ok(eventsToJson(events));
     }
   }
 
   // POST /
+  // TODO : ignore attendee params, set to empty list
   Future<Response> postEventsHandler(Request request) async {
     String body = await request.readAsString();
 
     try {
       Event event = eventFromJson(body);
-      Event newEvent = await _eventsRepo.addEventAsync(event);
-
-      return Response.ok(eventToJson(newEvent));
+      int newId = await _eventsRepo.addEventAsync(event);
+      return Response.ok("$newId");
     } catch (e) {
       return Response(400);
     }

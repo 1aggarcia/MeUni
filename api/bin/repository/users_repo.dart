@@ -8,6 +8,8 @@ abstract class UsersRepo {
 }
 
 class UsersRepoImpl extends UsersRepo {
+  // TODO : get database reference with locator (example in events_repo.dart)
+
   //* Overriden Methods
   @override
   Future<User?> getUserAsync(int id) {

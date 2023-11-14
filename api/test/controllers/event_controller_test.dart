@@ -7,8 +7,6 @@ import '../../bin/models/event.dart';
 import '../../bin/repository/events_repo.dart';
 import '../../bin/repository/mock/mock_events_repo.dart';
 
-final String _mockEvents =
-    '{"id":-3,"title":"Pizza","desc":"need ppl to chip in for pizza","location":"The crib","max":4,"startTime":"2023-11-04T03:04:15.537017Z","endTime":"2023-11-04T03:24:15.537017Z","hostId":1,"hostName":"Fei","attendees":[2,3],"attendeeNames":["John","Hannah"]},{"id":-2,"title":"Event 1","desc":"This is a sample description for this event","location":"UW CSE2 G21","max":3,"startTime":"2023-11-04T02:24:25.537017Z","endTime":"2023-11-07T03:24:15.537017Z","hostId":2,"hostName":"John","attendees":[1,3],"attendeeNames":["Fei","Hannah"]},{"id":-1,"title":"Another event","desc":"This time i really need people","location":"[Redacted]","max":2,"startTime":"2023-11-05T03:04:15.537017Z","endTime":"2023-11-05T03:24:15.537017Z","hostId":3,"hostName":"Hannah","attendees":[1],"attendeeNames":["Fei"]}';
 final String _rndUrl = 'https://example.com';
 
 EventController _controller = EventController();
@@ -21,14 +19,13 @@ void main() {
       locator.registerLazySingleton<EventsRepo>(() => MockEventsRepo());
 
       MockEventsRepo mockEventsRepo = locator<EventsRepo>() as MockEventsRepo;
-      mockEventsRepo.resetEvents();
+      mockEventsRepo.clearEvents();
 
       _controller = EventController();
     });
 
     test('POST events', () async {
       Event event = Event(
-        id: -3,
         title: 'Pizza',
         desc: 'need ppl to chip in for pizza',
         location: 'The crib',
@@ -44,8 +41,7 @@ void main() {
       String eventJson = eventToJson(event);
       expect(
           eventJson,
-          '{"id":-3,'
-          '"title":"Pizza",'
+          '{"title":"Pizza",'
           '"desc":"need ppl to chip in for pizza",'
           '"location":"The crib",'
           '"max":4,'
@@ -67,17 +63,7 @@ void main() {
 
       expect(
           await response.readAsString(),
-          '{"id":0,'
-          '"title":"Pizza",'
-          '"desc":"need ppl to chip in for pizza",'
-          '"location":"The crib",'
-          '"max":4,'
-          '"startTime":"2023-11-04T03:04:15.537017Z",'
-          '"endTime":"2023-11-04T03:24:15.537017Z",'
-          '"hostId":1,'
-          '"hostName":"Fei",'
-          '"attendees":[],'
-          '"attendeeNames":[]}');
+          "0");
     });
 
     test('POST with no body', () async {
@@ -111,8 +97,7 @@ void main() {
     });
 
     test('GET events no params', () async {
-      Event event = Event(
-        id: -3,
+      Event tennisEvent = Event(
         title: 'Tennis',
         desc: 'At the IMA tennis court! Hang out with me!',
         location: 'IMA tennis court',
@@ -124,15 +109,37 @@ void main() {
         attendees: [],
         attendeeNames: [],
       );
+      Event dingDongEvent = Event(
+        title: 'Ding Dong Ditching',
+        desc: 'Lets go make my neighbors mad!',
+        location: 'Community Center',
+        max: 5,
+        startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
+        endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
+        hostId: 3,
+        hostName: 'Hannah',
+        attendees: [],
+        attendeeNames: [],
+      );
 
-      String eventJson = eventToJson(event);
+      String tennisJson = eventToJson(tennisEvent);
+      String dingDongJson = eventToJson(dingDongEvent);
 
       Request req = Request(
         'POST',
         Uri.parse('$_rndUrl/events/create'),
-        body: eventJson,
+        body: tennisJson,
       );
       Response response = await _controller.postEventsHandler(req);
+
+      expect(response.statusCode, 200);
+
+      req = Request(
+        'POST',
+        Uri.parse('$_rndUrl/events/create'),
+        body: dingDongJson,
+      );
+      response = await _controller.postEventsHandler(req);
 
       expect(response.statusCode, 200);
 
@@ -145,9 +152,8 @@ void main() {
       expect(response.statusCode, 200);
       expect(
           await response.readAsString(),
-          '[$_mockEvents,'
-          '{"id":0,'
-          '"title":"Tennis",'
+          '{"0":'
+          '{"title":"Tennis",'
           '"desc":"At the IMA tennis court! Hang out with me!",'
           '"location":"IMA tennis court",'
           '"max":3,'
@@ -156,12 +162,22 @@ void main() {
           '"hostId":2,'
           '"hostName":"John",'
           '"attendees":[],'
-          '"attendeeNames":[]}]');
+          '"attendeeNames":[]},'
+          '"1":'
+          '{"title":"Ding Dong Ditching",'
+          '"desc":"Lets go make my neighbors mad!",'
+          '"location":"Community Center",'
+          '"max":5,'
+          '"startTime":"2024-08-04T15:14:15.537017Z",'
+          '"endTime":"2024-08-04T16:14:59.567017Z",'
+          '"hostId":3,'
+          '"hostName":"Hannah",'
+          '"attendees":[],'
+          '"attendeeNames":[]}}');
     });
 
     test('GET events with id param', () async {
       Event event = Event(
-        id: -3,
         title: 'Tennis',
         desc: 'At the IMA tennis court! Hang out with me!',
         location: 'IMA tennis court',
@@ -194,8 +210,7 @@ void main() {
       expect(response.statusCode, 200);
       expect(
           await response.readAsString(),
-          '{"id":0,'
-          '"title":"Tennis",'
+          '{"title":"Tennis",'
           '"desc":"At the IMA tennis court! Hang out with me!",'
           '"location":"IMA tennis court",'
           '"max":3,'

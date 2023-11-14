@@ -6,29 +6,30 @@ import '../models/event.dart';
 abstract class EventsRepo {
   //* Public Methods
 
-  Future<Event> addEventAsync(Event event);
+  // Returns the ID of the newly created event
+  Future<int> addEventAsync(Event event);
 
   /// Returns the Event if found, null otherwise
   Future<Event?> getEventAsync(int id);
 
-  /// Returns [] if no events
-  Future<List<Event>> getEventsAsync();
+  /// Returns {} if no events
+  Future<Map<int, Event>> getEventsAsync();
 }
 
 class EventsRepoImpl extends EventsRepo {
   //* Private Properties
-  late db.DatabaseReference _db;
+  late db.DatabaseReference _eventsRef;
 
   //* Constructors
   EventsRepoImpl() {
     final dbRef = locator<db.DatabaseReference>();
 
-    _db = dbRef.child('events');
+    _eventsRef = dbRef.child('events');
   }
 
   //* Overriden Methods
   @override
-  Future<Event> addEventAsync(Event event) {
+  Future<int> addEventAsync(Event event) {
     // TODO: implement addEventAsync
     throw UnimplementedError();
   }
@@ -40,17 +41,17 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   @override
-  Future<List<Event>> getEventsAsync() async {
-    final db.DataSnapshot snapshot = await _db.once();
+  Future<Map<int, Event>> getEventsAsync() async {
+    final db.DataSnapshot snapshot = await _eventsRef.once();
     print(snapshot.value);
 
-    final List<Object>? value = snapshot.value;
+    final Map<String, Object>? value = snapshot.value;
 
     if (value != null) {
-      // TODO: Convert List<Object>? to List<Event>
+      // TODO: Convert Map<String, Object> to Map<int, Event>
       throw UnimplementedError();
     } else {
-      return [];
+      return {};
     }
   }
 }

@@ -4,7 +4,7 @@ import '../events_repo.dart';
 class MockEventsRepo extends EventsRepo {
   //* Private Properties
   int _nextId = 0;
-  List<Event> _events = [];
+  Map<int, Event> _events = {};
 
   //* Constructors
   MockEventsRepo() {
@@ -12,12 +12,15 @@ class MockEventsRepo extends EventsRepo {
   }
 
   //* Public Methods
+  void clearEvents() {
+    _nextId = 0;
+    _events = {};
+  }
+
   void resetEvents() {
     _nextId = 0;
-
-    _events = [
-      Event(
-        id: -3,
+    _events = {
+      -3:Event(
         title: 'Pizza',
         desc: 'need ppl to chip in for pizza',
         location: 'The crib',
@@ -29,8 +32,7 @@ class MockEventsRepo extends EventsRepo {
         attendees: [2, 3],
         attendeeNames: ['John', 'Hannah'],
       ),
-      Event(
-        id: -2,
+      -2:Event(
         title: 'Event 1',
         desc: 'This is a sample description for this event',
         location: 'UW CSE2 G21',
@@ -42,8 +44,7 @@ class MockEventsRepo extends EventsRepo {
         attendees: [1, 3],
         attendeeNames: ['Fei', 'Hannah'],
       ),
-      Event(
-        id: -1,
+      -1:Event(
         title: 'Another event',
         desc: 'This time i really need people',
         location: '[Redacted]',
@@ -55,42 +56,37 @@ class MockEventsRepo extends EventsRepo {
         attendees: [1],
         attendeeNames: ['Fei'],
       ),
-    ];
+    };
   }
 
   //* Overriden Methods
   @override
-  Future<Event> addEventAsync(Event event) async {
-    Event newEvent = Event(
-      id: _nextId,
-      title: event.title,
-      desc: event.desc,
-      location: event.location,
-      max: event.max,
-      startTime: event.startTime,
-      endTime: event.endTime,
-      hostId: event.hostId,
-      hostName: event.hostName,
-      attendees: event.attendees,
-      attendeeNames: event.attendeeNames,
-    );
-    _events.add(newEvent);
+  Future<int> addEventAsync(Event event) async {
+    // Event newEvent = Event(
+    //   title: event.title,
+    //   desc: event.desc,
+    //   location: event.location,
+    //   max: event.max,
+    //   startTime: event.startTime,
+    //   endTime: event.endTime,
+    //   hostId: event.hostId,
+    //   hostName: event.hostName,
+    //   attendees: event.attendees,
+    //   attendeeNames: event.attendeeNames,
+    // );
+    _events[_nextId] = event;
     _nextId++;
 
-    return newEvent;
+    return _nextId - 1;
   }
 
   @override
   Future<Event?> getEventAsync(int id) async {
-    try {
-      return _events.singleWhere((e) => e.id == id);
-    } catch (e) {
-      return null;
-    }
+    return _events[id];
   }
 
   @override
-  Future<List<Event>> getEventsAsync() async {
+  Future<Map<int, Event>> getEventsAsync() async {
     return _events;
   }
 }
