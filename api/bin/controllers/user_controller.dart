@@ -1,33 +1,32 @@
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf/shelf.dart';
 
+import '../locator.dart';
+import '../repository/users_repo.dart';
 import 'controller.dart';
 import '../models/user.dart';
-import 'mock_users.dart';
 
 class UserController extends Controller {
   //* Private Properties
-  // _users must be sorted in order of increasing id
-  final List<User> _users = MockUsersRepo().getMockUsers();
+  final _usersRepo = locator<UsersRepo>();
 
   //* Overriden Methods
   @override
   Router setUpRoutes(Router router, String endpoint) {
-    String getEndpoint = "$endpoint/profile/get";
-    return router
-      ..get(getEndpoint, getUsersHandler);
+    return router..get('$endpoint/profile/get', getUserHandler);
   }
 
   //* Public API Methods
 
   // GET /
-  Response getUsersHandler(Request request) {
+  Future<Response> getUserHandler(Request request) async {
     Map<String, dynamic> params = request.url.queryParameters;
-    
+
     try {
       int userId = int.parse(params['id']);
-      dynamic user = findUser(userId);
-      if (user is User) {
+      User? user = await _usersRepo.getUserAsync(userId);
+
+      if (user != null) {
         return Response.ok(userToJson(user));
       } else {
         return Response(400);
@@ -36,28 +35,5 @@ class UserController extends Controller {
       print("Failed to get user: $e");
       return Response(400);
     }
-  }
-
-  /// Return the user with given userId, if it exists
-  /// @param userId of user
-  /// @returns user if found, false otherwise
-  dynamic findUser(int userId) {
-    int i = 0;
-    User u = _users[i];
-    // _users will be exausted or desired user found
-    while (i < _users.length && u.id != userId) {
-      u = _users[i];
-      i++;
-    }
-
-    if (u.id == userId) {
-      return u;
-    } else {
-      return false;
-    }
-  }
-
-  List<User> getUsers() {
-    return _users;
   }
 }
