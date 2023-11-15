@@ -2,7 +2,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../repository/events_repo.dart';
-import '../repository/mock/mock_events_repo.dart';
+//import '../repository/mock/mock_events_repo.dart';
 import '../repository/mock/mock_users_repo.dart';
 import '../repository/users_repo.dart';
 
@@ -29,7 +29,7 @@ import '../ui/views/startup/startup_view.dart';
     LazySingleton(classType: BottomSheetService),
     LazySingleton(classType: DialogService),
     LazySingleton(classType: NavigationService),
-    LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
+    LazySingleton(classType: EventsRepoImpl, asType: EventsRepo),
     LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
     LazySingleton(classType: ApiService),
 // @stacked-service
@@ -44,5 +44,5 @@ import '../ui/views/startup/startup_view.dart';
   ],
 )
 class App {
-  static const demoDuration = Duration(seconds: 3);
+  static const demoDuration = Duration(seconds: 0);
 }
