@@ -5,7 +5,7 @@ class ApiService {
   String testUri = 'http://localhost:8080/events/get';
 
   Future<Response> getAsync(String url) async {
-    final response = await get(Uri.parse(testUri));
+    final response = await get(Uri.parse(host + url));
     return response;
   }
 
