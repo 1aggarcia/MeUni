@@ -99,5 +99,5 @@ class Event {
         'hostName' : hostName,
         'attendees' : attendees,
         'attendeeNames' : attendeeNames
-      };
+  };
 }
