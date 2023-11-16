@@ -73,8 +73,8 @@ Event eventFromJson(String str) => Event.fromJson(json.decode(str));
 
 String eventToJson(Event data) => json.encode(data.toJson());
 
-List<Event> eventsFromJson(String str) =>
-    List<Event>.from(json.decode(str).map((x) => Event.fromJson(x)));
+Map<int, Event> eventsFromJson(String str) => fromJsonMap(json.decode(str));
+    // Map<int, Event>.from(json.decode(str).map((x) => Event.fromJson(x)));
 
 String eventsToJson(Map<int, Event> data) => json.encode(toJsonMap(data));
 
@@ -82,6 +82,17 @@ Map<String, dynamic> toJsonMap(Map<int, Event> data) {
   return Map<String, dynamic>.fromEntries(
     data.entries.map((entry) => MapEntry(entry.key.toString(), entry.value.toJson())),
   );
+}
+
+Map<int, Event> fromJsonMap(Map<String, dynamic> data) {
+  Map<int, Event> events = {};
+  data.forEach((k, v) {
+    if (int.tryParse(k) != null) {
+      Event e = Event.fromJson(v);
+      events[int.parse(k)] = e;
+    }
+  });
+  return events;
 }
 
 /// Given id, returns first name of given user, if it exists

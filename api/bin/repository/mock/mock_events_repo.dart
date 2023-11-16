@@ -81,6 +81,12 @@ class MockEventsRepo extends EventsRepo {
   }
 
   @override
+  int deleteEventAsync(int id) {
+    _events.remove(id);
+    return id;
+  }
+
+  @override
   Future<Event?> getEventAsync(int id) async {
     return _events[id];
   }

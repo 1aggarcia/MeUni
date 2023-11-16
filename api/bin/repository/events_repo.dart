@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_dart/database.dart' as db;
 
 import '../locator.dart';
@@ -8,6 +10,9 @@ abstract class EventsRepo {
 
   // Returns the ID of the newly created event
   Future<int> addEventAsync(Event event);
+
+  // Returns ID of deleted event, or -1 if unsucessfull
+  int deleteEventAsync(int id);
 
   /// Returns the Event if found, null otherwise
   Future<Event?> getEventAsync(int id);
@@ -35,23 +40,22 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   @override
-  Future<Event> getEventAsync(int id) {
-    // TODO: implement getEventAsync
+  int deleteEventAsync(int id) {
+    // TODO: implement deleteEventAsync
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Event> getEventAsync(int id) async {
+    final db.DataSnapshot snapshot = await _eventsRef.child("$id").once();
+    final json = jsonEncode(snapshot.value);
+    return eventFromJson(json);
   }
 
   @override
   Future<Map<int, Event>> getEventsAsync() async {
     final db.DataSnapshot snapshot = await _eventsRef.once();
-    print(snapshot.value);
-
-    final Map<String, Object>? value = snapshot.value;
-
-    if (value != null) {
-      // TODO: Convert Map<String, Object> to Map<int, Event>
-      throw UnimplementedError();
-    } else {
-      return {};
-    }
+    final json = jsonEncode(snapshot.value);
+    return eventsFromJson(json);
   }
 }
