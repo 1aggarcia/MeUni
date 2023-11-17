@@ -1,27 +1,26 @@
-import '../../models/studygroup.dart';
-import '../studygroup_repo.dart';
-import '../studygroup_repo.dart';
+import '../../models/study_group.dart';
+import '../study_groups_repo.dart';
 
-class MockStudyGroupRepo extends StudyGroupRepo {
+class MockStudyGroupsRepo extends StudyGroupsRepo {
   //* Private Properties
   int _nextId = 0;
-  Map<int, StudyGroup> _studygroups = {};
+  Map<int, StudyGroup> _studyGroups = {};
 
   //* Constructors
-  MockStudyGroupRepo() {
+  MockStudyGroupsRepo() {
     resetStudyGroups();
   }
 
   //* Public Methods
   void clearStudyGroups() {
     _nextId = 0;
-    _studygroups = {};
+    _studyGroups = {};
   }
 
   void resetStudyGroups() {
     _nextId = 0;
-    _studygroups = {
-      -3:StudyGroup(
+    _studyGroups = {
+      -3: StudyGroup(
         course: 'Pizza',
         desc: 'need ppl to chip in for pizza',
         location: 'The crib',
@@ -32,7 +31,7 @@ class MockStudyGroupRepo extends StudyGroupRepo {
         hostId: 1,
         attendees: [2, 3],
       ),
-      -2:StudyGroup(
+      -2: StudyGroup(
         course: 'Event 1',
         desc: 'This is a sample description for this event',
         location: 'UW CSE2 G21',
@@ -43,7 +42,7 @@ class MockStudyGroupRepo extends StudyGroupRepo {
         hostName: 'John',
         attendees: [1, 3],
       ),
-      -1:StudyGroup(
+      -1: StudyGroup(
         course: 'Another event',
         desc: 'This time i really need people',
         location: '[Redacted]',
@@ -60,25 +59,25 @@ class MockStudyGroupRepo extends StudyGroupRepo {
   //* Overriden Methods
   @override
   Future<int> addStudyGroupAsync(StudyGroup studyGroup) async {
-    _studygroups[_nextId] = studyGroup;
+    _studyGroups[_nextId] = studyGroup;
     _nextId++;
 
     return _nextId - 1;
   }
 
   @override
-  int deleteStudyGroupAsync(int id) {
-    _studygroups.remove(id);
+  Future<int> deleteStudyGroupAsync(int id) async {
+    _studyGroups.remove(id);
     return id;
   }
 
   @override
   Future<StudyGroup?> getStudyGroupAsync(int id) async {
-    return _studygroups[id];
+    return _studyGroups[id];
   }
 
   @override
   Future<Map<int, StudyGroup>> getStudyGroupsAsync() async {
-    return _studygroups;
+    return _studyGroups;
   }
 }
