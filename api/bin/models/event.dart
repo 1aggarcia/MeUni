@@ -4,7 +4,8 @@ import 'user.dart';
 import '../controllers/mock_users.dart';
 
 final List<User> mockUsers = MockUsersRepo().getMockUsers();
-
+ 
+// TODO: Handle missing attendee lists
 class Event {
   final String title;
   final String desc;

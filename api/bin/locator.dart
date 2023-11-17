@@ -19,6 +19,6 @@ void setupLocator(DatabaseReference dbRef) {
     locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
   } else {
     locator.registerLazySingleton<EventsRepo>(() => EventsRepoImpl());
-    locator.registerLazySingleton<UsersRepo>(() => UsersRepoImpl());
+    locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
   }
 }

@@ -43,7 +43,6 @@ class EventsRepoImpl extends EventsRepo {
     eventJson.remove('hostName');
     eventJson.remove('attendeeNames');
     newRef.update(eventJson);
-    print("returning: $id");
     return id;
   }
 
@@ -52,14 +51,6 @@ class EventsRepoImpl extends EventsRepo {
     final db.DatabaseReference eventRef = _eventsRef.child("$id");
     eventRef.remove();
     return id;
-    // final db.DatabaseReference eventRef = _eventsRef.child("$id");
-    // final db.DataSnapshot snapshot = await eventRef.once();
-    // if (snapshot.value != null) {
-    //   eventRef.remove();
-    //   return true;
-    // } else {
-    //   return false;
-    // }
   }
 
   @override
@@ -95,6 +86,7 @@ class EventsRepoImpl extends EventsRepo {
       }
       newRef = _eventsRef.child("$id");
       snapshot = await newRef.once();
+      used.add(id);
     }
     return(id, newRef);    
   }

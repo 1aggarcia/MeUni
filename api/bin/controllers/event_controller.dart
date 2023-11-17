@@ -49,7 +49,6 @@ class EventController extends Controller {
   }
 
   // POST /
-  // TODO : ignore attendee params, set to empty list
   Future<Response> postEventsHandler(Request request) async {
     String body = await request.readAsString();
 
