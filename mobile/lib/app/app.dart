@@ -1,5 +1,4 @@
 import 'package:stacked/stacked_annotations.dart';
-import 'package:stacked_firebase_auth/stacked_firebase_auth.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../repository/events_repo.dart';
@@ -33,8 +32,6 @@ import 'package:meuni_mobile/ui/views/login/login_view.dart';
     LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
     LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
     LazySingleton(classType: ApiService),
-
-    Singleton(classType: FirebaseAuthenticationService)
 // @stacked-service
   ],
   bottomsheets: [
