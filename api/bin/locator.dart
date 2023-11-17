@@ -8,7 +8,7 @@ import 'repository/users_repo.dart';
 
 final locator = GetIt.instance;
 
-final useMocks = true;
+final useMocks = false;
 
 void setupLocator(DatabaseReference dbRef) {
   // Database

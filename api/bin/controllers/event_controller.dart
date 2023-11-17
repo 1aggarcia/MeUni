@@ -1,5 +1,6 @@
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf/shelf.dart';
+import 'dart:convert';
 
 import '../locator.dart';
 import '../models/event.dart';
@@ -15,7 +16,8 @@ class EventController extends Controller {
   Router setUpRoutes(Router router, String endpoint) {
     return router
       ..get('$endpoint/get', getEventsHandler)
-      ..post('$endpoint/create', postEventsHandler);
+      ..post('$endpoint/create', postEventsHandler)
+      ..post('$endpoint/delete', deleteEventsHandler);
   }
 
   //* Public API Methods
@@ -52,10 +54,33 @@ class EventController extends Controller {
     String body = await request.readAsString();
 
     try {
-      Event event = eventFromJson(body);
-      int newId = await _eventsRepo.addEventAsync(event);
-      return Response.ok("$newId");
+      Event? event = eventFromJson(body);
+      if (event != null) {
+        int newId = await _eventsRepo.addEventAsync(event);
+        return Response.ok("$newId");
+      } else {
+        return Response(400);
+      }
     } catch (e) {
+      print(e);
+      return Response(400);
+    }
+  }
+
+  Future<Response> deleteEventsHandler(Request request) async {
+    String json = await request.readAsString();
+
+    try {
+      dynamic body = jsonDecode(json);
+      int? id = body['id'];
+      if (id != null) {
+        int result = _eventsRepo.deleteEventAsync(id);
+        return Response.ok("$result");
+      } else {
+        return Response(400);
+      }
+    } catch (e) {
+      print(e);
       return Response(400);
     }
   }

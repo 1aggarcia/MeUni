@@ -62,22 +62,16 @@ class MockEventsRepo extends EventsRepo {
   //* Overriden Methods
   @override
   Future<int> addEventAsync(Event event) async {
-    // Event newEvent = Event(
-    //   title: event.title,
-    //   desc: event.desc,
-    //   location: event.location,
-    //   max: event.max,
-    //   startTime: event.startTime,
-    //   endTime: event.endTime,
-    //   hostId: event.hostId,
-    //   hostName: event.hostName,
-    //   attendees: event.attendees,
-    //   attendeeNames: event.attendeeNames,
-    // );
     _events[_nextId] = event;
     _nextId++;
 
     return _nextId - 1;
+  }
+
+  @override
+  int deleteEventAsync(int id) {
+    _events.remove(id);
+    return id;
   }
 
   @override
