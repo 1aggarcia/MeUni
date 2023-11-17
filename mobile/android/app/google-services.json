@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "807288899830-e8k2sv60078kjod45d51e33rqe66e5kp.apps.googleusercontent.com",
+          "client_id": "807288899830-0ma7ogp71k689hqss9eehl5si8u9m3er.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.meuni_mobile",
-            "certificate_hash": "dfdbf0e03b3fb4f59b2d56b5100df0cf8e836a02"
+            "certificate_hash": "620781659b52f78eb3e914c9226406a40092168f"
           }
         },
         {

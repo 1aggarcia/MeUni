@@ -25,7 +25,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -69,24 +72,8 @@ class DefaultFirebaseOptions {
     projectId: 'meuni-9d616',
     databaseURL: 'https://meuni-9d616-default-rtdb.firebaseio.com',
     storageBucket: 'meuni-9d616.appspot.com',
-    androidClientId:
-        '807288899830-e8k2sv60078kjod45d51e33rqe66e5kp.apps.googleusercontent.com',
-    iosClientId:
-        '807288899830-kt46aglaenp4f4tlvk039j0kkv4cvdn7.apps.googleusercontent.com',
+    androidClientId: '807288899830-0ma7ogp71k689hqss9eehl5si8u9m3er.apps.googleusercontent.com',
+    iosClientId: '807288899830-kt46aglaenp4f4tlvk039j0kkv4cvdn7.apps.googleusercontent.com',
     iosBundleId: 'com.example.meuniMobile',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyB1qna4rlGnwhIoX3bBBiGgZKIkHClR7Qg',
-    appId: '1:807288899830:ios:ceb0ec82c074f7386dc4d7',
-    messagingSenderId: '807288899830',
-    projectId: 'meuni-9d616',
-    databaseURL: 'https://meuni-9d616-default-rtdb.firebaseio.com',
-    storageBucket: 'meuni-9d616.appspot.com',
-    androidClientId:
-        '807288899830-e8k2sv60078kjod45d51e33rqe66e5kp.apps.googleusercontent.com',
-    iosClientId:
-        '807288899830-2ii28tmj936q6mu2qpc7q79nnekqrqor.apps.googleusercontent.com',
-    iosBundleId: 'com.example.meuniMobile.RunnerTests',
   );
 }
