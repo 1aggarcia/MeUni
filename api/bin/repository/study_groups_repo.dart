@@ -1,35 +1,37 @@
 import 'package:firebase_dart/database.dart' as db;
 
 import '../locator.dart';
-import '../models/studygroup.dart';
+import '../models/study_group.dart';
 
-abstract class StudyGroupRepo {
+abstract class StudyGroupsRepo {
   //* Public Methods
 
-  // Returns the ID of the newly created studygroup
-  Future<int> addStudyGroupAsync(StudyGroup studygroup);
+  // Returns the ID of the newly created studyGroup
+  Future<int> addStudyGroupAsync(StudyGroup studyGroup);
+
+  Future<int> deleteStudyGroupAsync(int id);
 
   /// Returns the StudyGroup if found, null otherwise
   Future<StudyGroup?> getStudyGroupAsync(int id);
 
-  /// Returns {} if no studygroups
+  /// Returns {} if no studyGroup
   Future<Map<int, StudyGroup>> getStudyGroupsAsync();
 }
 
-class StudyGroupRepoImpl extends StudyGroupRepo {
+class StudyGroupReposImpl extends StudyGroupsRepo {
   //* Private Properties
-  late db.DatabaseReference _studygroupsRef;
+  late db.DatabaseReference _studyGroupsRef;
 
   //* Constructors
-  StudyGroupsRepoImpl() {
+  StudyGroupReposImpl() {
     final dbRef = locator<db.DatabaseReference>();
 
-    _studygroupsRef = dbRef.child('studygroups');
+    _studyGroupsRef = dbRef.child('studyGroups');
   }
 
   //* Overriden Methods
   @override
-  Future<int> addStudyGroupAsync(StudyGroup studygroup) {
+  Future<int> addStudyGroupAsync(StudyGroup studyGroup) {
     // TODO: implement addStudyGroupAsync
     throw UnimplementedError();
   }
@@ -42,7 +44,7 @@ class StudyGroupRepoImpl extends StudyGroupRepo {
 
   @override
   Future<Map<int, StudyGroup>> getStudyGroupsAsync() async {
-    final db.DataSnapshot snapshot = await _studygroupsRef.once();
+    final db.DataSnapshot snapshot = await _studyGroupsRef.once();
     print(snapshot.value);
 
     final Map<String, Object>? value = snapshot.value;
@@ -53,5 +55,11 @@ class StudyGroupRepoImpl extends StudyGroupRepo {
     } else {
       return {};
     }
+  }
+
+  @override
+  Future<int> deleteStudyGroupAsync(int id) {
+    // TODO: implement deleteStudyGroupAsync
+    throw UnimplementedError();
   }
 }
