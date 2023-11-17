@@ -1,8 +1,10 @@
+// ignore_for_file: unused_import
+
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../repository/events_repo.dart';
-//import '../repository/mock/mock_events_repo.dart';
+import '../repository/mock/mock_events_repo.dart';
 import '../repository/mock/mock_users_repo.dart';
 import '../repository/users_repo.dart';
 
@@ -31,6 +33,8 @@ import '../ui/views/startup/startup_view.dart';
     LazySingleton(classType: NavigationService),
     LazySingleton(classType: EventsRepoImpl, asType: EventsRepo),
     LazySingleton(classType: UsersRepoImpl, asType: UsersRepo),
+    // LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
+    // LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
     LazySingleton(classType: ApiService),
 // @stacked-service
   ],
