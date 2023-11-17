@@ -25,18 +25,32 @@ class MockUsersRepo extends UsersRepo {
         pronouns: 'He/Him',
         admin: false,
       ),
-      User(
-        id: '4H1ZJTd7gUdQKSstwBG9DsKle0u2',
-        firstName: 'Sandeep',
-        lastName: 'Test',
-        year: 3,
-        pronouns: 'He/Him',
-        admin: true,
-      ),
     ];
   }
 
   //* Public Properties
+  @override
+  Future<User> addUserAsync({
+    required String id,
+    required String firstName,
+    required String lastName,
+    required int year,
+    required String pronouns,
+  }) async {
+    User user = User(
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      year: year,
+      pronouns: pronouns,
+      admin: false,
+    );
+
+    _users.add(user);
+
+    return user;
+  }
+
   @override
   Future<User?> getUserAsync(String id) async {
     await Future.delayed(App.demoDuration);
