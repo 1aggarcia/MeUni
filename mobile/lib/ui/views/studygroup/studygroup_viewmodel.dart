@@ -9,7 +9,7 @@ import '../../../repository/events_repo.dart';
 import '../../../repository/studygroup_repo.dart';
 import '../../../repository/users_repo.dart';
 
-class EventsViewModel extends BaseViewModel {
+class StudyGroupViewModel extends BaseViewModel {
   //* Private Properties
   final _eventsRepo = locator<EventsRepo>();
   final _usersRepo = locator<UsersRepo>();
@@ -26,23 +26,21 @@ class EventsViewModel extends BaseViewModel {
   List<StudyGroup> studyGroups = [];
 
   //* Public Methods
-  Future getEventsAsync() async {
+  Future getStudyGroupsAsync() async {
     isLoading = true;
     rebuildUi();
 
-    events = await _eventsRepo.getEventsAsync();
+    studyGroups = await _studyGroupRepo.getStudyGroupsAsync();
 
     isLoading = false;
     rebuildUi();
   }
 
+  Future goToEventPageAsync() async =>
+      await _navigationService.navigateToEventsView();
 
-  Future goToCreateEventPageAsync() async =>
-      await _navigationService.navigateToCreateEventView();
-
-
-  Future goToStudyGroupPageAsync() async =>
-      await _navigationService.navigateToStudyGroupView();
+  Future goToCreateStudyGroupPageAsync() async =>
+      await _navigationService.navigateToCreateStudyGroupView();
 
   Future logoutAsync() async => await _navigationService.replaceWithLoginView();
 }

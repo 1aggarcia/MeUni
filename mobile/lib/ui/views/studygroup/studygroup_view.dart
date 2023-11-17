@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:meuni_mobile/ui/views/studygroup/studygroup_viewmodel.dart';
+import 'package:meuni_mobile/ui/widgets/studygroup_card.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
-import '../../widgets/event_card.dart';
-import 'events_viewmodel.dart';
 
-class EventsView extends StackedView<EventsViewModel> {
-  const EventsView({Key? key}) : super(key: key);
+class StudyGroupView extends StackedView<StudyGroupViewModel> {
+  const StudyGroupView({Key? key}) : super(key: key);
 
   @override
   Widget builder(
-      BuildContext context, EventsViewModel viewModel, Widget? child) {
+      BuildContext context, StudyGroupViewModel viewModel, Widget? child) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: kcBackgroundColor,
@@ -36,34 +36,34 @@ class EventsView extends StackedView<EventsViewModel> {
                         MaterialButton(
                           color: Colors.black,
                           onPressed: () async =>
-                              await viewModel.getEventsAsync(),
+                          await viewModel.goToEventPageAsync(),
                           child: const Text(
-                            'Get Events',
+                            'Go to Event View',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
                         MaterialButton(
                           color: Colors.black,
                           onPressed: () async =>
-                              await viewModel.goToCreateEventPageAsync(),
+                              await viewModel.getStudyGroupsAsync(),
                           child: const Text(
-                            'Add Event',
+                            'Get Study Groups',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
                         MaterialButton(
                           color: Colors.black,
                           onPressed: () async =>
-                          await viewModel.goToStudyGroupPageAsync(),
+                              await viewModel.goToCreateStudyGroupPageAsync(),
                           child: const Text(
-                            'Go to Study Groups View',
+                            'Add Study Group',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ],
                     ),
-                    for (var event in viewModel.events) ...[
-                      EventCard(event: event)
+                    for (var studygroup in viewModel.studyGroups) ...[
+                      StudyGroupCard(studyGroup: studygroup)
                     ]
                   ],
                 )),
@@ -72,5 +72,6 @@ class EventsView extends StackedView<EventsViewModel> {
   }
 
   @override
-  EventsViewModel viewModelBuilder(BuildContext context) => EventsViewModel();
+  StudyGroupViewModel viewModelBuilder(BuildContext context) =>
+      StudyGroupViewModel();
 }

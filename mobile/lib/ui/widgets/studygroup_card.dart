@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:meuni_mobile/models/studygroup.dart';
 
 import '../../models/event.dart';
 import '../common/ui_helpers.dart';
 
-class EventCard extends StatelessWidget {
+class StudyGroupCard extends StatelessWidget {
   //* Public Properties
-  final Event event;
+  final StudyGroup studyGroup;
 
   //* Constructors
-  const EventCard({super.key, required this.event});
+  const StudyGroupCard({super.key, required this.studyGroup});
 
   //* Overriden Methods
   @override
   Widget build(BuildContext context) {
-    final startDate = DateFormat.MMMEd().format(event.startTime);
-    final startTime = DateFormat.jm().format(event.startTime);
-    final endTime = DateFormat.jm().format(event.endTime);
+    final startDate = DateFormat.MMMEd().format(studyGroup.startTime);
+    final startTime = DateFormat.jm().format(studyGroup.startTime);
+    final endTime = DateFormat.jm().format(studyGroup.endTime);
 
     const textStyle = TextStyle(
       color: Colors.black,
@@ -41,7 +42,7 @@ class EventCard extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
                   child: Text(
-                    'Title: ${event.title}',
+                    'Course: ${studyGroup.course}',
                     textAlign: TextAlign.center,
                     style: textStyle,
                   ),
@@ -51,7 +52,7 @@ class EventCard extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
                   child: Text(
-                    'Description: ${event.desc}',
+                    'Description: ${studyGroup.desc}',
                     textAlign: TextAlign.center,
                     style: textStyle,
                   ),
@@ -71,7 +72,7 @@ class EventCard extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
                   child: Text(
-                    'Location: ${event.location}',
+                    'Location: ${studyGroup.location}',
                     textAlign: TextAlign.center,
                     style: textStyle,
                   ),

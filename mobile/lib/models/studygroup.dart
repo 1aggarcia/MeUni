@@ -1,23 +1,23 @@
 import 'dart:convert';
 
-Event eventFromJson(String str) {
+StudyGroup studygroupFromJson(String str) {
   var decode = json.decode(str);
-  return Event.fromJson(decode);
+  return StudyGroup.fromJson(decode);
 }
 
-String eventToJson(Event data) => json.encode(data.toJson());
+String studygroupToJson(StudyGroup data) => json.encode(data.toJson());
 
-List<Event> eventsFromJson(String str) =>
-    List<Event>.from(json.decode(str).map((x) => Event.fromJson(x)));
+List<StudyGroup> studygroupsFromJson(String str) =>
+    List<StudyGroup>.from(json.decode(str).map((x) => StudyGroup.fromJson(x)));
 
-String eventsToJson(List<Event> data) =>
+String studygroupsToJson(List<StudyGroup> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Event {
+class StudyGroup {
   //* Public Properties
   final int id;
 
-  final String title;
+  final String course;
   final String desc;
   final String location;
 
@@ -31,9 +31,9 @@ class Event {
   final List<int> attendees;
 
   //* Constructors
-  Event(
+  StudyGroup(
       {required this.id,
-      required this.title,
+      required this.course,
       required this.desc,
       required this.location,
       required this.max,
@@ -43,12 +43,12 @@ class Event {
       required this.hostName,
       required this.attendees});
 
-  factory Event.fromJson(Map<String, dynamic> json) {
+  factory StudyGroup.fromJson(Map<String, dynamic> json) {
     List<int> attendees = List<int>.from(json['attendees']);
 
-    return Event(
+    return StudyGroup(
       id: json['id'],
-      title: json['title'],
+      course: json['course'],
       desc: json['desc'],
       location: json['location'],
       max: json['max'],
@@ -62,7 +62,7 @@ class Event {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'title': title,
+        'course': course,
         'desc': desc,
         'location': location,
         'max': max,

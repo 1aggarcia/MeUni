@@ -1,4 +1,3 @@
-
 import 'package:http/http.dart';
 
 import '../app/app.locator.dart';
@@ -13,7 +12,6 @@ abstract class EventsRepo {
 }
 
 class EventsRepoImpl extends EventsRepo {
-
   final ApiService _apiService = locator<ApiService>();
   @override
   Future addEventAsync(Event event) async {
@@ -24,8 +22,7 @@ class EventsRepoImpl extends EventsRepo {
   @override
   Future<List<Event>> getEventsAsync() async {
     // TODO: implement getEventsAsync
-   Response response = await _apiService.getAsync("/events/get");
-   return eventsFromJson(response.body);
+    Response response = await _apiService.getAsync("/events/get");
+    return eventsFromJson(response.body);
   }
-  
 }
