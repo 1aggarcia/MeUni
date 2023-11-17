@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -38,6 +40,8 @@ import '../ui/views/startup/startup_view.dart';
     LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
     LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
     LazySingleton(classType: MockStudyGroupRepo, asType: StudyGroupRepo),
+    // LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
+    // LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
     LazySingleton(classType: ApiService),
 // @stacked-service
   ],
