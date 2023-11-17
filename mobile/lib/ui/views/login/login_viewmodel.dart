@@ -15,25 +15,28 @@ class LoginViewModel extends BaseViewModel {
         await GoogleSignIn(hostedDomain: "uw.edu").signIn();
 
     if (googleUser == null) {
-      // Error!
+      _dialogService.showDialog(
+        title: 'Error!',
+        description: 'Please try again another time.',
+      );
+    } else {
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      _dialogService.showDialog(
+        title: userCredential.user!.email,
+        description: userCredential.user!.uid,
+      );
     }
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    UserCredential user =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-
-    _dialogService.showDialog(
-      title: user.user!.email,
-      description: user.user!.uid,
-    );
   }
 }

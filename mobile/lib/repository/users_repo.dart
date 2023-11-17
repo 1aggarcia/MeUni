@@ -5,5 +5,5 @@ abstract class UsersRepo {
   User? loggedInUser;
 
   //* Public Methods
-  Future<User> getUserAsync(int id);
+  Future<User?> getUserAsync(String id);
 }

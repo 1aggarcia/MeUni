@@ -16,15 +16,16 @@ class Event {
   final List<int> attendees;
 
   //* Constructors
-  Event(
-      {required this.id,
-      required this.title,
-      required this.desc,
-      required this.location,
-      required this.max,
-      required this.startTime,
-      required this.endTime,
-      required this.hostId,
-      required this.hostName,
-      required this.attendees});
+  Event({
+    required this.id,
+    required this.title,
+    required this.desc,
+    required this.location,
+    required this.max,
+    required this.startTime,
+    required this.endTime,
+    required this.hostId,
+    required this.hostName,
+    required this.attendees,
+  });
 }

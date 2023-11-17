@@ -10,29 +10,41 @@ class MockUsersRepo extends UsersRepo {
   MockUsersRepo() {
     _users = [
       User(
+        id: '1',
         firstName: 'Fei',
         lastName: 'Huang',
         year: 4,
         pronouns: 'He/Him',
         admin: true,
-        id: 1,
       ),
       User(
+        id: '2',
         firstName: 'John',
         lastName: 'Stuart',
         year: 3,
         pronouns: 'He/Him',
         admin: false,
-        id: 2,
-      )
+      ),
+      User(
+        id: '4H1ZJTd7gUdQKSstwBG9DsKle0u2',
+        firstName: 'Sandeep',
+        lastName: 'Test',
+        year: 3,
+        pronouns: 'He/Him',
+        admin: true,
+      ),
     ];
   }
 
   //* Public Properties
   @override
-  Future<User> getUserAsync(int id) async {
+  Future<User?> getUserAsync(String id) async {
     await Future.delayed(App.demoDuration);
 
-    return _users.singleWhere((u) => u.id == id);
+    try {
+      return _users.singleWhere((u) => u.id == id);
+    } catch (e) {
+      return null;
+    }
   }
 }
