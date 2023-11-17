@@ -11,7 +11,8 @@ class LoginViewModel extends BaseViewModel {
   //* Public Methods
   Future signInWithGoogleAsync() async {
     // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount? googleUser =
+        await GoogleSignIn(hostedDomain: "uw.edu").signIn();
 
     if (googleUser == null) {
       // Error!
