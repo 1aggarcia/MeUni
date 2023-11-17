@@ -52,9 +52,13 @@ class EventController extends Controller {
     String body = await request.readAsString();
 
     try {
-      Event event = eventFromJson(body);
-      int newId = await _eventsRepo.addEventAsync(event);
-      return Response.ok("$newId");
+      Event? event = eventFromJson(body);
+      if (event != null) {
+        int newId = await _eventsRepo.addEventAsync(event);
+        return Response.ok("$newId");
+      } else {
+        return Response(400);
+      }
     } catch (e) {
       return Response(400);
     }
