@@ -73,7 +73,7 @@ class EventController extends Controller {
       dynamic body = jsonDecode(json);
       int? id = body['id'];
       if (id != null) {
-        int result = _eventsRepo.deleteEventAsync(id);
+        int result = _eventsRepo.deleteEvent(id);
         return Response.ok("$result");
       } else {
         return Response(400);

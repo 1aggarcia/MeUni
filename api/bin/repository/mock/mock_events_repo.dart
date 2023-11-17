@@ -69,7 +69,7 @@ class MockEventsRepo extends EventsRepo {
   }
 
   @override
-  int deleteEventAsync(int id) {
+  int deleteEvent(int id) {
     _events.remove(id);
     return id;
   }

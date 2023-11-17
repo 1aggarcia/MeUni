@@ -15,7 +15,7 @@ abstract class EventsRepo {
   Future<int> addEventAsync(Event event);
 
   /// Removes event of given id from database, returns id of deleted event
-  int deleteEventAsync(int id);
+  int deleteEvent(int id);
 
   /// Returns the Event if found, null otherwise
   Future<Event?> getEventAsync(int id);
@@ -47,7 +47,7 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   @override
-  int deleteEventAsync(int id) {
+  int deleteEvent(int id) {
     final db.DatabaseReference eventRef = _eventsRef.child("$id");
     eventRef.remove();
     return id;

@@ -88,6 +88,18 @@ class Event {
     'attendees': attendees,
     'attendeeNames': attendeeNames
   };
+
+  bool equals(Event other) {
+    return 
+        title == other.title &&
+        desc == other.desc &&
+        location == other.location &&
+        max == other.max &&
+        startTime == other.startTime &&
+        endTime == other.endTime &&
+        hostId == other.hostId &&
+        hostName == other.hostName;
+  }
 }
 
 /// Given json string representing event, returns Event or null if improperly formatted
@@ -153,3 +165,4 @@ String userNamefromId(String userId) {
     return "[unknown user]";
   }
 }
+
