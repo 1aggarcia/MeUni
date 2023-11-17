@@ -14,7 +14,7 @@ abstract class EventsRepo {
   /// Returns the ID of the newly created event, or -1 if unsucessfull
   Future<int> addEventAsync(Event event);
 
-  /// Returns ID of deleted event, or -1 if unsucessfull
+  /// Removes event of given id from database, returns id of deleted event
   int deleteEventAsync(int id);
 
   /// Returns the Event if found, null otherwise
@@ -38,33 +38,28 @@ class EventsRepoImpl extends EventsRepo {
   //* Overriden Methods
   @override
   Future<int> addEventAsync(Event event) async {
-    // Find avaliable ID
-    final rand = Random();
-    int id = rand.nextInt(maxEvents);
-    List<int> used = [id];
-    db.DatabaseReference newEvent = _eventsRef.child("$id");
-    db.DataSnapshot snapshot = await newEvent.once();
-
-    // Condition on length prevents infinite loop
-    while(snapshot.value != null && used.length < maxEvents) {
-      // Given above condition, there must be an unused id that can be generated
-      while (used.contains(id)) {
-        id = rand.nextInt(maxEvents);
-      }
-      newEvent = _eventsRef.child("$id");
-      snapshot = await newEvent.once();
-    }
-
-    // Create event
-    newEvent.update({"titulo":"c"});
-
+    final (id, newRef) = await getNewRefAsync();
+    final Map<String, dynamic> eventJson = event.toJson();
+    eventJson.remove('hostName');
+    eventJson.remove('attendeeNames');
+    newRef.update(eventJson);
+    print("returning: $id");
     return id;
   }
 
   @override
   int deleteEventAsync(int id) {
-    // TODO: implement deleteEventAsync
-    throw UnimplementedError();
+    final db.DatabaseReference eventRef = _eventsRef.child("$id");
+    eventRef.remove();
+    return id;
+    // final db.DatabaseReference eventRef = _eventsRef.child("$id");
+    // final db.DataSnapshot snapshot = await eventRef.once();
+    // if (snapshot.value != null) {
+    //   eventRef.remove();
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   }
 
   @override
@@ -79,5 +74,28 @@ class EventsRepoImpl extends EventsRepo {
     final db.DataSnapshot snapshot = await _eventsRef.once();
     final json = jsonEncode(snapshot.value);
     return eventsFromJson(json);
+  }
+
+  //* Helper methods
+
+  /// Finds an avaliable id in the database
+  /// returns new id and its DatabaseReference
+  Future<(int, db.DatabaseReference)> getNewRefAsync() async {
+    final rand = Random();
+    int id = rand.nextInt(maxEvents);
+    List<int> used = [id];
+    db.DatabaseReference newRef = _eventsRef.child("$id");
+    db.DataSnapshot snapshot = await newRef.once();
+
+    // Condition on length prevents infinite loop
+    while(snapshot.value != null && used.length < maxEvents) {
+      // Given above condition, there must be an unused id that can be generated
+      while (used.contains(id)) {
+        id = rand.nextInt(maxEvents);
+      }
+      newRef = _eventsRef.child("$id");
+      snapshot = await newRef.once();
+    }
+    return(id, newRef);    
   }
 }
