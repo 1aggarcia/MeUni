@@ -72,8 +72,10 @@ class DefaultFirebaseOptions {
     projectId: 'meuni-9d616',
     databaseURL: 'https://meuni-9d616-default-rtdb.firebaseio.com',
     storageBucket: 'meuni-9d616.appspot.com',
-    androidClientId: '807288899830-0ma7ogp71k689hqss9eehl5si8u9m3er.apps.googleusercontent.com',
-    iosClientId: '807288899830-kt46aglaenp4f4tlvk039j0kkv4cvdn7.apps.googleusercontent.com',
+    androidClientId:
+        '807288899830-0ma7ogp71k689hqss9eehl5si8u9m3er.apps.googleusercontent.com',
+    iosClientId:
+        '807288899830-kt46aglaenp4f4tlvk039j0kkv4cvdn7.apps.googleusercontent.com',
     iosBundleId: 'com.example.meuniMobile',
   );
 }

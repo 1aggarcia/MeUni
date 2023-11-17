@@ -1,12 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:meuni_mobile/app/app.locator.dart';
+import 'package:meuni_mobile/app/app.router.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+
+import '../../../app/app.locator.dart';
+import '../../../repository/users_repo.dart';
+import '../../../models/user.dart' as m;
 
 class LoginViewModel extends BaseViewModel {
   //* Private Properties
   final _dialogService = locator<DialogService>();
+  final _navigationService = locator<NavigationService>();
+  final _usersRepo = locator<UsersRepo>();
 
   //* Public Methods
   Future signInWithGoogleAsync() async {
@@ -33,10 +39,19 @@ class LoginViewModel extends BaseViewModel {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      _dialogService.showDialog(
-        title: userCredential.user!.email,
-        description: userCredential.user!.uid,
-      );
+      String userId = userCredential.user!.uid;
+
+      m.User? user = await _usersRepo.getUserAsync(userId);
+
+      if (user != null) {
+        // Set logged in user
+        _usersRepo.loggedInUser = user;
+
+        _navigationService.replaceWithEventsView();
+      } else {
+        // Create Profile
+        _navigationService.replaceWithCreateProfileView(userId: userId);
+      }
     }
   }
 }

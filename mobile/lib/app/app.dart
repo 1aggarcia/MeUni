@@ -15,6 +15,7 @@ import '../ui/views/create_event/create_event_view.dart';
 import '../ui/views/events/events_view.dart';
 import '../ui/views/startup/startup_view.dart';
 import 'package:meuni_mobile/ui/views/login/login_view.dart';
+import 'package:meuni_mobile/ui/views/create_profile/create_profile_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -23,6 +24,7 @@ import 'package:meuni_mobile/ui/views/login/login_view.dart';
     MaterialRoute(page: EventsView),
     MaterialRoute(page: CreateEventView),
     MaterialRoute(page: LoginView),
+    MaterialRoute(page: CreateProfileView),
 // @stacked-route
   ],
   dependencies: [
