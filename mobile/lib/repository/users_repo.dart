@@ -1,4 +1,8 @@
+import 'package:http/http.dart';
+
 import '../models/user.dart';
+import '../app/app.locator.dart';
+import '../services/api_service.dart';
 
 abstract class UsersRepo {
   //* Public Properties
@@ -6,4 +10,15 @@ abstract class UsersRepo {
 
   //* Public Methods
   Future<User> getUserAsync(int id);
+}
+
+class UsersRepoImpl extends UsersRepo {
+  final ApiService _apiService = locator<ApiService>();
+
+  @override
+  Future<User> getUserAsync(int id) async {
+    Response response = await _apiService.getAsync("/users/profile/get?id=$id");
+    return userFromJson(response.body, id);
+  }
+
 }

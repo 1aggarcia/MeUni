@@ -30,7 +30,7 @@ import '../ui/views/startup/startup_view.dart';
     LazySingleton(classType: DialogService),
     LazySingleton(classType: NavigationService),
     LazySingleton(classType: EventsRepoImpl, asType: EventsRepo),
-    LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
+    LazySingleton(classType: UsersRepoImpl, asType: UsersRepo),
     LazySingleton(classType: ApiService),
 // @stacked-service
   ],
