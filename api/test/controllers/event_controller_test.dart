@@ -32,7 +32,7 @@ void main() {
         max: 4,
         startTime: DateTime.parse('2023-11-04T03:04:15.537017Z'),
         endTime: DateTime.parse('2023-11-04T03:24:15.537017Z'),
-        hostId: 1,
+        hostId: "1a",
         hostName: 'Fei',
         attendees: [],
         attendeeNames: [],
@@ -47,7 +47,7 @@ void main() {
           '"max":4,'
           '"startTime":"2023-11-04T03:04:15.537017Z",'
           '"endTime":"2023-11-04T03:24:15.537017Z",'
-          '"hostId":1,'
+          '"hostId":"1a",'
           '"hostName":"Fei",'
           '"attendees":[],'
           '"attendeeNames":[]}');
@@ -83,7 +83,7 @@ void main() {
           '"max":"",'
           '"startTime":"12/25/23",'
           '"endTime":"2023-11-04T03:24:15.537017Z",'
-          '"hostId":1,'
+          '"hostId":"1a",'
           '"attendees":25}';
 
       Request req = Request(
@@ -104,8 +104,8 @@ void main() {
         max: 3,
         startTime: DateTime.parse('2024-01-04T15:14:15.537017Z'),
         endTime: DateTime.parse('2023-11-04T16:14:15.567017Z'),
-        hostId: 2,
-        hostName: 'John',
+        hostId: "2b",
+        hostName: '[unknown user]',
         attendees: [],
         attendeeNames: [],
       );
@@ -116,8 +116,8 @@ void main() {
         max: 5,
         startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
         endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
-        hostId: 3,
-        hostName: 'Hannah',
+        hostId: "3b",
+        hostName: '[unknown user]',
         attendees: [],
         attendeeNames: [],
       );
@@ -151,7 +151,6 @@ void main() {
 
       expect(response.statusCode, 200);
       expect(
-          await response.readAsString(),
           '{"0":'
           '{"title":"Tennis",'
           '"desc":"At the IMA tennis court! Hang out with me!",'
@@ -159,8 +158,8 @@ void main() {
           '"max":3,'
           '"startTime":"2024-01-04T15:14:15.537017Z",'
           '"endTime":"2023-11-04T16:14:15.567017Z",'
-          '"hostId":2,'
-          '"hostName":"John",'
+          '"hostId":"2b",'
+          '"hostName":"[unknown user]",'
           '"attendees":[],'
           '"attendeeNames":[]},'
           '"1":'
@@ -170,10 +169,11 @@ void main() {
           '"max":5,'
           '"startTime":"2024-08-04T15:14:15.537017Z",'
           '"endTime":"2024-08-04T16:14:59.567017Z",'
-          '"hostId":3,'
-          '"hostName":"Hannah",'
+          '"hostId":"3b",'
+          '"hostName":"[unknown user]",'
           '"attendees":[],'
-          '"attendeeNames":[]}}');
+          '"attendeeNames":[]}}',
+          await response.readAsString());
     });
 
     test('GET events with id param', () async {
@@ -184,8 +184,8 @@ void main() {
         max: 3,
         startTime: DateTime.parse('2024-01-04T15:14:15.537017Z'),
         endTime: DateTime.parse('2023-11-04T16:14:15.567017Z'),
-        hostId: 2,
-        hostName: 'John',
+        hostId: "2b",
+        hostName: '[unknown user]',
         attendees: [],
         attendeeNames: [],
       );
@@ -216,8 +216,8 @@ void main() {
           '"max":3,'
           '"startTime":"2024-01-04T15:14:15.537017Z",'
           '"endTime":"2023-11-04T16:14:15.567017Z",'
-          '"hostId":2,'
-          '"hostName":"John",'
+          '"hostId":"2b",'
+          '"hostName":"[unknown user]",'
           '"attendees":[],'
           '"attendeeNames":[]}');
     });

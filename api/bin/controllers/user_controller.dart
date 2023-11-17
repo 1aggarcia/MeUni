@@ -23,8 +23,7 @@ class UserController extends Controller {
     Map<String, dynamic> params = request.url.queryParameters;
 
     try {
-      int userId = int.parse(params['id']);
-      User? user = await _usersRepo.getUserAsync(userId);
+      User? user = await _usersRepo.getUserAsync(params['id']);
 
       if (user != null) {
         return Response.ok(userToJson(user));

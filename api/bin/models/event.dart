@@ -15,10 +15,10 @@ class Event {
   final DateTime startTime;
   final DateTime endTime;
 
-  final int hostId;
+  final String hostId;
   final String hostName;
 
-  final List<int> attendees;
+  final List<String> attendees;
   final List<String> attendeeNames;
 
   Event({
@@ -35,15 +35,14 @@ class Event {
   });
 
   /// Creates an instance event from a json map.
-  /// Required from json map:
-  /// json['title'] is String,
-  /// json['desc'] is String,
-  /// json['location'] is String,
-  /// json['max'] is int,
-  /// json['startTime'] is String formatted as ISO date,
-  /// json['endTime'] is String formatted as ISO date,
-  /// json['hostId'] is int,
-  /// json['attendees'] is List<int>
+  /// @requires json['title'] is String,
+  /// @requires json['desc'] is String,
+  /// @requires json['location'] is String,
+  /// @requires json['max'] is int,
+  /// @requires json['startTime'] is String formatted as ISO date,
+  /// @requires json['endTime'] is String formatted as ISO date,
+  /// @requires json['hostId'] is String,
+  /// @requires json['attendees'] is List<String> if included
   factory Event.fromJson(Map<String, dynamic> json) {
     if (json['title'] is! String ||
           json['desc'] is! String ||
@@ -51,16 +50,15 @@ class Event {
           json['max'] is! int ||
           json['startTime'] is! String ||
           json['endTime'] is! String ||
-          json['hostId'] is! int ||
-          json['attendees'] is! List<dynamic>) {
+          json['hostId'] is! String) {
       throw Exception("json map passed in with incorrect types for Event:\n$json");
     }
 
     String hostName = userNamefromId(json['hostId']);
-    List<int> attendees = List<int>.from(json['attendees']);
+    List<String> attendees = List<String>.from(json['attendees']);
     List<String> attendeeNames = [];
-    for (int i in attendees) {
-      attendeeNames.add(userNamefromId(i));
+    for (String id in attendees) {
+      attendeeNames.add(userNamefromId(id));
     }
 
     return Event(
@@ -140,7 +138,7 @@ Map<int, Event> fromJsonMap(Map<String, dynamic> data) {
 /// Given id, returns first name of given user, if it exists
 /// @param userId - of desired user
 /// @returns first name of user with userId, or "[unknown user]" if unavaliable
-String userNamefromId(int userId) {
+String userNamefromId(String userId) {
   int i = 0;
   User u = mockUsers[i];
   // mockUsers will be exausted or desired user found
