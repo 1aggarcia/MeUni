@@ -4,7 +4,9 @@ import 'package:get_it/get_it.dart';
 import 'repository/events_repo.dart';
 import 'repository/mock/mock_events_repo.dart';
 import 'repository/mock/mock_users_repo.dart';
+import 'repository/mock/mock_study_groups_repo.dart';
 import 'repository/users_repo.dart';
+import 'repository/study_groups_repo.dart';
 
 final locator = GetIt.instance;
 
@@ -17,8 +19,10 @@ void setupLocator(DatabaseReference dbRef) {
   if (useMocks) {
     locator.registerLazySingleton<EventsRepo>(() => MockEventsRepo());
     locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
+    locator.registerLazySingleton<StudyGroupsRepo>(() => MockStudyGroupsRepo());
   } else {
     locator.registerLazySingleton<EventsRepo>(() => EventsRepoImpl());
     locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
+    locator.registerLazySingleton<StudyGroupsRepo>(() => MockStudyGroupsRepo());
   }
 }
