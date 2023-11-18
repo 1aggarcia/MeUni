@@ -4,8 +4,8 @@ import 'user.dart';
 import '../controllers/mock_users.dart';
 
 final List<User> mockUsers = MockUsersRepo().getMockUsers();
- 
-// TODO: Handle missing attendee lists
+final int maxCapacity = 15;
+
 class Event {
   final String title;
   final String desc;
@@ -39,8 +39,8 @@ class Event {
   /// @requires json['desc'] is String,
   /// @requires json['location'] is String,
   /// @requires json['max'] is int,
-  /// @requires json['startTime'] is String formatted as ISO date,
-  /// @requires json['endTime'] is String formatted as ISO date,
+  /// @requires json['startTime'] is String formatted as ISO timestamp,
+  /// @requires json['endTime'] is String formatted as ISO timestamp,
   /// @requires json['hostId'] is String,
   /// @requires json['attendees'] is List<String> if included
   factory Event.fromJson(Map<String, dynamic> json) {
@@ -51,14 +51,23 @@ class Event {
           json['startTime'] is! String ||
           json['endTime'] is! String ||
           json['hostId'] is! String) {
-      throw Exception("json map passed in with incorrect types for Event:\n$json");
+      throw Exception("json map passed in with incorrect or missing params for Event:\n$json");
     }
+    if (1 > json['max'] || json['max'] > maxCapacity) {
+      throw Exception("param 'max' must be within range 1-$maxCapacity:\n$json");
+    }
+    List<String> attendees = [];
+    List<String> attendeeNames = [];
 
     String hostName = userNamefromId(json['hostId']);
-    List<String> attendees = List<String>.from(json['attendees']);
-    List<String> attendeeNames = [];
-    for (String id in attendees) {
-      attendeeNames.add(userNamefromId(id));
+    if (json['attendees'] is List<dynamic>) {
+      attendees = List<String>.from(json['attendees']);
+      attendeeNames = [];
+      for (String id in attendees) {
+        attendeeNames.add(userNamefromId(id));
+      }
+    } else if (json['attendees'] != null) {
+      throw Exception("Optional param 'attendees' must be of type List<String> if included:\n$json");
     }
 
     return Event(
@@ -75,6 +84,8 @@ class Event {
     );
   }
 
+  // TODO: create 2nd toJson for database, leave this for clients
+
   /// Returns a json map of Event instance
   Map<String, dynamic> toJson() => {
     'title': title,
@@ -89,6 +100,7 @@ class Event {
     'attendeeNames': attendeeNames
   };
 
+  /// Does not check equality of attendees or attendeeNames
   bool equals(Event other) {
     return 
         title == other.title &&
@@ -106,7 +118,7 @@ class Event {
 Event? eventFromJson(String str){
   try {
     return Event.fromJson(json.decode(str));
-  } catch(e) { 
+  } catch(e) {
     return null; 
   }
 }
@@ -116,8 +128,13 @@ String eventToJson(Event data) => json.encode(data.toJson());
 
 /// Returns Map of all events provided in json string.
 /// Improperly formatted entires ignored
-Map<int, Event> eventsFromJson(String str) => fromJsonMap(json.decode(str));
-    // Map<int, Event>.from(json.decode(str).map((x) => Event.fromJson(x)));
+Map<int, Event> eventsFromJson(String str) {
+  try {
+    return fromJsonMap(json.decode(str));
+  } catch (e) {
+    return {};
+  }
+}
 
 /// Returns json as string representing passed in Map of events
 String eventsToJson(Map<int, Event> data) => json.encode(toJsonMap(data));
@@ -139,8 +156,7 @@ Map<int, Event> fromJsonMap(Map<String, dynamic> data) {
         Event e = Event.fromJson(v);
         events[int.parse(k)] = e;
       } catch (e) {
-        print("Failed to get event $k:");
-        print("$e");
+        print("fromJsonMap: $e");
       }
     }
   });

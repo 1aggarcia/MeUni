@@ -11,7 +11,7 @@ const maxEvents = 1 << 30; // 2^30 = 1,073,741,824
 abstract class EventsRepo {
   //* Public Methods
 
-  /// Returns the ID of the newly created event, or -1 if unsucessfull
+  /// Returns the ID of the newly created event
   Future<int> addEventAsync(Event event);
 
   /// Removes event of given id from database, returns id of deleted event
@@ -22,17 +22,24 @@ abstract class EventsRepo {
 
   /// Returns map of all events
   Future<Map<int, Event>> getEventsAsync();
+
+  /// Adds user with given id to event with given id
+  /// Returns new attendees list or null if event is at max capacity,
+  /// or either id is invalid
+  Future<List<String>?> joinEventAsync(String userId, int eventId);
 }
 
 class EventsRepoImpl extends EventsRepo {
   //* Private Properties
   late db.DatabaseReference _eventsRef;
+  late db.DatabaseReference _userEventsRef;
 
   //* Constructors
   EventsRepoImpl() {
     final dbRef = locator<db.DatabaseReference>();
 
     _eventsRef = dbRef.child('events');
+    _userEventsRef = dbRef.child('user_events');
   }
 
   //* Overriden Methods
@@ -67,7 +74,46 @@ class EventsRepoImpl extends EventsRepo {
     return eventsFromJson(json);
   }
 
+  @override
+  Future<List<String>?> joinEventAsync(String userId, int eventId) async {
+    if (!await userCanJoinAsync(userId, eventId)) {
+      return null;
+    } else {
+      Event? event = await getEventAsync(eventId) as Event;
+      event.attendees.add(userId);
+      final eventJson = event.toJson();
+      eventJson.remove('hostName');
+      eventJson.remove('attendeeNames');
+      _eventsRef.child("$eventId").update(eventJson);
+
+      db.DatabaseReference userLog = _userEventsRef.push();
+      userLog.update({
+        "userId": userId,
+        "eventId": eventId
+      });
+
+      return event.attendees;
+    }
+  }  
+
   //* Helper methods
+
+  /// Returns true iff userId and eventId passed in coorespond 
+  /// to an existing user and event in the database, and the event has space
+  Future<bool> userCanJoinAsync(String userId, int eventId) async{
+    // TODO: check for user validity
+    Event? event = await getEventAsync(eventId);
+    if (event != null) {
+      print("c1 exists true");
+      print("c2 user not joined ${!event.attendees.contains(userId)}");
+      print("c3 event has capacity ${event.attendees.length < event.max}");
+    } else {
+      print("c1 exists false");
+    }
+    return (event != null &&
+        !event.attendees.contains(userId) &&
+        event.attendees.length < event.max);
+  }
 
   /// Finds an avaliable id in the database
   /// returns new id and its DatabaseReference

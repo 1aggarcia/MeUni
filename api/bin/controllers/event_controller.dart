@@ -17,7 +17,8 @@ class EventController extends Controller {
     return router
       ..get('$endpoint/get', getEventsHandler)
       ..post('$endpoint/create', postEventsHandler)
-      ..post('$endpoint/delete', deleteEventsHandler);
+      ..post('$endpoint/delete', deleteEventsHandler)
+      ..post('$endpoint/join', joinEventsHandler);
   }
 
   //* Public API Methods
@@ -73,6 +74,28 @@ class EventController extends Controller {
       if (id != null) {
         int result = _eventsRepo.deleteEvent(id);
         return Response.ok("$result");
+      } else {
+        return Response(400);
+      }
+    } catch (e) {
+      return Response(400);
+    }
+  }
+
+  Future<Response> joinEventsHandler(Request request) async {
+    String json = await request.readAsString();
+
+    try {
+      dynamic body = jsonDecode(json);
+      String? userId = body['userId'];
+      int? eventId = body['eventId'];
+      if (userId != null && eventId != null) {
+        List<String>? result = await _eventsRepo.joinEventAsync(userId, eventId);
+        if (result != null) {
+          return Response.ok(jsonEncode(result));
+        } else {
+          return Response(400);
+        }
       } else {
         return Response(400);
       }

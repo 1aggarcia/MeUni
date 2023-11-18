@@ -64,7 +64,6 @@ class MockEventsRepo extends EventsRepo {
   Future<int> addEventAsync(Event event) async {
     _events[_nextId] = event;
     _nextId++;
-
     return _nextId - 1;
   }
 
@@ -82,5 +81,19 @@ class MockEventsRepo extends EventsRepo {
   @override
   Future<Map<int, Event>> getEventsAsync() async {
     return _events;
+  }
+
+  @override
+  Future<List<String>?> joinEventAsync(String userId, int eventId) async {
+    Event? event = _events[eventId];
+    if (event == null ||
+          event.attendees.contains(userId) ||
+          event.attendees.length >= event.max) {
+      return null;
+    } else {
+      event.attendees.add(userId);
+      event.attendeeNames.add(userNamefromId(userId));
+      return event.attendees;
+    }
   }
 }
