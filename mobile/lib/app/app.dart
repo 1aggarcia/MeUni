@@ -6,9 +6,9 @@ import 'package:stacked_services/stacked_services.dart';
 import '../repository/events_repo.dart';
 import '../repository/mock/mock_events_repo.dart';
 import '../repository/mock/mock_users_repo.dart';
-import '../repository/mock/mock_studygroups_repo.dart';
+import '../repository/mock/mock_study_groups_repo.dart';
 import '../repository/users_repo.dart';
-import '../repository/studygroup_repo.dart';
+import '../repository/study_groups_repo.dart';
 
 import '../services/api_service.dart';
 
@@ -39,7 +39,7 @@ import '../ui/views/startup/startup_view.dart';
     LazySingleton(classType: NavigationService),
     LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
     LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
-    LazySingleton(classType: MockStudyGroupRepo, asType: StudyGroupRepo),
+    LazySingleton(classType: MockStudyGroupsRepo, asType: StudyGroupsRepo),
     // LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
     // LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
     LazySingleton(classType: ApiService),

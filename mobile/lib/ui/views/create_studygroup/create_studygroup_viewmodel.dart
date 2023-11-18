@@ -3,14 +3,13 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
-import '../../../models/studygroup.dart';
-import '../../../repository/studygroup_repo.dart';
+import '../../../models/study_group.dart';
+import '../../../repository/study_groups_repo.dart';
 import './create_studygroup_view.form.dart';
-
 
 class CreateStudyGroupViewModel extends FormViewModel {
   //* Private Properties
-  final _studyGroupRepo = locator<StudyGroupRepo>();
+  final _studyGroupRepo = locator<StudyGroupsRepo>();
 
   final _navigationService = locator<NavigationService>();
 

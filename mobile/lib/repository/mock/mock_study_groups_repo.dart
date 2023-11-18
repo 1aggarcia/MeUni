@@ -1,14 +1,14 @@
 import '../../app/app.dart';
-import '../../models/studygroup.dart';
-import '../studygroup_repo.dart';
+import '../../models/study_group.dart';
+import '../study_groups_repo.dart';
 
-class MockStudyGroupRepo extends StudyGroupRepo {
+class MockStudyGroupsRepo extends StudyGroupsRepo {
   //* Private Properties
-  List<StudyGroup> _studygroups = [];
+  List<StudyGroup> _studyGroups = [];
 
   //* Constructors
-  MockStudyGroupRepo() {
-    _studygroups = [
+  MockStudyGroupsRepo() {
+    _studyGroups = [
       StudyGroup(
         id: 1,
         course: 'CSE 403',
@@ -53,13 +53,13 @@ class MockStudyGroupRepo extends StudyGroupRepo {
   Future<List<StudyGroup>> getStudyGroupsAsync() async {
     await Future.delayed(App.demoDuration);
 
-    return _studygroups;
+    return _studyGroups;
   }
 
   @override
   Future addStudyGroupAsync(StudyGroup studyGroup) async {
     await Future.delayed(App.demoDuration);
 
-    _studygroups.add(studyGroup);
+    _studyGroups.add(studyGroup);
   }
 }

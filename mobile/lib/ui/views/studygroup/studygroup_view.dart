@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meuni_mobile/ui/views/studygroup/studygroup_viewmodel.dart';
-import 'package:meuni_mobile/ui/widgets/studygroup_card.dart';
+import 'package:meuni_mobile/ui/widgets/study_group_card.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../common/app_colors.dart';
@@ -36,7 +36,7 @@ class StudyGroupView extends StackedView<StudyGroupViewModel> {
                         MaterialButton(
                           color: Colors.black,
                           onPressed: () async =>
-                          await viewModel.goToEventPageAsync(),
+                              await viewModel.goToEventPageAsync(),
                           child: const Text(
                             'Go to Event View',
                             style: TextStyle(color: Colors.white),

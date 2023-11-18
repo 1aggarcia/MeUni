@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:meuni_mobile/models/studygroup.dart';
 
-import '../../models/event.dart';
+import '../../models/study_group.dart';
 import '../common/ui_helpers.dart';
 
 class StudyGroupCard extends StatelessWidget {
@@ -31,13 +30,14 @@ class StudyGroupCard extends StatelessWidget {
       children: [
         verticalSpaceLarge,
         Container(
-            decoration: ShapeDecoration(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
+          decoration: ShapeDecoration(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-            child: Column(children: [
+          ),
+          child: Column(
+            children: [
               Container(
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
@@ -78,7 +78,9 @@ class StudyGroupCard extends StatelessWidget {
                   ),
                 ),
               ),
-            ]))
+            ],
+          ),
+        )
       ],
     );
   }
