@@ -20,5 +20,4 @@ class UsersRepoImpl extends UsersRepo {
     Response response = await _apiService.getAsync("/users/profile/get?id=$id");
     return userFromJson(response.body, id);
   }
-
 }
