@@ -35,4 +35,18 @@ class MockUsersRepo extends UsersRepo {
 
     return _users.singleWhere((u) => u.id == id);
   }
+
+  @override
+  Future<List<String>> getUserClasses(int id) async {
+    return ["CSE 403", "CSE 332", "MUS 350"];
+  }
+
+  @override
+  Future updateUserAsync(User user) async {
+    for (int i = 0; i < _users.length; i++) {
+      if (_users[i].id == user.id) {
+        _users[i] = user;
+      }
+    }
+  }
 }

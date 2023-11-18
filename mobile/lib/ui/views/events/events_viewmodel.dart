@@ -13,7 +13,6 @@ class EventsViewModel extends BaseViewModel {
   //* Private Properties
   final _eventsRepo = locator<EventsRepo>();
   final _usersRepo = locator<UsersRepo>();
-  final _studyGroupRepo = locator<StudyGroupRepo>();
 
   final _navigationService = locator<NavigationService>();
 
@@ -36,13 +35,14 @@ class EventsViewModel extends BaseViewModel {
     rebuildUi();
   }
 
-
   Future goToCreateEventPageAsync() async =>
       await _navigationService.navigateToCreateEventView();
 
-
   Future goToStudyGroupPageAsync() async =>
       await _navigationService.navigateToStudyGroupView();
+
+  Future goToProfilePageAsync() async =>
+      await _navigationService.navigateToProfileView();
 
   Future logoutAsync() async => await _navigationService.replaceWithLoginView();
 }

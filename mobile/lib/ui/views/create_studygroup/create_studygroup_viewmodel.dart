@@ -7,7 +7,6 @@ import '../../../models/studygroup.dart';
 import '../../../repository/studygroup_repo.dart';
 import './create_studygroup_view.form.dart';
 
-
 class CreateStudyGroupViewModel extends FormViewModel {
   //* Private Properties
   final _studyGroupRepo = locator<StudyGroupRepo>();

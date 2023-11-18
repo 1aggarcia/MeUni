@@ -10,6 +10,8 @@ abstract class UsersRepo {
 
   //* Public Methods
   Future<User> getUserAsync(int id);
+  Future updateUserAsync(User user);
+  Future<List<String>> getUserClasses(int id);
 }
 
 class UsersRepoImpl extends UsersRepo {
@@ -21,4 +23,14 @@ class UsersRepoImpl extends UsersRepo {
     return userFromJson(response.body, id);
   }
 
+  Future updateUserAsync(User user) async {
+    int id = user.id;
+    await _apiService.postAsync("/users/profile/update?id=$id", userToJson(user));
+  }
+
+  @override
+  Future<List<String>> getUserClasses(int id) async {
+    // TODO: implement getUserClasses
+    throw UnimplementedError();
+  }
 }

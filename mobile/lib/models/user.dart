@@ -4,6 +4,7 @@ User userFromJson(String str, int userId) {
   var decode = json.decode(str);
   return User.fromJson(decode, userId);
 }
+
 String userToJson(User data) => json.encode(data.toJson());
 
 List<User> usersFromJson(String str) =>
@@ -31,20 +32,20 @@ class User {
       required this.admin});
 
   factory User.fromJson(Map<String, dynamic> json, int userId) => User(
-    id: json['id'],
-    firstName: json['firstName'],
-    lastName: json['lastName'],
-    year: json['year'],
-    pronouns: json['pronouns'],
-    admin: json['admin'],
-  );
+        id: json['id'],
+        firstName: json['firstName'],
+        lastName: json['lastName'],
+        year: json['year'],
+        pronouns: json['pronouns'],
+        admin: json['admin'],
+      );
 
   Map<String, dynamic> toJson() => {
-    'id' : id,
-    'firstName' : firstName,
-    'lastName': lastName,
-    'year': year,
-    'pronouns' : pronouns,
-    'admin' : admin,
-  };
+        'id': id,
+        'firstName': firstName,
+        'lastName': lastName,
+        'year': year,
+        'pronouns': pronouns,
+        'admin': admin,
+      };
 }
