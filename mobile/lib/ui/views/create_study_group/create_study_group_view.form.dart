@@ -7,7 +7,7 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names, non_constant_identifier_names,unnecessary_this
 
 import 'package:flutter/material.dart';
-import 'package:meuni_mobile/ui/views/create_studygroup/create_studygroup_viewmodel.dart';
+import 'package:meuni_mobile/ui/views/create_study_group/create_study_group_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 
 const bool _autoTextFieldValidation = true;

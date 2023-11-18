@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meuni_mobile/ui/views/studygroup/studygroup_viewmodel.dart';
+import 'package:meuni_mobile/ui/views/study_groups/study_groups_viewmodel.dart';
 import 'package:meuni_mobile/ui/widgets/study_group_card.dart';
 import 'package:stacked/stacked.dart';
 
@@ -62,8 +62,8 @@ class StudyGroupView extends StackedView<StudyGroupViewModel> {
                         ),
                       ],
                     ),
-                    for (var studygroup in viewModel.studyGroups) ...[
-                      StudyGroupCard(studyGroup: studygroup)
+                    for (var studyGroup in viewModel.studyGroups) ...[
+                      StudyGroupCard(studyGroup: studyGroup)
                     ]
                   ],
                 )),

@@ -9,12 +9,13 @@ import 'package:flutter/material.dart' as _i8;
 import 'package:flutter/material.dart';
 import 'package:meuni_mobile/ui/views/create_event/create_event_view.dart'
     as _i4;
-import 'package:meuni_mobile/ui/views/create_studygroup/create_studygroup_view.dart'
+import 'package:meuni_mobile/ui/views/create_study_group/create_study_group_view.dart'
     as _i7;
 import 'package:meuni_mobile/ui/views/events/events_view.dart' as _i3;
 import 'package:meuni_mobile/ui/views/login/login_view.dart' as _i5;
 import 'package:meuni_mobile/ui/views/startup/startup_view.dart' as _i2;
-import 'package:meuni_mobile/ui/views/studygroup/studygroup_view.dart' as _i6;
+import 'package:meuni_mobile/ui/views/study_groups/study_groups_view.dart'
+    as _i6;
 import 'package:stacked/stacked.dart' as _i1;
 import 'package:stacked_services/stacked_services.dart' as _i9;
 

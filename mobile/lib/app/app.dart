@@ -16,9 +16,9 @@ import '../ui/bottom_sheets/notice/notice_sheet.dart';
 import '../ui/dialogs/info_alert/info_alert_dialog.dart';
 
 import '../ui/views/create_event/create_event_view.dart';
-import '../ui/views/create_studygroup/create_studygroup_view.dart';
+import '../ui/views/create_study_group/create_study_group_view.dart';
 import '../ui/views/events/events_view.dart';
-import '../ui/views/studygroup/studygroup_view.dart';
+import '../ui/views/study_groups/study_groups_view.dart';
 import '../ui/views/login/login_view.dart';
 import '../ui/views/startup/startup_view.dart';
 // @stacked-import
