@@ -162,9 +162,9 @@ void main() {
       Map<String, dynamic> data = {
         "0":evt.toJson(), "1":evtA.toJson(), "2":evtB.toJson()
       };
-      Map<int, Event> events = fromJsonMap(data);
+      Map<String, Event> events = fromJsonMap(data);
       events.forEach((k, v) {
-        Event? fromJson = eventFromJson(data["$k"].toString());
+        Event? fromJson = eventFromJson(data[k].toString());
         if (fromJson != null) {
           expect(v.equals(fromJson), true);
         }
@@ -172,21 +172,21 @@ void main() {
     });
 
     test('toJsonMap', () {
-      Map<int, Event> data = {
-        0:evt, 1:evtA, 2:evtB
+      Map<String, Event> data = {
+        "0":evt, "1":evtA, "2":evtB
       };
       Map<String, dynamic> json = toJsonMap(data);
       json.forEach((k, v) {
-        expect(jsonEncode(v) == eventToJson(data[int.parse(k)] as Event), true);
+        expect(jsonEncode(v) == eventToJson(data[k] as Event), true);
       });
     });
 
     test('eventsFromJson', () {
-      Map<int, Event> data = {
-        0:evt, 1:evtA, 2:evtB
+      Map<String, Event> data = {
+        "0":evt, "1":evtA, "2":evtB
       };
       String json = jsonEncode(toJsonMap(data));
-      Map<int, Event> events = eventsFromJson(json);
+      Map<String, Event> events = eventsFromJson(json);
       expect(events.length, 3);
       events.forEach((k, v) {
         expect(v.equals(data[k] as Event), true);
@@ -199,8 +199,8 @@ void main() {
     });
 
     test('eventsToJson', () {
-      Map<int, Event> data = {
-        0:evt, 1:evtA, 2:evtB
+      Map<String, Event> data = {
+        "0":evt, "1":evtA, "2":evtB
       };
       String json = eventsToJson(data);
       expect(json, jsonEncode(toJsonMap(data))); 

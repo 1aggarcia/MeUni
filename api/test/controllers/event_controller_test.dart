@@ -133,8 +133,8 @@ void main() {
 
       expect(response.statusCode, 200);
       expect(eventsToJson({
-        0:tennisEvent,
-        1:dingDongEvent
+        "0":tennisEvent,
+        "1":dingDongEvent
       }),
           await response.readAsString());
     });
@@ -196,7 +196,7 @@ void main() {
       req = Request(
         'POST',
         Uri.parse('$_rndUrl/events/delete'),
-        body: '{"id":0}',
+        body: '{"id":"0"}',
       );
       response = await _controller.deleteEventsHandler(req);
       expect(response.statusCode, 200);
@@ -225,7 +225,7 @@ void main() {
       req = Request(
         'POST',
         Uri.parse('$_rndUrl/events/delete'),
-        body: '{"userId":"2c","eventId":0}',
+        body: '{"userId":"2c","eventId":"0"}',
       );
       response = await _controller.joinEventsHandler(req);
       expect(response.statusCode, 200);

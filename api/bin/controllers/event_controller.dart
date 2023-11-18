@@ -18,7 +18,8 @@ class EventController extends Controller {
       ..get('$endpoint/get', getEventsHandler)
       ..post('$endpoint/create', postEventsHandler)
       ..post('$endpoint/delete', deleteEventsHandler)
-      ..post('$endpoint/join', joinEventsHandler);
+      ..post('$endpoint/join', joinEventsHandler)
+      ..post('$endpoint/unjoin', unjoinEventsHandler);
   }
 
   //* Public API Methods
@@ -31,8 +32,7 @@ class EventController extends Controller {
 
     if (params.containsKey('id')) {
       try {
-        int eventId = int.parse(params['id']);
-        Event? event = await _eventsRepo.getEventAsync(eventId);
+        Event? event = await _eventsRepo.getEventAsync(params['id']);
 
         if (event != null) {
           return Response.ok(eventToJson(event));
@@ -43,7 +43,7 @@ class EventController extends Controller {
         return Response(400);
       }
     } else {
-      Map<int, Event> events = await _eventsRepo.getEventsAsync();
+      Map<String, Event> events = await _eventsRepo.getEventsAsync();
       return Response.ok(eventsToJson(events));
     }
   }
@@ -70,10 +70,10 @@ class EventController extends Controller {
 
     try {
       dynamic body = jsonDecode(json);
-      int? id = body['id'];
+      String? id = body['id'];
       if (id != null) {
-        int result = _eventsRepo.deleteEvent(id);
-        return Response.ok("$result");
+        String result = _eventsRepo.deleteEvent(id);
+        return Response.ok(result);
       } else {
         return Response(400);
       }
@@ -88,7 +88,7 @@ class EventController extends Controller {
     try {
       dynamic body = jsonDecode(json);
       String? userId = body['userId'];
-      int? eventId = body['eventId'];
+      String? eventId = body['eventId'];
       if (userId != null && eventId != null) {
         List<String>? result = await _eventsRepo.joinEventAsync(userId, eventId);
         if (result != null) {
@@ -102,5 +102,9 @@ class EventController extends Controller {
     } catch (e) {
       return Response(400);
     }
+  }
+
+  Future<Response> unjoinEventsHandler(Request request) async {
+    throw UnimplementedError();
   }
 }

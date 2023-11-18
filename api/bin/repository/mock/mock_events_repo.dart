@@ -4,7 +4,7 @@ import '../events_repo.dart';
 class MockEventsRepo extends EventsRepo {
   //* Private Properties
   int _nextId = 0;
-  Map<int, Event> _events = {};
+  Map<String, Event> _events = {};
 
   //* Constructors
   MockEventsRepo() {
@@ -20,7 +20,7 @@ class MockEventsRepo extends EventsRepo {
   void resetEvents() {
     _nextId = 0;
     _events = {
-      -3:Event(
+      "-3":Event(
         title: 'Pizza',
         desc: 'need ppl to chip in for pizza',
         location: 'The crib',
@@ -32,7 +32,7 @@ class MockEventsRepo extends EventsRepo {
         attendees: ["2", "3"],
         attendeeNames: ['John', 'Hannah'],
       ),
-      -2:Event(
+      "-2":Event(
         title: 'Event 1',
         desc: 'This is a sample description for this event',
         location: 'UW CSE2 G21',
@@ -44,7 +44,7 @@ class MockEventsRepo extends EventsRepo {
         attendees: ["1", "3"],
         attendeeNames: ['Fei', 'Hannah'],
       ),
-      -1:Event(
+      "-1":Event(
         title: 'Another event',
         desc: 'This time i really need people',
         location: '[Redacted]',
@@ -62,29 +62,29 @@ class MockEventsRepo extends EventsRepo {
   //* Overriden Methods
   @override
   Future<int> addEventAsync(Event event) async {
-    _events[_nextId] = event;
+    _events["$_nextId"] = event;
     _nextId++;
     return _nextId - 1;
   }
 
   @override
-  int deleteEvent(int id) {
+  String deleteEvent(String id) {
     _events.remove(id);
     return id;
   }
 
   @override
-  Future<Event?> getEventAsync(int id) async {
+  Future<Event?> getEventAsync(String id) async {
     return _events[id];
   }
 
   @override
-  Future<Map<int, Event>> getEventsAsync() async {
+  Future<Map<String, Event>> getEventsAsync() async {
     return _events;
   }
 
   @override
-  Future<List<String>?> joinEventAsync(String userId, int eventId) async {
+  Future<List<String>?> joinEventAsync(String userId, String eventId) async {
     Event? event = _events[eventId];
     if (event == null ||
           event.attendees.contains(userId) ||
@@ -93,6 +93,17 @@ class MockEventsRepo extends EventsRepo {
     } else {
       event.attendees.add(userId);
       event.attendeeNames.add(userNamefromId(userId));
+      return event.attendees;
+    }
+  }
+
+  @override
+  Future<List<String>?> unjoinEventAsync(String userId, String eventId) async {
+    Event? event = _events[eventId];
+    if (event == null) {
+      return null;
+    } else {
+      event.attendees.remove(userId);
       return event.attendees;
     }
   }

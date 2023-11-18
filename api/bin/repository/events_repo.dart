@@ -11,22 +11,27 @@ const maxEvents = 1 << 30; // 2^30 = 1,073,741,824
 abstract class EventsRepo {
   //* Public Methods
 
-  /// Returns the ID of the newly created event
+  /// @returns the ID of the newly created event
   Future<int> addEventAsync(Event event);
 
-  /// Removes event of given id from database, returns id of deleted event
-  int deleteEvent(int id);
+  /// Removes event of given id from database
+  /// @returns id of deleted event
+  String deleteEvent(String id);
 
-  /// Returns the Event if found, null otherwise
-  Future<Event?> getEventAsync(int id);
+  /// @returns the Event if found, null otherwise
+  Future<Event?> getEventAsync(String id);
 
-  /// Returns map of all events
-  Future<Map<int, Event>> getEventsAsync();
+  /// @returns map of all events
+  Future<Map<String, Event>> getEventsAsync();
 
   /// Adds user with given id to event with given id
-  /// Returns new attendees list or null if event is at max capacity,
+  /// @returns new attendees list or null if event is at max capacity,
   /// or either id is invalid
-  Future<List<String>?> joinEventAsync(String userId, int eventId);
+  Future<List<String>?> joinEventAsync(String userId, String eventId);
+
+  /// Removes user with given id from event with given id
+  /// @returns new attendees list or null if event id is invalid
+  Future<List<String>?> unjoinEventAsync(String userId, String eventId);
 }
 
 class EventsRepoImpl extends EventsRepo {
@@ -54,28 +59,28 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   @override
-  int deleteEvent(int id) {
-    final db.DatabaseReference eventRef = _eventsRef.child("$id");
+  String deleteEvent(String id) {
+    final db.DatabaseReference eventRef = _eventsRef.child(id);
     eventRef.remove();
     return id;
   }
 
   @override
-  Future<Event?> getEventAsync(int id) async {
-    final db.DataSnapshot snapshot = await _eventsRef.child("$id").once();
+  Future<Event?> getEventAsync(String id) async {
+    final db.DataSnapshot snapshot = await _eventsRef.child(id).once();
     final json = jsonEncode(snapshot.value);
     return eventFromJson(json);
   }
 
   @override
-  Future<Map<int, Event>> getEventsAsync() async {
+  Future<Map<String, Event>> getEventsAsync() async {
     final db.DataSnapshot snapshot = await _eventsRef.once();
     final json = jsonEncode(snapshot.value);
     return eventsFromJson(json);
   }
 
   @override
-  Future<List<String>?> joinEventAsync(String userId, int eventId) async {
+  Future<List<String>?> joinEventAsync(String userId, String eventId) async {
     if (!await userCanJoinAsync(userId, eventId)) {
       return null;
     } else {
@@ -84,7 +89,7 @@ class EventsRepoImpl extends EventsRepo {
       final eventJson = event.toJson();
       eventJson.remove('hostName');
       eventJson.remove('attendeeNames');
-      _eventsRef.child("$eventId").update(eventJson);
+      _eventsRef.child(eventId).update(eventJson);
 
       db.DatabaseReference userLog = _userEventsRef.push();
       userLog.update({
@@ -94,13 +99,18 @@ class EventsRepoImpl extends EventsRepo {
 
       return event.attendees;
     }
-  }  
+  }
+
+  @override
+  Future<List<String>?> unjoinEventAsync(String userId, String eventId) {
+    throw UnimplementedError();
+  }   
 
   //* Helper methods
 
   /// Returns true iff userId and eventId passed in coorespond 
   /// to an existing user and event in the database, and the event has space
-  Future<bool> userCanJoinAsync(String userId, int eventId) async{
+  Future<bool> userCanJoinAsync(String userId, String eventId) async{
     // TODO: check for user validity
     Event? event = await getEventAsync(eventId);
     if (event != null) {
@@ -116,7 +126,7 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   /// Finds an avaliable id in the database
-  /// returns new id and its DatabaseReference
+  /// @returns new id and its DatabaseReference
   Future<(int, db.DatabaseReference)> getNewRefAsync() async {
     final rand = Random();
     int id = rand.nextInt(maxEvents);

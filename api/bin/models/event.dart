@@ -128,7 +128,7 @@ String eventToJson(Event data) => json.encode(data.toJson());
 
 /// Returns Map of all events provided in json string.
 /// Improperly formatted entires ignored
-Map<int, Event> eventsFromJson(String str) {
+Map<String, Event> eventsFromJson(String str) {
   try {
     return fromJsonMap(json.decode(str));
   } catch (e) {
@@ -137,10 +137,10 @@ Map<int, Event> eventsFromJson(String str) {
 }
 
 /// Returns json as string representing passed in Map of events
-String eventsToJson(Map<int, Event> data) => json.encode(toJsonMap(data));
+String eventsToJson(Map<String, Event> data) => json.encode(toJsonMap(data));
 
 /// Converts map of events to json map
-Map<String, dynamic> toJsonMap(Map<int, Event> data) {
+Map<String, dynamic> toJsonMap(Map<String, Event> data) {
   return Map<String, dynamic>.fromEntries(
     data.entries.map((entry) => MapEntry(entry.key.toString(), entry.value.toJson())),
   );
@@ -148,13 +148,13 @@ Map<String, dynamic> toJsonMap(Map<int, Event> data) {
 
 /// Converts json map to map of events.
 /// Improperly formatted entries ignored.
-Map<int, Event> fromJsonMap(Map<String, dynamic> data) {
-  Map<int, Event> events = {};
+Map<String, Event> fromJsonMap(Map<String, dynamic> data) {
+  Map<String, Event> events = {};
   data.forEach((k, v) {
     if (int.tryParse(k) != null) {
       try {
         Event e = Event.fromJson(v);
-        events[int.parse(k)] = e;
+        events[k] = e;
       } catch (e) {
         print("fromJsonMap: $e");
       }
