@@ -24,7 +24,7 @@ void main() {
       _controller = EventController();
     });
 
-    test('POST events', () async {
+    test('events/create', () async {
       Event event = Event(
         title: 'Pizza',
         desc: 'need ppl to chip in for pizza',
@@ -37,20 +37,7 @@ void main() {
         attendees: [],
         attendeeNames: [],
       );
-
       String eventJson = eventToJson(event);
-      expect(
-          eventJson,
-          '{"title":"Pizza",'
-          '"desc":"need ppl to chip in for pizza",'
-          '"location":"The crib",'
-          '"max":4,'
-          '"startTime":"2023-11-04T03:04:15.537017Z",'
-          '"endTime":"2023-11-04T03:24:15.537017Z",'
-          '"hostId":"1a",'
-          '"hostName":"Fei",'
-          '"attendees":[],'
-          '"attendeeNames":[]}');
 
       Request req = Request(
         'POST',
@@ -58,15 +45,12 @@ void main() {
         body: eventJson,
       );
       Response response = await _controller.postEventsHandler(req);
-
       expect(response.statusCode, 200);
 
-      expect(
-          await response.readAsString(),
-          "0");
+      expect(await response.readAsString(),"0");
     });
 
-    test('POST with no body', () async {
+    test('events/create with no body', () async {
       Request req = Request(
         'POST',
         Uri.parse('$_rndUrl/events/create'),
@@ -76,8 +60,9 @@ void main() {
       expect(response.statusCode, 400);
     });
 
-    test('POST events with wrong types', () async {
-      String eventJson = '{"title":0,'
+    test('events/create with wrong types', () async {
+      String eventJson = 
+          '{"title":0,'
           '"desc":"need ppl to chip in for pizza",'
           '"location":"The crib",'
           '"max":"",'
@@ -96,7 +81,7 @@ void main() {
       expect(response.statusCode, 400);
     });
 
-    test('GET events no params', () async {
+    test('events/get no params', () async {
       Event tennisEvent = Event(
         title: 'Tennis',
         desc: 'At the IMA tennis court! Hang out with me!',
@@ -131,7 +116,6 @@ void main() {
         body: tennisJson,
       );
       Response response = await _controller.postEventsHandler(req);
-
       expect(response.statusCode, 200);
 
       req = Request(
@@ -140,7 +124,6 @@ void main() {
         body: dingDongJson,
       );
       response = await _controller.postEventsHandler(req);
-
       expect(response.statusCode, 200);
 
       req = Request(
@@ -150,33 +133,14 @@ void main() {
       response = await _controller.getEventsHandler(req);
 
       expect(response.statusCode, 200);
-      expect(
-          '{"0":'
-          '{"title":"Tennis",'
-          '"desc":"At the IMA tennis court! Hang out with me!",'
-          '"location":"IMA tennis court",'
-          '"max":3,'
-          '"startTime":"2024-01-04T15:14:15.537017Z",'
-          '"endTime":"2023-11-04T16:14:15.567017Z",'
-          '"hostId":"2b",'
-          '"hostName":"[unknown user]",'
-          '"attendees":[],'
-          '"attendeeNames":[]},'
-          '"1":'
-          '{"title":"Ding Dong Ditching",'
-          '"desc":"Lets go make my neighbors mad!",'
-          '"location":"Community Center",'
-          '"max":5,'
-          '"startTime":"2024-08-04T15:14:15.537017Z",'
-          '"endTime":"2024-08-04T16:14:59.567017Z",'
-          '"hostId":"3b",'
-          '"hostName":"[unknown user]",'
-          '"attendees":[],'
-          '"attendeeNames":[]}}',
+      expect(eventsToJson({
+        0:tennisEvent,
+        1:dingDongEvent
+      }),
           await response.readAsString());
     });
 
-    test('GET events with id param', () async {
+    test('events/get with id param', () async {
       Event event = Event(
         title: 'Tennis',
         desc: 'At the IMA tennis court! Hang out with me!',
@@ -189,7 +153,6 @@ void main() {
         attendees: [],
         attendeeNames: [],
       );
-
       String eventJson = eventToJson(event);
 
       Request req = Request(
@@ -198,7 +161,6 @@ void main() {
         body: eventJson,
       );
       Response response = await _controller.postEventsHandler(req);
-
       expect(response.statusCode, 200);
 
       req = Request(
@@ -208,27 +170,59 @@ void main() {
       response = await _controller.getEventsHandler(req);
 
       expect(response.statusCode, 200);
-      expect(
-          await response.readAsString(),
-          '{"title":"Tennis",'
-          '"desc":"At the IMA tennis court! Hang out with me!",'
-          '"location":"IMA tennis court",'
-          '"max":3,'
-          '"startTime":"2024-01-04T15:14:15.537017Z",'
-          '"endTime":"2023-11-04T16:14:15.567017Z",'
-          '"hostId":"2b",'
-          '"hostName":"[unknown user]",'
-          '"attendees":[],'
-          '"attendeeNames":[]}');
+      expect(eventJson,
+          await response.readAsString());
     });
 
-    test('GET events with bad id', () async {
+    test('events/get with bad id', () async {
       Request req = Request(
         'GET',
         Uri.parse('$_rndUrl/events/get?id=999'),
       );
       Response response = await _controller.getEventsHandler(req);
+      expect(response.statusCode, 400);
+    });
 
+    test('events/delete', () async {
+      // Create event
+      Event event = Event(
+        title: 'Pizza',
+        desc: 'need ppl to chip in for pizza',
+        location: 'The crib',
+        max: 4,
+        startTime: DateTime.parse('2023-11-04T03:04:15.537017Z'),
+        endTime: DateTime.parse('2023-11-04T03:24:15.537017Z'),
+        hostId: "1a",
+        hostName: 'Fei',
+        attendees: [],
+        attendeeNames: [],
+      );
+      String eventJson = eventToJson(event);
+
+      Request req = Request(
+        'POST',
+        Uri.parse('$_rndUrl/events/create'),
+        body: eventJson,
+      );
+      Response response = await _controller.postEventsHandler(req);
+      expect(response.statusCode, 200);
+
+      // Delete event
+      req = Request(
+        'POST',
+        Uri.parse('$_rndUrl/events/delete'),
+        body: '{"id":0}',
+      );
+      response = await _controller.deleteEventsHandler(req);
+      expect(response.statusCode, 200);
+      expect(await response.readAsString(),"0");
+
+      // Verify event no longer in dataase
+      req = Request(
+        'GET',
+        Uri.parse('$_rndUrl/events/get?id=0'),
+      );
+      response = await _controller.getEventsHandler(req);
       expect(response.statusCode, 400);
     });
   });

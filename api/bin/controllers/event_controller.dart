@@ -39,7 +39,6 @@ class EventController extends Controller {
           return Response(400);
         }
       } catch (e) {
-        print("Failed to get event: $e");
         return Response(400);
       }
     } else {
@@ -61,7 +60,6 @@ class EventController extends Controller {
         return Response(400);
       }
     } catch (e) {
-      print(e);
       return Response(400);
     }
   }
@@ -79,7 +77,6 @@ class EventController extends Controller {
         return Response(400);
       }
     } catch (e) {
-      print(e);
       return Response(400);
     }
   }
