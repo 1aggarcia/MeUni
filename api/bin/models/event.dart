@@ -132,6 +132,7 @@ Map<String, Event> eventsFromJson(String str) {
   try {
     return fromJsonMap(json.decode(str));
   } catch (e) {
+    print("eventsFromJson $e");
     return {};
   }
 }
@@ -151,14 +152,8 @@ Map<String, dynamic> toJsonMap(Map<String, Event> data) {
 Map<String, Event> fromJsonMap(Map<String, dynamic> data) {
   Map<String, Event> events = {};
   data.forEach((k, v) {
-    if (int.tryParse(k) != null) {
-      try {
-        Event e = Event.fromJson(v);
-        events[k] = e;
-      } catch (e) {
-        print("fromJsonMap: $e");
-      }
-    }
+      Event e = Event.fromJson(v);
+      events[k] = e;
   });
   return events;
 }

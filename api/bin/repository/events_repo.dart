@@ -12,7 +12,7 @@ abstract class EventsRepo {
   //* Public Methods
 
   /// @returns the ID of the newly created event
-  Future<int> addEventAsync(Event event);
+  String addEvent(Event event);
 
   /// Removes event of given id from database
   /// @returns id of deleted event
@@ -49,13 +49,15 @@ class EventsRepoImpl extends EventsRepo {
 
   //* Overriden Methods
   @override
-  Future<int> addEventAsync(Event event) async {
-    final (id, newRef) = await getNewRefAsync();
+  String addEvent(Event event) {
+    final db.DatabaseReference newRef = _eventsRef.push();
     final Map<String, dynamic> eventJson = event.toJson();
+
     eventJson.remove('hostName');
     eventJson.remove('attendeeNames');
     newRef.update(eventJson);
-    return id;
+
+    return newRef.key as String;
   }
 
   @override

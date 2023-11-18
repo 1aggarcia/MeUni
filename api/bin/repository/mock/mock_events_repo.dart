@@ -61,10 +61,10 @@ class MockEventsRepo extends EventsRepo {
 
   //* Overriden Methods
   @override
-  Future<int> addEventAsync(Event event) async {
+  String addEvent(Event event) {
     _events["$_nextId"] = event;
     _nextId++;
-    return _nextId - 1;
+    return "${_nextId - 1}";
   }
 
   @override
