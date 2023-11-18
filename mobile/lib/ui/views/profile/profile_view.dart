@@ -95,7 +95,14 @@ class ProfileView extends StackedView<ProfileViewModel> {
               ),
               verticalSpaceMedium,
 
-
+              MaterialButton(
+                color: Colors.black,
+                onPressed: () async => (),
+                child: const Text(
+                  'Edit Profile',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ],
           ),
         ),
