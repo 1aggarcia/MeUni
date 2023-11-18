@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names, non_constant_identifier_names,unnecessary_this
 
 import 'package:flutter/material.dart';
+import 'package:meuni_mobile/ui/views/create_study_group/create_study_group_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 
 const bool _autoTextFieldValidation = true;
@@ -25,12 +26,16 @@ final Map<String, FocusNode> _CreateStudyGroupViewFocusNodes = {};
 
 final Map<String, String? Function(String?)?>
     _CreateStudyGroupViewTextValidations = {
-  StudyGroupCourseValueKey: null,
-  StudyGroupDescriptionValueKey: null,
-  StudyGroupLocationValueKey: null,
-  StudyGroupDateValueKey: null,
-  StudyGroupStartTimeValueKey: null,
-  StudyGroupEndTimeValueKey: null,
+  StudyGroupCourseValueKey: CreateStudyGroupValidators.validateStudyGroupCourse,
+  StudyGroupDescriptionValueKey:
+      CreateStudyGroupValidators.validateStudyGroupDescription,
+  StudyGroupLocationValueKey:
+      CreateStudyGroupValidators.validateStudyGroupLocation,
+  StudyGroupDateValueKey: CreateStudyGroupValidators.validateStudyGroupDate,
+  StudyGroupStartTimeValueKey:
+      CreateStudyGroupValidators.validateStudyGroupStartTime,
+  StudyGroupEndTimeValueKey:
+      CreateStudyGroupValidators.validateStudyGroupEndTime,
 };
 
 mixin $CreateStudyGroupView {

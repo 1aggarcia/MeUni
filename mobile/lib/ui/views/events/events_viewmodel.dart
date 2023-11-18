@@ -4,9 +4,8 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../../app/app.router.dart';
 import '../../../app/app.locator.dart';
 import '../../../models/event.dart';
-import '../../../models/studygroup.dart';
+import '../../../models/study_group.dart';
 import '../../../repository/events_repo.dart';
-import '../../../repository/studygroup_repo.dart';
 import '../../../repository/users_repo.dart';
 
 class EventsViewModel extends BaseViewModel {

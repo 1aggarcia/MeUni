@@ -1,28 +1,29 @@
 import 'package:http/http.dart';
 
 import '../app/app.locator.dart';
-import '../models/studygroup.dart';
+import '../models/study_group.dart';
 import '../services/api_service.dart';
 
-abstract class StudyGroupRepo {
+abstract class StudyGroupsRepo {
   //* Public Methods
   Future<List<StudyGroup>> getStudyGroupsAsync();
 
-  Future addStudyGroupAsync(StudyGroup event);
+  Future addStudyGroupAsync(StudyGroup studyGroup);
 }
 
-class StudyGroupRepoImpl extends StudyGroupRepo {
+class StudyGroupsRepoImpl extends StudyGroupsRepo {
   final ApiService _apiService = locator<ApiService>();
+
   @override
-  Future addStudyGroupAsync(StudyGroup event) async {
+  Future addStudyGroupAsync(StudyGroup studyGroup) async {
     // TODO: implement addEventAsync
-    _apiService.postAsync("/studygroup/create", studygroupToJson(event));
+    _apiService.postAsync("/studygroup/create", studyGroupToJson(studyGroup));
   }
 
   @override
   Future<List<StudyGroup>> getStudyGroupsAsync() async {
     // TODO: implement getStudyGroupsAsync
     Response response = await _apiService.getAsync("/studygroup/get");
-    return studygroupsFromJson(response.body);
+    return studyGroupsFromJson(response.body);
   }
 }

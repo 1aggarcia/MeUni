@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-StudyGroup studygroupFromJson(String str) {
+StudyGroup studyGroupFromJson(String str) {
   var decode = json.decode(str);
   return StudyGroup.fromJson(decode);
 }
 
-String studygroupToJson(StudyGroup data) => json.encode(data.toJson());
+String studyGroupToJson(StudyGroup data) => json.encode(data.toJson());
 
-List<StudyGroup> studygroupsFromJson(String str) =>
+List<StudyGroup> studyGroupsFromJson(String str) =>
     List<StudyGroup>.from(json.decode(str).map((x) => StudyGroup.fromJson(x)));
 
-String studygroupsToJson(List<StudyGroup> data) =>
+String studyGroupsToJson(List<StudyGroup> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class StudyGroup {
@@ -31,17 +31,18 @@ class StudyGroup {
   final List<int> attendees;
 
   //* Constructors
-  StudyGroup(
-      {required this.id,
-      required this.course,
-      required this.desc,
-      required this.location,
-      required this.max,
-      required this.startTime,
-      required this.endTime,
-      required this.hostId,
-      required this.hostName,
-      required this.attendees});
+  StudyGroup({
+    required this.id,
+    required this.course,
+    required this.desc,
+    required this.location,
+    required this.max,
+    required this.startTime,
+    required this.endTime,
+    required this.hostId,
+    required this.hostName,
+    required this.attendees,
+  });
 
   factory StudyGroup.fromJson(Map<String, dynamic> json) {
     List<int> attendees = List<int>.from(json['attendees']);

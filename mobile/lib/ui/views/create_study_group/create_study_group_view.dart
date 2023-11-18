@@ -3,43 +3,43 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
 import '../../common/ui_helpers.dart';
-import 'create_event_view.form.dart';
-import 'create_event_viewmodel.dart';
+import 'create_study_group_view.form.dart';
+import 'create_study_group_viewmodel.dart';
 import '../../widgets/text_input.dart';
 
 @FormView(fields: [
   FormTextField(
-    name: 'eventName',
-    validator: CreateEventValidators.validateEventName,
+    name: 'studyGroupCourse',
+    validator: CreateStudyGroupValidators.validateStudyGroupCourse,
   ),
   FormTextField(
-    name: 'eventDescription',
-    validator: CreateEventValidators.validateEventDescription,
+    name: 'studyGroupDescription',
+    validator: CreateStudyGroupValidators.validateStudyGroupDescription,
   ),
   FormTextField(
-    name: 'eventLocation',
-    validator: CreateEventValidators.validateEventLocation,
+    name: 'studyGroupLocation',
+    validator: CreateStudyGroupValidators.validateStudyGroupLocation,
   ),
   FormTextField(
-    name: 'eventDate',
-    validator: CreateEventValidators.validateEventDate,
+    name: 'studyGroupDate',
+    validator: CreateStudyGroupValidators.validateStudyGroupDate,
   ),
   FormTextField(
-    name: 'eventStartTime',
-    validator: CreateEventValidators.validateEventStartTime,
+    name: 'studyGroupStartTime',
+    validator: CreateStudyGroupValidators.validateStudyGroupStartTime,
   ),
   FormTextField(
-    name: 'eventEndTime',
-    validator: CreateEventValidators.validateEventEndTime,
+    name: 'studyGroupEndTime',
+    validator: CreateStudyGroupValidators.validateStudyGroupEndTime,
   ),
 ])
-class CreateEventView extends StackedView<CreateEventViewModel>
-    with $CreateEventView {
-  const CreateEventView({Key? key}) : super(key: key);
+class CreateStudyGroupView extends StackedView<CreateStudyGroupViewModel>
+    with $CreateStudyGroupView {
+  const CreateStudyGroupView({Key? key}) : super(key: key);
 
   @override
-  Widget builder(
-      BuildContext context, CreateEventViewModel viewModel, Widget? child) {
+  Widget builder(BuildContext context, CreateStudyGroupViewModel viewModel,
+      Widget? child) {
     const labelTextStyle = TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.w700,
@@ -53,7 +53,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: const Text('Create Event')),
+        appBar: AppBar(title: const Text('Create Study Group')),
         body: viewModel.isLoading
             ? const Text('Loading...')
             : Container(
@@ -64,58 +64,59 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                     children: [
                       verticalSpaceMedium,
 
-                      // Event Name
+                      // StudyGroup Course Name
                       TextInput(
-                        label: 'Event Name',
-                        placeholder: 'Name',
+                        label: 'Study Group Course Name',
+                        placeholder: 'Course Name',
                         labelTextStyle: labelTextStyle,
                         errorTextStyle: errorTextStyle,
-                        controller: eventNameController,
+                        controller: studyGroupCourseController,
                         hasValidationMessage:
-                            viewModel.hasEventNameValidationMessage,
-                        validationMessage: viewModel.eventNameValidationMessage,
+                            viewModel.hasStudyGroupCourseValidationMessage,
+                        validationMessage:
+                            viewModel.studyGroupCourseValidationMessage,
                       ),
 
                       verticalSpaceSmall,
 
-                      // Event Description
+                      // Study Group Description
                       TextInput(
-                        label: 'Event Description',
+                        label: 'Study Group Description',
                         placeholder: 'Description',
                         labelTextStyle: labelTextStyle,
                         errorTextStyle: errorTextStyle,
-                        controller: eventDescriptionController,
+                        controller: studyGroupDescriptionController,
                         hasValidationMessage:
-                            viewModel.hasEventDescriptionValidationMessage,
+                            viewModel.hasStudyGroupDescriptionValidationMessage,
                         validationMessage:
-                            viewModel.eventDescriptionValidationMessage,
+                            viewModel.studyGroupDescriptionValidationMessage,
                       ),
 
                       verticalSpaceSmall,
 
-                      // Event Location
+                      // Study Group Location
                       TextInput(
-                        label: 'Event Location',
+                        label: 'Study Group Location',
                         placeholder: 'Location',
                         labelTextStyle: labelTextStyle,
                         errorTextStyle: errorTextStyle,
-                        controller: eventLocationController,
+                        controller: studyGroupLocationController,
                         hasValidationMessage:
-                            viewModel.hasEventLocationValidationMessage,
+                            viewModel.hasStudyGroupLocationValidationMessage,
                         validationMessage:
-                            viewModel.eventLocationValidationMessage,
+                            viewModel.studyGroupLocationValidationMessage,
                       ),
 
                       verticalSpaceSmall,
 
-                      // Event Date
+                      // Study Group Date
                       const Text(
-                        'Event Date (yyyy-mm-dd)',
+                        'Study Group Date (yyyy-mm-dd)',
                         style: labelTextStyle,
                       ),
                       verticalSpaceSmall,
                       TextFormField(
-                        controller: eventDateController,
+                        controller: studyGroupDateController,
                         decoration: const InputDecoration(
                           labelText: 'Date',
                         ),
@@ -128,28 +129,28 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                                 DateTime.now().add(const Duration(days: 365)),
                           );
                           if (picked != null) {
-                            eventDateController.text = picked.toString();
+                            studyGroupDateController.text = picked.toString();
                           }
                         },
                       ),
-                      if (viewModel.hasEventDateValidationMessage) ...[
+                      if (viewModel.hasStudyGroupDateValidationMessage) ...[
                         verticalSpaceTiny,
                         Text(
-                          viewModel.eventDateValidationMessage!,
+                          viewModel.studyGroupDateValidationMessage!,
                           style: errorTextStyle,
                         ),
                       ],
 
                       verticalSpaceSmall,
 
-                      // Event Start Time
+                      // Study Group Start Time
                       const Text(
-                        'Event Start Time',
+                        'Study Group Start Time',
                         style: labelTextStyle,
                       ),
                       verticalSpaceSmall,
                       TextFormField(
-                        controller: eventStartTimeController,
+                        controller: studyGroupStartTimeController,
                         decoration: const InputDecoration(
                           labelText: 'Start Time',
                         ),
@@ -162,30 +163,31 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                             initialTime: time,
                           );
                           if (picked != null && picked != time) {
-                            eventStartTimeController.text =
+                            studyGroupStartTimeController.text =
                                 // ignore: use_build_context_synchronously
                                 picked.format(context);
                           }
                         },
                       ),
-                      if (viewModel.hasEventStartTimeValidationMessage) ...[
+                      if (viewModel
+                          .hasStudyGroupStartTimeValidationMessage) ...[
                         verticalSpaceTiny,
                         Text(
-                          viewModel.eventStartTimeValidationMessage!,
+                          viewModel.studyGroupStartTimeValidationMessage!,
                           style: errorTextStyle,
                         ),
                       ],
 
                       verticalSpaceSmall,
 
-                      // Event End Time
+                      // Study Group End Time
                       const Text(
-                        'Event End Time',
+                        'Study Group End Time',
                         style: labelTextStyle,
                       ),
                       verticalSpaceSmall,
                       TextFormField(
-                        controller: eventEndTimeController,
+                        controller: studyGroupEndTimeController,
                         decoration: const InputDecoration(
                           labelText: 'End Time',
                         ),
@@ -198,28 +200,29 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                             initialTime: time,
                           );
                           if (picked != null && picked != time) {
-                            eventEndTimeController.text =
+                            studyGroupEndTimeController.text =
                                 // ignore: use_build_context_synchronously
                                 picked.format(context);
                           }
                         },
                       ),
-                      if (viewModel.hasEventEndTimeValidationMessage) ...[
+                      if (viewModel.hasStudyGroupEndTimeValidationMessage) ...[
                         verticalSpaceTiny,
                         Text(
-                          viewModel.eventEndTimeValidationMessage!,
+                          viewModel.studyGroupEndTimeValidationMessage!,
                           style: errorTextStyle,
                         ),
                       ],
 
                       verticalSpaceSmall,
 
-                      // Add Event Button
+                      // Add Study Group Button
                       MaterialButton(
                         color: Colors.black,
-                        onPressed: () async => await viewModel.addEventAsync(),
+                        onPressed: () async =>
+                            await viewModel.addStudyGroupAsync(),
                         child: const Text(
-                          'Add Event',
+                          'Add Study Group',
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
@@ -233,15 +236,15 @@ class CreateEventView extends StackedView<CreateEventViewModel>
 
   //* Overriden Methods
   @override
-  CreateEventViewModel viewModelBuilder(BuildContext context) =>
-      CreateEventViewModel();
+  CreateStudyGroupViewModel viewModelBuilder(BuildContext context) =>
+      CreateStudyGroupViewModel();
 
   @override
-  void onViewModelReady(CreateEventViewModel viewModel) =>
+  void onViewModelReady(CreateStudyGroupViewModel viewModel) =>
       syncFormWithViewModel(viewModel);
 
   @override
-  void onDispose(CreateEventViewModel viewModel) {
+  void onDispose(CreateStudyGroupViewModel viewModel) {
     super.onDispose(viewModel);
     disposeForm();
   }
