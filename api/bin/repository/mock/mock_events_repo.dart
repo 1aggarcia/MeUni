@@ -21,6 +21,7 @@ class MockEventsRepo extends EventsRepo {
     _nextId = 0;
     _events = {
       "-3":Event(
+        id: "-3",
         title: 'Pizza',
         desc: 'need ppl to chip in for pizza',
         location: 'The crib',
@@ -33,6 +34,7 @@ class MockEventsRepo extends EventsRepo {
         attendeeNames: ['John', 'Hannah'],
       ),
       "-2":Event(
+        id: "-2",
         title: 'Event 1',
         desc: 'This is a sample description for this event',
         location: 'UW CSE2 G21',
@@ -45,6 +47,7 @@ class MockEventsRepo extends EventsRepo {
         attendeeNames: ['Fei', 'Hannah'],
       ),
       "-1":Event(
+        id: "-1",
         title: 'Another event',
         desc: 'This time i really need people',
         location: '[Redacted]',
@@ -79,8 +82,13 @@ class MockEventsRepo extends EventsRepo {
   }
 
   @override
-  Future<Map<String, Event>> getEventsAsync() async {
-    return _events;
+  Future<List<Event>> getEventsAsync() async {
+    List<Event> list = [];
+    _events.forEach((k, v) {
+      v.setId(k);
+      list.add(v);
+    });
+    return list;
   }
 
   @override

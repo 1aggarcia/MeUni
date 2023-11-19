@@ -22,7 +22,7 @@ abstract class EventsRepo {
   Future<Event?> getEventAsync(String id);
 
   /// @returns map of all events
-  Future<Map<String, Event>> getEventsAsync();
+  Future<List<Event>> getEventsAsync();
 
   /// Adds user with given id to event with given id
   /// @returns new attendees list or null if event is at max capacity,
@@ -70,12 +70,15 @@ class EventsRepoImpl extends EventsRepo {
   @override
   Future<Event?> getEventAsync(String id) async {
     final db.DataSnapshot snapshot = await _eventsRef.child(id).once();
-    final json = jsonEncode(snapshot.value);
-    return eventFromJson(json);
+    final Event? event = eventFromJson(jsonEncode(snapshot.value));
+    if (event is Event) {
+      event.setId(id);
+    }
+    return event;
   }
 
   @override
-  Future<Map<String, Event>> getEventsAsync() async {
+  Future<List<Event>> getEventsAsync() async {
     final db.DataSnapshot snapshot = await _eventsRef.once();
     final json = jsonEncode(snapshot.value);
     return eventsFromJson(json);
@@ -115,13 +118,6 @@ class EventsRepoImpl extends EventsRepo {
   Future<bool> userCanJoinAsync(String userId, String eventId) async{
     // TODO: check for user validity
     Event? event = await getEventAsync(eventId);
-    if (event != null) {
-      print("c1 exists true");
-      print("c2 user not joined ${!event.attendees.contains(userId)}");
-      print("c3 event has capacity ${event.attendees.length < event.max}");
-    } else {
-      print("c1 exists false");
-    }
     return (event != null &&
         !event.attendees.contains(userId) &&
         event.attendees.length < event.max);

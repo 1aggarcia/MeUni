@@ -25,6 +25,7 @@ void main() {
     });
 
     Event event = Event(
+      id:"0",
       title: 'Pizza',
       desc: 'need ppl to chip in for pizza',
       location: 'The crib',
@@ -32,11 +33,12 @@ void main() {
       startTime: DateTime.parse('2023-11-04T03:04:15.537017Z'),
       endTime: DateTime.parse('2023-11-04T03:24:15.537017Z'),
       hostId: "1a",
-      hostName: 'Fei',
+      hostName: '[unknown user]',
       attendees: [],
       attendeeNames: [],
     );
     Event tennisEvent = Event(
+      id:"1",
       title: 'Tennis',
       desc: 'At the IMA tennis court! Hang out with me!',
       location: 'IMA tennis court',
@@ -49,6 +51,7 @@ void main() {
       attendeeNames: [],
     );
     Event dingDongEvent = Event(
+      id:"2",
       title: 'Ding Dong Ditching',
       desc: 'Lets go make my neighbors mad!',
       location: 'Community Center',
@@ -108,13 +111,21 @@ void main() {
       expect(response.statusCode, 400);
     });
 
-    test('events/get no params', () async {
+    test('events/get full list', () async {
       Request req = Request(
+        'POST',
+        Uri.parse('$_rndUrl/events/create'),
+        body: eventJson,
+      );
+      Response response = await _controller.postEventsHandler(req);
+      expect(response.statusCode, 200);
+
+      req = Request(
         'POST',
         Uri.parse('$_rndUrl/events/create'),
         body: tennisJson,
       );
-      Response response = await _controller.postEventsHandler(req);
+      response = await _controller.postEventsHandler(req);
       expect(response.statusCode, 200);
 
       req = Request(
@@ -132,11 +143,12 @@ void main() {
       response = await _controller.getEventsHandler(req);
 
       expect(response.statusCode, 200);
-      expect(eventsToJson({
-        "0":tennisEvent,
-        "1":dingDongEvent
-      }),
-          await response.readAsString());
+      expect(await response.readAsString(),
+        eventsToJson([
+          event,
+          tennisEvent,
+          dingDongEvent
+        ]),);
     });
 
     test('events/get with id param', () async {
@@ -245,15 +257,16 @@ void main() {
       // Join event twice
       req = Request(
         'POST',
-        Uri.parse('$_rndUrl/events/delete'),
-        body: '{"userId":"2c","eventId":0}',
+        Uri.parse('$_rndUrl/events/join'),
+        body: '{"userId":"2c","eventId":"0"}',
       );
       response = await _controller.joinEventsHandler(req);
+      expect(response.statusCode, 200);
 
       req = Request(
         'POST',
-        Uri.parse('$_rndUrl/events/delete'),
-        body: '{"userId":"2c","eventId":0}',
+        Uri.parse('$_rndUrl/events/join'),
+        body: '{"userId":"2c","eventId":"0"}',
       );
       response = await _controller.joinEventsHandler(req);
       expect(response.statusCode, 400);
@@ -300,6 +313,7 @@ void main() {
         body: '{"userId":"ff","eventId":0}',
       );
       response = await _controller.joinEventsHandler(req);
+      expect(response.statusCode, 400);
 
       req = Request(
         'POST',

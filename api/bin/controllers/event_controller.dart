@@ -43,7 +43,7 @@ class EventController extends Controller {
         return Response(400);
       }
     } else {
-      Map<String, Event> events = await _eventsRepo.getEventsAsync();
+      List<Event> events = await _eventsRepo.getEventsAsync();
       return Response.ok(eventsToJson(events));
     }
   }
