@@ -20,7 +20,10 @@ class UsersRepoImpl extends UsersRepo {
 
   @override
   Future<User> getUserAsync(String id) async {
-    Response response = await _apiService.getAsync("/users/profile/get?id=$id");
+    Response response = await _apiService.getAsync(
+      Endpoints.getUser,
+      params: {"id": id},
+    );
     return userFromJson(response.body);
   }
 
@@ -33,6 +36,9 @@ class UsersRepoImpl extends UsersRepo {
   @override
   Future updateUserAsync(User user) async {
     await _apiService.postAsync(
-        "/users/profile/update?id=${user.id}", userToJson(user));
+      Endpoints.updateUser,
+      params: {"id": user.id},
+      body: userToJson(user),
+    );
   }
 }

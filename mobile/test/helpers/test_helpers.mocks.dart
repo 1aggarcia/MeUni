@@ -669,48 +669,22 @@ class MockDialogService extends _i1.Mock implements _i3.DialogService {
 /// See the documentation for Mockito's code generation for more information.
 class MockApiService extends _i1.Mock implements _i7.ApiService {
   @override
-  String get host => (super.noSuchMethod(
-        Invocation.getter(#host),
-        returnValue: '',
-        returnValueForMissingStub: '',
-      ) as String);
-
-  @override
-  set host(String? _host) => super.noSuchMethod(
-        Invocation.setter(
-          #host,
-          _host,
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  String get testUri => (super.noSuchMethod(
-        Invocation.getter(#testUri),
-        returnValue: '',
-        returnValueForMissingStub: '',
-      ) as String);
-
-  @override
-  set testUri(String? _testUri) => super.noSuchMethod(
-        Invocation.setter(
-          #testUri,
-          _testUri,
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  _i5.Future<_i2.Response> getAsync(String? url) => (super.noSuchMethod(
+  _i5.Future<_i2.Response> getAsync(
+    _i7.Endpoints? endpoint, {
+    Map<String, String>? params,
+  }) =>
+      (super.noSuchMethod(
         Invocation.method(
           #getAsync,
-          [url],
+          [endpoint],
+          {#params: params},
         ),
         returnValue: _i5.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #getAsync,
-            [url],
+            [endpoint],
+            {#params: params},
           ),
         )),
         returnValueForMissingStub:
@@ -718,32 +692,36 @@ class MockApiService extends _i1.Mock implements _i7.ApiService {
           this,
           Invocation.method(
             #getAsync,
-            [url],
+            [endpoint],
+            {#params: params},
           ),
         )),
       ) as _i5.Future<_i2.Response>);
 
   @override
   _i5.Future<_i2.Response> postAsync(
-    String? url,
+    _i7.Endpoints? endpoint, {
+    Map<String, String>? params,
     String? body,
-  ) =>
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #postAsync,
-          [
-            url,
-            body,
-          ],
+          [endpoint],
+          {
+            #params: params,
+            #body: body,
+          },
         ),
         returnValue: _i5.Future<_i2.Response>.value(_FakeResponse_0(
           this,
           Invocation.method(
             #postAsync,
-            [
-              url,
-              body,
-            ],
+            [endpoint],
+            {
+              #params: params,
+              #body: body,
+            },
           ),
         )),
         returnValueForMissingStub:
@@ -751,10 +729,11 @@ class MockApiService extends _i1.Mock implements _i7.ApiService {
           this,
           Invocation.method(
             #postAsync,
-            [
-              url,
-              body,
-            ],
+            [endpoint],
+            {
+              #params: params,
+              #body: body,
+            },
           ),
         )),
       ) as _i5.Future<_i2.Response>);

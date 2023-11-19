@@ -13,16 +13,18 @@ abstract class EventsRepo {
 
 class EventsRepoImpl extends EventsRepo {
   final ApiService _apiService = locator<ApiService>();
+
   @override
   Future addEventAsync(Event event) async {
-    // TODO: implement addEventAsync
-    _apiService.postAsync("/events/create", eventToJson(event));
+    await _apiService.postAsync(
+      Endpoints.createEvent,
+      body: eventToJson(event),
+    );
   }
 
   @override
   Future<List<Event>> getEventsAsync() async {
-    // TODO: implement getEventsAsync
-    Response response = await _apiService.getAsync("/events/get");
+    Response response = await _apiService.getAsync(Endpoints.getEvents);
     return eventsFromJson(response.body);
   }
 }

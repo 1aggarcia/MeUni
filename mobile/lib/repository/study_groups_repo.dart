@@ -16,14 +16,13 @@ class StudyGroupsRepoImpl extends StudyGroupsRepo {
 
   @override
   Future addStudyGroupAsync(StudyGroup studyGroup) async {
-    // TODO: implement addEventAsync
-    _apiService.postAsync("/studygroup/create", studyGroupToJson(studyGroup));
+    await _apiService.postAsync(Endpoints.createStudyGroup,
+        body: studyGroupToJson(studyGroup));
   }
 
   @override
   Future<List<StudyGroup>> getStudyGroupsAsync() async {
-    // TODO: implement getStudyGroupsAsync
-    Response response = await _apiService.getAsync("/studygroup/get");
+    Response response = await _apiService.getAsync(Endpoints.getStudyGroups);
     return studyGroupsFromJson(response.body);
   }
 }
