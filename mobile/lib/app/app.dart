@@ -59,5 +59,5 @@ import 'package:meuni_mobile/ui/views/profile/profile_view.dart';
   ],
 )
 class App {
-  static const demoDuration = Duration(seconds: 0);
+  static const demoDuration = Duration(seconds: 3);
 }
