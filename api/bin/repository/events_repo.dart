@@ -4,6 +4,7 @@ import 'package:firebase_dart/database.dart' as db;
 
 import '../locator.dart';
 import '../models/event.dart';
+import '../models/user_data.dart';
 
 // const maxEvents = 1 << 30; // 2^30 = 1,073,741,824
 
@@ -36,13 +37,14 @@ abstract class EventsRepo {
 class EventsRepoImpl extends EventsRepo {
   //* Private Properties
   late db.DatabaseReference _eventsRef;
-  late db.DatabaseReference _userEventsRef;
+  late UserData _userEventsTable;
 
   //* Constructors
   EventsRepoImpl() {
     final dbRef = locator<db.DatabaseReference>();
     _eventsRef = dbRef.child('events');
-    _userEventsRef = dbRef.child('user_events');
+    final userEventsRef = dbRef.child('user_events');
+    _userEventsTable = UserData(userEventsRef, 'eventId');
   }
 
   //* Overriden Methods
@@ -60,9 +62,9 @@ class EventsRepoImpl extends EventsRepo {
 
   @override
   String deleteEvent(String id) {
-    // TODO: remove all entries with id from user_events
     final db.DatabaseReference eventRef = _eventsRef.child(id);
     eventRef.remove();
+    //_userEventsTable.removeDataAsync(id);
     return id;
   }
 
@@ -95,20 +97,15 @@ class EventsRepoImpl extends EventsRepo {
       eventJson.remove('attendeeNames');
       _eventsRef.child(eventId).update(eventJson);
 
-      // TODO: create user table repo,
-      // replace with userTable.add(userId, eventId)
-      db.DatabaseReference userLog = _userEventsRef.push();
-      userLog.update({
-        "userId": userId,
-        "eventId": eventId
-      });
+      // TODO: create user table repo
+      _userEventsTable.add(userId, eventId);
 
       return event.attendees;
     }
   }
 
   @override
-  Future<List<String>?> unjoinEventAsync(String userId, String eventId) {
+  Future<List<String>?> unjoinEventAsync(String userId, String eventId) async {
     /*
       - verificar que evento existe
         - si no, devolvé null
