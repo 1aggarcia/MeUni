@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart';
 
 import '../app/app.locator.dart';
@@ -12,19 +14,30 @@ abstract class EventsRepo {
 }
 
 class EventsRepoImpl extends EventsRepo {
+  //* Private Properties
   final ApiService _apiService = locator<ApiService>();
 
+  //* Overridden Methods
   @override
   Future addEventAsync(Event event) async {
     await _apiService.postAsync(
       Endpoints.createEvent,
-      body: eventToJson(event),
+      body: _eventToJson(event),
     );
   }
 
   @override
   Future<List<Event>> getEventsAsync() async {
     Response response = await _apiService.getAsync(Endpoints.getEvents);
-    return eventsFromJson(response.body);
+    return _eventsFromJson(response.body);
+  }
+
+  //* Private Methods
+  String _eventToJson(Event event) => json.encode(event.toJson());
+
+  List<Event> _eventsFromJson(String str) {
+    final jsonMap = json.decode(str);
+
+    return List<Event>.from(jsonMap.map((e) => Event.fromJson(e)));
   }
 }

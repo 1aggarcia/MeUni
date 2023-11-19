@@ -1,18 +1,3 @@
-import 'dart:convert';
-
-Event eventFromJson(String str) {
-  var decode = json.decode(str);
-  return Event.fromJson(decode);
-}
-
-String eventToJson(Event data) => json.encode(data.toJson());
-
-List<Event> eventsFromJson(String str) =>
-    List<Event>.from(json.decode(str).map((x) => Event.fromJson(x)));
-
-String eventsToJson(List<Event> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 class Event {
   //* Public Properties
   final String id;
