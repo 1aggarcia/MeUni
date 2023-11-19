@@ -6,8 +6,6 @@ import '../locator.dart';
 import '../models/event.dart';
 import '../models/user_data.dart';
 
-// const maxEvents = 1 << 30; // 2^30 = 1,073,741,824
-
 abstract class EventsRepo {
   //* Public Methods
 
@@ -21,7 +19,7 @@ abstract class EventsRepo {
   /// @returns the Event if found, null otherwise
   Future<Event?> getEventAsync(String id);
 
-  /// @returns map of all events
+  /// @returns list of all events
   Future<List<Event>> getEventsAsync();
 
   /// Adds user with given id to event with given id

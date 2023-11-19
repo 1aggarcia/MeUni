@@ -236,10 +236,10 @@ void main() {
       // Join event
       req = Request(
         'POST',
-        Uri.parse('$_rndUrl/events/delete'),
+        Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"2c","eventId":"0"}',
       );
-      response = await _controller.joinEventsHandler(req);
+      response = await _controller.joinEventsHandler(req, true);
       expect(response.statusCode, 200);
       expect(await response.readAsString(),'["2c"]');
     });
@@ -260,7 +260,7 @@ void main() {
         Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"2c","eventId":"0"}',
       );
-      response = await _controller.joinEventsHandler(req);
+      response = await _controller.joinEventsHandler(req, true);
       expect(response.statusCode, 200);
 
       req = Request(
@@ -268,17 +268,17 @@ void main() {
         Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"2c","eventId":"0"}',
       );
-      response = await _controller.joinEventsHandler(req);
+      response = await _controller.joinEventsHandler(req, true);
       expect(response.statusCode, 400);
     });
 
     test('events/join - invalid event', () async {
       Request req = Request(
         'POST',
-        Uri.parse('$_rndUrl/events/delete'),
+        Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"2c","eventId":235}',
       );
-      Response response = await _controller.joinEventsHandler(req);
+      Response response = await _controller.joinEventsHandler(req, true);
       expect(response.statusCode, 400);
     });
 
@@ -309,19 +309,50 @@ void main() {
       // Exceed capacity
       req = Request(
         'POST',
-        Uri.parse('$_rndUrl/events/delete'),
+        Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"ff","eventId":0}',
       );
-      response = await _controller.joinEventsHandler(req);
+      response = await _controller.joinEventsHandler(req, true);
       expect(response.statusCode, 400);
 
       req = Request(
         'POST',
-        Uri.parse('$_rndUrl/events/delete'),
+        Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"2c","eventId":0}',
       );
-      response = await _controller.joinEventsHandler(req);
+      response = await _controller.joinEventsHandler(req, true);
       expect(response.statusCode, 400);
+    });
+
+    test('events/unjoin', () async {
+      // Create event
+      Request req = Request(
+        'POST',
+        Uri.parse('$_rndUrl/events/create'),
+        body: eventJson,
+      );
+      Response response = await _controller.postEventsHandler(req);
+      expect(response.statusCode, 200);
+
+      // Join event
+      req = Request(
+        'POST',
+        Uri.parse('$_rndUrl/events/join'),
+        body: '{"userId":"2c","eventId":"0"}',
+      );
+      response = await _controller.joinEventsHandler(req, true);
+      expect(response.statusCode, 200);
+      expect(await response.readAsString(),'["2c"]');
+
+      // Unoin event
+      req = Request(
+        'POST',
+        Uri.parse('$_rndUrl/events/unjoin'),
+        body: '{"userId":"2c","eventId":"0"}',
+      );
+      response = await _controller.joinEventsHandler(req, false);
+      expect(response.statusCode, 200);
+      expect(await response.readAsString(),'[]');
     });
   });
 }
