@@ -1,21 +1,21 @@
 import 'dart:convert';
 
-User userFromJson(String str, int userId) {
+User userFromJson(String str) {
   var decode = json.decode(str);
-  return User.fromJson(decode, userId);
+  return User.fromJson(decode);
 }
 
 String userToJson(User data) => json.encode(data.toJson());
 
 List<User> usersFromJson(String str) =>
-    List<User>.from(json.decode(str).map((x) => User.fromJson(x, -1)));
+    List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
 
 String usersToJson(List<User> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class User {
   //* Public Properties
-  final int id;
+  final String id;
   final String firstName;
   final String lastName;
   final int year;
@@ -31,7 +31,7 @@ class User {
       required this.pronouns,
       required this.admin});
 
-  factory User.fromJson(Map<String, dynamic> json, int userId) => User(
+  factory User.fromJson(Map<String, dynamic> json) => User(
         id: json['id'],
         firstName: json['firstName'],
         lastName: json['lastName'],

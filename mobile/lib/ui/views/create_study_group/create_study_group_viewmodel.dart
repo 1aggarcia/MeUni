@@ -24,28 +24,29 @@ class CreateStudyGroupViewModel extends FormViewModel {
       TimeOfDay endTime = _fromString(studyGroupEndTimeValue!);
 
       StudyGroup studyGroup = StudyGroup(
-          id: -1,
-          course: studyGroupCourseValue!,
-          desc: studyGroupDescriptionValue!,
-          location: studyGroupLocationValue!,
-          max: -1,
-          startTime: DateTime(
-            dateTime.year,
-            dateTime.month,
-            dateTime.day,
-            startTime.hour,
-            startTime.minute,
-          ),
-          endTime: DateTime(
-            dateTime.year,
-            dateTime.month,
-            dateTime.day,
-            endTime.hour,
-            endTime.minute,
-          ),
-          hostId: -1,
-          hostName: "Ronals",
-          attendees: []);
+        id: '-1',
+        course: studyGroupCourseValue!,
+        desc: studyGroupDescriptionValue!,
+        location: studyGroupLocationValue!,
+        max: -1,
+        startTime: DateTime(
+          dateTime.year,
+          dateTime.month,
+          dateTime.day,
+          startTime.hour,
+          startTime.minute,
+        ),
+        endTime: DateTime(
+          dateTime.year,
+          dateTime.month,
+          dateTime.day,
+          endTime.hour,
+          endTime.minute,
+        ),
+        hostId: -1,
+        hostName: 'Ronals',
+        attendees: [],
+      );
 
       isLoading = true;
       rebuildUi();

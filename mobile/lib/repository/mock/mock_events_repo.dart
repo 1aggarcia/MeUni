@@ -10,7 +10,7 @@ class MockEventsRepo extends EventsRepo {
   MockEventsRepo() {
     _events = [
       Event(
-        id: 1,
+        id: '1',
         title: 'Pizza',
         desc: 'need ppl to chip in for pizza',
         location: 'The crib',
@@ -19,10 +19,10 @@ class MockEventsRepo extends EventsRepo {
         endTime: DateTime.parse('2023-11-04 03:24:15.537017Z'),
         hostName: 'Fei',
         hostId: 1,
-        attendees: [2, 3],
+        attendees: ['2', '3'],
       ),
       Event(
-        id: 2,
+        id: '2',
         title: 'Event 1',
         desc: 'This is a sample description for this event',
         location: 'UW CSE2 G21',
@@ -31,10 +31,10 @@ class MockEventsRepo extends EventsRepo {
         endTime: DateTime.parse('2023-11-07 03:24:15.537017Z'),
         hostId: 2,
         hostName: 'John',
-        attendees: [1, 3],
+        attendees: ['1', '3'],
       ),
       Event(
-        id: 3,
+        id: '3',
         title: 'Another event',
         desc: 'This time i really need people',
         location: '[Redacted]',
@@ -43,7 +43,7 @@ class MockEventsRepo extends EventsRepo {
         endTime: DateTime.parse('2023-11-05 03:24:15.537017Z'),
         hostId: 3,
         hostName: 'Hannah',
-        attendees: [1],
+        attendees: ['1'],
       ),
     ];
   }

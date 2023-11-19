@@ -22,14 +22,12 @@ class LoginViewModel extends FormViewModel {
       isLoading = true;
       rebuildUi();
 
-      int id = 0;
+      String id = '';
       String userName = usernameValue!;
       if (userName == 'Fei') {
-        id = 1;
+        id = '1';
       } else if (usernameValue == 'John') {
-        id = 2;
-      } else {
-        return null;
+        id = '2';
       }
 
       User user = await _userRepo.getUserAsync(id);

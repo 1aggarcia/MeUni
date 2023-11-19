@@ -15,7 +15,7 @@ String studyGroupsToJson(List<StudyGroup> data) =>
 
 class StudyGroup {
   //* Public Properties
-  final int id;
+  final String id;
 
   final String course;
   final String desc;
@@ -28,7 +28,7 @@ class StudyGroup {
 
   final int hostId;
   final String hostName;
-  final List<int> attendees;
+  final List<String> attendees;
 
   //* Constructors
   StudyGroup({
@@ -44,22 +44,18 @@ class StudyGroup {
     required this.attendees,
   });
 
-  factory StudyGroup.fromJson(Map<String, dynamic> json) {
-    List<int> attendees = List<int>.from(json['attendees']);
-
-    return StudyGroup(
-      id: json['id'],
-      course: json['course'],
-      desc: json['desc'],
-      location: json['location'],
-      max: json['max'],
-      startTime: DateTime.parse(json['startTime']),
-      endTime: DateTime.parse(json['endTime']),
-      hostId: json['hostId'],
-      hostName: json['hostName'],
-      attendees: attendees,
-    );
-  }
+  factory StudyGroup.fromJson(Map<String, dynamic> json) => StudyGroup(
+        id: json['id'],
+        course: json['course'],
+        desc: json['desc'],
+        location: json['location'],
+        max: json['max'],
+        startTime: DateTime.parse(json['startTime']),
+        endTime: DateTime.parse(json['endTime']),
+        hostId: json['hostId'],
+        hostName: json['hostName'],
+        attendees: List<String>.from(json['attendees']),
+      );
 
   Map<String, dynamic> toJson() => {
         'id': id,
