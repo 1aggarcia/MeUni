@@ -18,7 +18,7 @@ class HomeView extends StackedView<HomeViewModel> {
         backgroundColor: const Color(0xFFB5A8A0),
         currentIndex: viewModel.currentIndex,
         selectedItemColor: Colors.orange[700],
-        unselectedItemColor: Color(0xFF00004D),
+        unselectedItemColor: const Color(0xFF00004D),
         onTap: viewModel.setIndex,
         items: const [
           BottomNavigationBarItem(

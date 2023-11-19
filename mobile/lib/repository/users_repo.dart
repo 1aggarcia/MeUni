@@ -23,9 +23,11 @@ class UsersRepoImpl extends UsersRepo {
     return userFromJson(response.body, id);
   }
 
+  @override
   Future updateUserAsync(User user) async {
     int id = user.id;
-    await _apiService.postAsync("/users/profile/update?id=$id", userToJson(user));
+    await _apiService.postAsync(
+        "/users/profile/update?id=$id", userToJson(user));
   }
 
   @override
