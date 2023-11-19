@@ -71,9 +71,12 @@ enum Endpoints {
   }
 }
 
+/// Responsible for communicating with the API to fetch data
 class ApiService {
   final _host = 'localhost:8080';
 
+  /// Sends a GET request to the API based on the given [endpoint],
+  /// adding on [params] to the URL if provided
   Future<Response> getAsync(Endpoints endpoint,
       {Map<String, String>? params}) async {
     Uri url = Uri.http(_host, endpoint.uri, params);
@@ -81,6 +84,9 @@ class ApiService {
     return await get(url);
   }
 
+  /// Sends a POST request to the API based on the given [endpoint],
+  /// adding on [params] to the URL if provided. Provide [body] to send JSON
+  /// to the server via the POST call's body.
   Future<Response> postAsync(Endpoints endpoint,
       {Map<String, String>? params, String? body}) async {
     Uri url = Uri.http(_host, endpoint.uri, params);
