@@ -31,7 +31,7 @@ import 'package:meuni_mobile/ui/views/profile/profile_view.dart';
     MaterialRoute(page: EventsView),
     MaterialRoute(page: CreateEventView),
     MaterialRoute(page: LoginView),
-    MaterialRoute(page: StudyGroupView),
+    MaterialRoute(page: StudyGroupsView),
     MaterialRoute(page: CreateStudyGroupView),
     MaterialRoute(page: HomeView),
     MaterialRoute(page: ProfileView),

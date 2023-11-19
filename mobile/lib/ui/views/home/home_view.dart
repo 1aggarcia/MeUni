@@ -46,7 +46,7 @@ class HomeView extends StackedView<HomeViewModel> {
       case 0:
         return const EventsView();
       case 1:
-        return const StudyGroupView();
+        return const StudyGroupsView();
       case 2:
         return const ProfileView();
     }

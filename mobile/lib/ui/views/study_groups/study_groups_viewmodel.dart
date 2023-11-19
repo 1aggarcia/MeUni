@@ -8,7 +8,7 @@ import '../../../models/study_group.dart';
 import '../../../repository/study_groups_repo.dart';
 import '../../../repository/users_repo.dart';
 
-class StudyGroupViewModel extends BaseViewModel {
+class StudyGroupsViewModel extends BaseViewModel {
   //* Private Properties
   final _usersRepo = locator<UsersRepo>();
   final _studyGroupsRepo = locator<StudyGroupsRepo>();

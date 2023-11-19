@@ -30,7 +30,7 @@ class Routes {
 
   static const loginView = '/login-view';
 
-  static const studyGroupView = '/study-group-view';
+  static const studyGroupsView = '/study-groups-view';
 
   static const createStudyGroupView = '/create-study-group-view';
 
@@ -43,7 +43,7 @@ class Routes {
     eventsView,
     createEventView,
     loginView,
-    studyGroupView,
+    studyGroupsView,
     createStudyGroupView,
     homeView,
     profileView,
@@ -69,8 +69,8 @@ class StackedRouter extends _i1.RouterBase {
       page: _i5.LoginView,
     ),
     _i1.RouteDef(
-      Routes.studyGroupView,
-      page: _i6.StudyGroupView,
+      Routes.studyGroupsView,
+      page: _i6.StudyGroupsView,
     ),
     _i1.RouteDef(
       Routes.createStudyGroupView,
@@ -111,9 +111,9 @@ class StackedRouter extends _i1.RouterBase {
         settings: data,
       );
     },
-    _i6.StudyGroupView: (data) {
+    _i6.StudyGroupsView: (data) {
       return _i10.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i6.StudyGroupView(),
+        builder: (context) => const _i6.StudyGroupsView(),
         settings: data,
       );
     },
@@ -201,14 +201,14 @@ extension NavigatorStateExtension on _i11.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToStudyGroupView([
+  Future<dynamic> navigateToStudyGroupsView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
   ]) async {
-    return navigateTo<dynamic>(Routes.studyGroupView,
+    return navigateTo<dynamic>(Routes.studyGroupsView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -313,14 +313,14 @@ extension NavigatorStateExtension on _i11.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithStudyGroupView([
+  Future<dynamic> replaceWithStudyGroupsView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
   ]) async {
-    return replaceWith<dynamic>(Routes.studyGroupView,
+    return replaceWith<dynamic>(Routes.studyGroupsView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

@@ -6,12 +6,12 @@ import 'package:stacked/stacked.dart';
 import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
 
-class StudyGroupView extends StackedView<StudyGroupViewModel> {
-  const StudyGroupView({Key? key}) : super(key: key);
+class StudyGroupsView extends StackedView<StudyGroupsViewModel> {
+  const StudyGroupsView({Key? key}) : super(key: key);
 
   @override
   Widget builder(
-      BuildContext context, StudyGroupViewModel viewModel, Widget? child) {
+      BuildContext context, StudyGroupsViewModel viewModel, Widget? child) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: kcBackgroundColor,
@@ -63,6 +63,6 @@ class StudyGroupView extends StackedView<StudyGroupViewModel> {
   }
 
   @override
-  StudyGroupViewModel viewModelBuilder(BuildContext context) =>
-      StudyGroupViewModel();
+  StudyGroupsViewModel viewModelBuilder(BuildContext context) =>
+      StudyGroupsViewModel();
 }
