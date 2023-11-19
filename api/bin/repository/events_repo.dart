@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:firebase_dart/database.dart' as db;
 
 import '../locator.dart';
 import '../models/event.dart';
 
-const maxEvents = 1 << 30; // 2^30 = 1,073,741,824
+// const maxEvents = 1 << 30; // 2^30 = 1,073,741,824
 
 abstract class EventsRepo {
   //* Public Methods
@@ -42,7 +41,6 @@ class EventsRepoImpl extends EventsRepo {
   //* Constructors
   EventsRepoImpl() {
     final dbRef = locator<db.DatabaseReference>();
-
     _eventsRef = dbRef.child('events');
     _userEventsRef = dbRef.child('user_events');
   }
@@ -62,6 +60,7 @@ class EventsRepoImpl extends EventsRepo {
 
   @override
   String deleteEvent(String id) {
+    // TODO: remove all entries with id from user_events
     final db.DatabaseReference eventRef = _eventsRef.child(id);
     eventRef.remove();
     return id;
@@ -96,6 +95,8 @@ class EventsRepoImpl extends EventsRepo {
       eventJson.remove('attendeeNames');
       _eventsRef.child(eventId).update(eventJson);
 
+      // TODO: create user table repo,
+      // replace with userTable.add(userId, eventId)
       db.DatabaseReference userLog = _userEventsRef.push();
       userLog.update({
         "userId": userId,
@@ -108,6 +109,15 @@ class EventsRepoImpl extends EventsRepo {
 
   @override
   Future<List<String>?> unjoinEventAsync(String userId, String eventId) {
+    /*
+      - verificar que evento existe
+        - si no, devolvé null
+      - obtiene referencia de evento
+      - quitarle usuario de attendees
+      - quitar entrada (userId, eventId) de user_events
+      - actualizar evento
+      - devolvé attendees
+    */
     throw UnimplementedError();
   }   
 
@@ -123,25 +133,25 @@ class EventsRepoImpl extends EventsRepo {
         event.attendees.length < event.max);
   }
 
-  /// Finds an avaliable id in the database
-  /// @returns new id and its DatabaseReference
-  Future<(int, db.DatabaseReference)> getNewRefAsync() async {
-    final rand = Random();
-    int id = rand.nextInt(maxEvents);
-    List<int> used = [id];
-    db.DatabaseReference newRef = _eventsRef.child("$id");
-    db.DataSnapshot snapshot = await newRef.once();
+  // /// Finds an avaliable id in the database
+  // /// @returns new id and its DatabaseReference
+  // Future<(int, db.DatabaseReference)> getNewRefAsync() async {
+  //   final rand = Random();
+  //   int id = rand.nextInt(maxEvents);
+  //   List<int> used = [id];
+  //   db.DatabaseReference newRef = _eventsRef.child("$id");
+  //   db.DataSnapshot snapshot = await newRef.once();
 
-    // Condition on length prevents infinite loop
-    while(snapshot.value != null && used.length < maxEvents) {
-      // Given above condition, there must be an unused id that can be generated
-      while (used.contains(id)) {
-        id = rand.nextInt(maxEvents);
-      }
-      newRef = _eventsRef.child("$id");
-      snapshot = await newRef.once();
-      used.add(id);
-    }
-    return(id, newRef);    
-  }
+  //   // Condition on length prevents infinite loop
+  //   while(snapshot.value != null && used.length < maxEvents) {
+  //     // Given above condition, there must be an unused id that can be generated
+  //     while (used.contains(id)) {
+  //       id = rand.nextInt(maxEvents);
+  //     }
+  //     newRef = _eventsRef.child("$id");
+  //     snapshot = await newRef.once();
+  //     used.add(id);
+  //   }
+  //   return(id, newRef);    
+  // }
 }
