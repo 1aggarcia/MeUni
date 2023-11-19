@@ -12,11 +12,11 @@ abstract class EventsRepo {
   //* Public Methods
 
   /// @returns the ID of the newly created event
-  String addEvent(Event event);
+  Future<String> addEventAsync(Event event);
 
   /// Removes event of given id from database
   /// @returns id of deleted event
-  String deleteEvent(String id);
+  Future<String> deleteEventAsync(String id);
 
   /// @returns the Event if found, null otherwise
   Future<Event?> getEventAsync(String id);
@@ -43,28 +43,29 @@ class EventsRepoImpl extends EventsRepo {
   EventsRepoImpl() {
     final dbRef = locator<db.DatabaseReference>();
     _eventsRef = dbRef.child('events');
+
     final userEventsRef = dbRef.child('user_events');
     _userEventsTable = UserData(userEventsRef, 'eventId');
   }
 
   //* Overriden Methods
   @override
-  String addEvent(Event event) {
+  Future<String> addEventAsync(Event event) async {
     final db.DatabaseReference newRef = _eventsRef.push();
     final Map<String, dynamic> eventJson = event.toJson();
 
     eventJson.remove('hostName');
     eventJson.remove('attendeeNames');
-    newRef.update(eventJson);
+    await newRef.set(eventJson);
 
     return newRef.key as String;
   }
 
   @override
-  String deleteEvent(String id) {
+  Future<String> deleteEventAsync(String id) async {
     final db.DatabaseReference eventRef = _eventsRef.child(id);
-    eventRef.remove();
-    //_userEventsTable.removeDataAsync(id);
+    await eventRef.remove();
+    await _userEventsTable.removeData(id);
     return id;
   }
 
@@ -90,15 +91,11 @@ class EventsRepoImpl extends EventsRepo {
     if (!await userCanJoinAsync(userId, eventId)) {
       return null;
     } else {
-      Event? event = await getEventAsync(eventId) as Event;
+      Event event = await getEventAsync(eventId) as Event;
       event.attendees.add(userId);
-      final eventJson = event.toJson();
-      eventJson.remove('hostName');
-      eventJson.remove('attendeeNames');
-      _eventsRef.child(eventId).update(eventJson);
 
-      // TODO: create user table repo
-      _userEventsTable.add(userId, eventId);
+      await _eventsRef.child(eventId).update({'attendees': event.attendees});
+      await _userEventsTable.add(userId, eventId);
 
       return event.attendees;
     }
@@ -106,16 +103,17 @@ class EventsRepoImpl extends EventsRepo {
 
   @override
   Future<List<String>?> unjoinEventAsync(String userId, String eventId) async {
-    /*
-      - verificar que evento existe
-        - si no, devolvé null
-      - obtiene referencia de evento
-      - quitarle usuario de attendees
-      - quitar entrada (userId, eventId) de user_events
-      - actualizar evento
-      - devolvé attendees
-    */
-    throw UnimplementedError();
+    Event? event = await getEventAsync(eventId);
+    if (event == null) {
+      return null;
+    } else {
+      event.attendees.remove(userId);
+
+      await _eventsRef.child(eventId).update({'attendees': event.attendees});
+      await _userEventsTable.removeUser(userId);
+
+      return event.attendees;    
+    }
   }   
 
   //* Helper methods
@@ -129,26 +127,4 @@ class EventsRepoImpl extends EventsRepo {
         !event.attendees.contains(userId) &&
         event.attendees.length < event.max);
   }
-
-  // /// Finds an avaliable id in the database
-  // /// @returns new id and its DatabaseReference
-  // Future<(int, db.DatabaseReference)> getNewRefAsync() async {
-  //   final rand = Random();
-  //   int id = rand.nextInt(maxEvents);
-  //   List<int> used = [id];
-  //   db.DatabaseReference newRef = _eventsRef.child("$id");
-  //   db.DataSnapshot snapshot = await newRef.once();
-
-  //   // Condition on length prevents infinite loop
-  //   while(snapshot.value != null && used.length < maxEvents) {
-  //     // Given above condition, there must be an unused id that can be generated
-  //     while (used.contains(id)) {
-  //       id = rand.nextInt(maxEvents);
-  //     }
-  //     newRef = _eventsRef.child("$id");
-  //     snapshot = await newRef.once();
-  //     used.add(id);
-  //   }
-  //   return(id, newRef);    
-  // }
 }

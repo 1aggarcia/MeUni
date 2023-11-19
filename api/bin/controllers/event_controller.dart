@@ -55,7 +55,7 @@ class EventController extends Controller {
     try {
       Event? event = eventFromJson(body);
       if (event != null) {
-        String newId = _eventsRepo.addEvent(event);
+        String newId = await _eventsRepo.addEventAsync(event);
         return Response.ok(newId);
       } else {
         return Response(400);
@@ -72,7 +72,7 @@ class EventController extends Controller {
       dynamic body = jsonDecode(json);
       String? id = body['id'];
       if (id != null) {
-        String result = _eventsRepo.deleteEvent(id);
+        String result = await _eventsRepo.deleteEventAsync(id);
         return Response.ok(result);
       } else {
         return Response(400);
