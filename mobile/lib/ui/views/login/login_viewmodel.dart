@@ -36,7 +36,7 @@ class LoginViewModel extends FormViewModel {
       _userRepo.loggedInUser = user;
 
       isLoading = false;
-      _navigationService.replaceWithEventsView();
+      _navigationService.replaceWithHomeView();
     }
   }
 }

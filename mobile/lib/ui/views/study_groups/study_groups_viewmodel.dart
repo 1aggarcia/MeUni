@@ -34,9 +34,6 @@ class StudyGroupViewModel extends BaseViewModel {
     rebuildUi();
   }
 
-  Future goToEventPageAsync() async =>
-      await _navigationService.navigateToEventsView();
-
   Future goToCreateStudyGroupPageAsync() async =>
       await _navigationService.navigateToCreateStudyGroupView();
 

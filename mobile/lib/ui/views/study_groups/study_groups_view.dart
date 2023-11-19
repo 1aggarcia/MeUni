@@ -36,15 +36,6 @@ class StudyGroupView extends StackedView<StudyGroupViewModel> {
                         MaterialButton(
                           color: Colors.black,
                           onPressed: () async =>
-                              await viewModel.goToEventPageAsync(),
-                          child: const Text(
-                            'Go to Event View',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        MaterialButton(
-                          color: Colors.black,
-                          onPressed: () async =>
                               await viewModel.getStudyGroupsAsync(),
                           child: const Text(
                             'Get Study Groups',

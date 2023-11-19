@@ -37,11 +37,5 @@ class EventsViewModel extends BaseViewModel {
   Future goToCreateEventPageAsync() async =>
       await _navigationService.navigateToCreateEventView();
 
-  Future goToStudyGroupPageAsync() async =>
-      await _navigationService.navigateToStudyGroupView();
-
-  Future goToProfilePageAsync() async =>
-      await _navigationService.navigateToProfileView();
-
   Future logoutAsync() async => await _navigationService.replaceWithLoginView();
 }
