@@ -18,8 +18,8 @@ class EventController extends Controller {
       ..get('$endpoint/get', getEventsHandler)
       ..post('$endpoint/create', postEventsHandler)
       ..post('$endpoint/delete', deleteEventsHandler)
-      ..post('$endpoint/join', joinEventsHandler)
-      ..post('$endpoint/unjoin', unjoinEventsHandler);
+      ..post('$endpoint/join', (request) => joinEventsHandler(request, true))
+      ..post('$endpoint/unjoin', (request) => joinEventsHandler(request, false));
   }
 
   //* Public API Methods
@@ -37,13 +37,13 @@ class EventController extends Controller {
         if (event != null) {
           return Response.ok(eventToJson(event));
         } else {
-          return Response(400);
+          throw Exception('Event was not found');
         }
       } catch (e) {
         return Response(400);
       }
     } else {
-      Map<String, Event> events = await _eventsRepo.getEventsAsync();
+      List<Event> events = await _eventsRepo.getEventsAsync();
       return Response.ok(eventsToJson(events));
     }
   }
@@ -55,10 +55,10 @@ class EventController extends Controller {
     try {
       Event? event = eventFromJson(body);
       if (event != null) {
-        int newId = await _eventsRepo.addEventAsync(event);
-        return Response.ok("$newId");
+        String newId = await _eventsRepo.addEventAsync(event);
+        return Response.ok(newId);
       } else {
-        return Response(400);
+        throw Exception('Json body could not be converted to event');
       }
     } catch (e) {
       return Response(400);
@@ -72,17 +72,19 @@ class EventController extends Controller {
       dynamic body = jsonDecode(json);
       String? id = body['id'];
       if (id != null) {
-        String result = _eventsRepo.deleteEvent(id);
+        String result = await _eventsRepo.deleteEventAsync(id);
         return Response.ok(result);
       } else {
-        return Response(400);
+        throw Exception("Missing param 'id'");
       }
     } catch (e) {
       return Response(400);
     }
   }
 
-  Future<Response> joinEventsHandler(Request request) async {
+  /// joining = true indicates request to join,
+  /// joining = false indicates request to unjoin
+  Future<Response> joinEventsHandler(Request request, bool joining) async {
     String json = await request.readAsString();
 
     try {
@@ -90,21 +92,22 @@ class EventController extends Controller {
       String? userId = body['userId'];
       String? eventId = body['eventId'];
       if (userId != null && eventId != null) {
-        List<String>? result = await _eventsRepo.joinEventAsync(userId, eventId);
+        List<String>? result;
+        if (joining) {
+          result = await _eventsRepo.joinEventAsync(userId, eventId);
+        } else {
+          result = await _eventsRepo.unjoinEventAsync(userId, eventId);
+        }
         if (result != null) {
           return Response.ok(jsonEncode(result));
         } else {
-          return Response(400);
+          throw Exception("Event did not allow specified join operation");
         }
       } else {
-        return Response(400);
+        throw Exception("Missing one or more params, 'userId', 'eventId'");
       }
     } catch (e) {
       return Response(400);
     }
-  }
-
-  Future<Response> unjoinEventsHandler(Request request) async {
-    throw UnimplementedError();
   }
 }

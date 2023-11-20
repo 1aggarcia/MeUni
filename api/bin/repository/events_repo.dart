@@ -1,28 +1,26 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:firebase_dart/database.dart' as db;
 
 import '../locator.dart';
 import '../models/event.dart';
-
-const maxEvents = 1 << 30; // 2^30 = 1,073,741,824
+import '../models/user_data.dart';
 
 abstract class EventsRepo {
   //* Public Methods
 
   /// @returns the ID of the newly created event
-  Future<int> addEventAsync(Event event);
+  Future<String> addEventAsync(Event event);
 
   /// Removes event of given id from database
   /// @returns id of deleted event
-  String deleteEvent(String id);
+  Future<String> deleteEventAsync(String id);
 
   /// @returns the Event if found, null otherwise
   Future<Event?> getEventAsync(String id);
 
-  /// @returns map of all events
-  Future<Map<String, Event>> getEventsAsync();
+  /// @returns list of all events
+  Future<List<Event>> getEventsAsync();
 
   /// Adds user with given id to event with given id
   /// @returns new attendees list or null if event is at max capacity,
@@ -37,43 +35,50 @@ abstract class EventsRepo {
 class EventsRepoImpl extends EventsRepo {
   //* Private Properties
   late db.DatabaseReference _eventsRef;
-  late db.DatabaseReference _userEventsRef;
+  late UserData _userEventsTable;
 
   //* Constructors
   EventsRepoImpl() {
     final dbRef = locator<db.DatabaseReference>();
-
     _eventsRef = dbRef.child('events');
-    _userEventsRef = dbRef.child('user_events');
+
+    final userEventsRef = dbRef.child('user_events');
+    _userEventsTable = UserData(userEventsRef, 'eventId');
   }
 
   //* Overriden Methods
   @override
-  Future<int> addEventAsync(Event event) async {
-    final (id, newRef) = await getNewRefAsync();
+  Future<String> addEventAsync(Event event) async {
+    final db.DatabaseReference newRef = _eventsRef.push();
     final Map<String, dynamic> eventJson = event.toJson();
+
     eventJson.remove('hostName');
     eventJson.remove('attendeeNames');
-    newRef.update(eventJson);
-    return id;
+    await newRef.set(eventJson);
+
+    return newRef.key as String;
   }
 
   @override
-  String deleteEvent(String id) {
+  Future<String> deleteEventAsync(String id) async {
     final db.DatabaseReference eventRef = _eventsRef.child(id);
-    eventRef.remove();
+    await eventRef.remove();
+    await _userEventsTable.removeData(id);
     return id;
   }
 
   @override
   Future<Event?> getEventAsync(String id) async {
     final db.DataSnapshot snapshot = await _eventsRef.child(id).once();
-    final json = jsonEncode(snapshot.value);
-    return eventFromJson(json);
+    final Event? event = eventFromJson(jsonEncode(snapshot.value));
+    if (event is Event) {
+      event.setId(id);
+    }
+    return event;
   }
 
   @override
-  Future<Map<String, Event>> getEventsAsync() async {
+  Future<List<Event>> getEventsAsync() async {
     final db.DataSnapshot snapshot = await _eventsRef.once();
     final json = jsonEncode(snapshot.value);
     return eventsFromJson(json);
@@ -84,26 +89,29 @@ class EventsRepoImpl extends EventsRepo {
     if (!await userCanJoinAsync(userId, eventId)) {
       return null;
     } else {
-      Event? event = await getEventAsync(eventId) as Event;
+      Event event = await getEventAsync(eventId) as Event;
       event.attendees.add(userId);
-      final eventJson = event.toJson();
-      eventJson.remove('hostName');
-      eventJson.remove('attendeeNames');
-      _eventsRef.child(eventId).update(eventJson);
 
-      db.DatabaseReference userLog = _userEventsRef.push();
-      userLog.update({
-        "userId": userId,
-        "eventId": eventId
-      });
+      await _eventsRef.child(eventId).update({'attendees': event.attendees});
+      await _userEventsTable.add(userId, eventId);
 
       return event.attendees;
     }
   }
 
   @override
-  Future<List<String>?> unjoinEventAsync(String userId, String eventId) {
-    throw UnimplementedError();
+  Future<List<String>?> unjoinEventAsync(String userId, String eventId) async {
+    Event? event = await getEventAsync(eventId);
+    if (event == null) {
+      return null;
+    } else {
+      event.attendees.remove(userId);
+
+      await _eventsRef.child(eventId).update({'attendees': event.attendees});
+      await _userEventsTable.removeUser(userId);
+
+      return event.attendees;    
+    }
   }   
 
   //* Helper methods
@@ -113,37 +121,8 @@ class EventsRepoImpl extends EventsRepo {
   Future<bool> userCanJoinAsync(String userId, String eventId) async{
     // TODO: check for user validity
     Event? event = await getEventAsync(eventId);
-    if (event != null) {
-      print("c1 exists true");
-      print("c2 user not joined ${!event.attendees.contains(userId)}");
-      print("c3 event has capacity ${event.attendees.length < event.max}");
-    } else {
-      print("c1 exists false");
-    }
     return (event != null &&
         !event.attendees.contains(userId) &&
         event.attendees.length < event.max);
-  }
-
-  /// Finds an avaliable id in the database
-  /// @returns new id and its DatabaseReference
-  Future<(int, db.DatabaseReference)> getNewRefAsync() async {
-    final rand = Random();
-    int id = rand.nextInt(maxEvents);
-    List<int> used = [id];
-    db.DatabaseReference newRef = _eventsRef.child("$id");
-    db.DataSnapshot snapshot = await newRef.once();
-
-    // Condition on length prevents infinite loop
-    while(snapshot.value != null && used.length < maxEvents) {
-      // Given above condition, there must be an unused id that can be generated
-      while (used.contains(id)) {
-        id = rand.nextInt(maxEvents);
-      }
-      newRef = _eventsRef.child("$id");
-      snapshot = await newRef.once();
-      used.add(id);
-    }
-    return(id, newRef);    
   }
 }

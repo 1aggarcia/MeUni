@@ -7,6 +7,7 @@ final List<User> mockUsers = MockUsersRepo().getMockUsers();
 final int maxCapacity = 15;
 
 class Event {
+  String? id;
   final String title;
   final String desc;
   final String location;
@@ -22,6 +23,7 @@ class Event {
   final List<String> attendeeNames;
 
   Event({
+    this.id,
     required this.title,
     required this.desc,
     required this.location,
@@ -84,10 +86,17 @@ class Event {
     );
   }
 
+  // Sets event id to given id
+  bool setId(String id) {
+    this.id = id;
+    return true;
+  }
+
   // TODO: create 2nd toJson for database, leave this for clients
 
   /// Returns a json map of Event instance
   Map<String, dynamic> toJson() => {
+    'id': id,
     'title': title,
     'desc': desc,
     'location': location,
@@ -100,7 +109,7 @@ class Event {
     'attendeeNames': attendeeNames
   };
 
-  /// Does not check equality of attendees or attendeeNames
+  /// Does not check equality of attendees, attendeeNames, or id
   bool equals(Event other) {
     return 
         title == other.title &&
@@ -119,45 +128,38 @@ Event? eventFromJson(String str){
   try {
     return Event.fromJson(json.decode(str));
   } catch(e) {
+    print("ERROR: eventFromJson() $e");
     return null; 
   }
 }
 
-/// Returns json as string representing passed in Event
+/// Returns json string representing passed in Event
 String eventToJson(Event data) => json.encode(data.toJson());
 
-/// Returns Map of all events provided in json string.
-/// Improperly formatted entires ignored
-Map<String, Event> eventsFromJson(String str) {
+/// Returns json string representing passed in Event list
+String eventsToJson(List<Event> data) => 
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+/// Converts json string to event list, improperly formatted entires ignored
+List<Event> eventsFromJson(String str) {
   try {
-    return fromJsonMap(json.decode(str));
+    return eventsFromMap(json.decode(str));
   } catch (e) {
-    return {};
+    print("ERROR: eventsFromJson() $e");
+    return [];
   }
 }
 
-/// Returns json as string representing passed in Map of events
-String eventsToJson(Map<String, Event> data) => json.encode(toJsonMap(data));
-
-/// Converts map of events to json map
-Map<String, dynamic> toJsonMap(Map<String, Event> data) {
-  return Map<String, dynamic>.fromEntries(
-    data.entries.map((entry) => MapEntry(entry.key.toString(), entry.value.toJson())),
-  );
-}
-
-/// Converts json map to map of events.
-/// Improperly formatted entries ignored.
-Map<String, Event> fromJsonMap(Map<String, dynamic> data) {
-  Map<String, Event> events = {};
+/// Converts json map to event list, improperly formatted entries ignored.
+List<Event> eventsFromMap(Map<String, dynamic> data) {
+  List<Event> events = [];
   data.forEach((k, v) {
-    if (int.tryParse(k) != null) {
-      try {
-        Event e = Event.fromJson(v);
-        events[k] = e;
-      } catch (e) {
-        print("fromJsonMap: $e");
-      }
+    try {
+      Event e = Event.fromJson(v);
+      e.setId(k);
+      events.add(e);
+    } catch (e) {
+      print("ERROR: eventsFromMap() $e");
     }
   });
   return events;
@@ -180,5 +182,15 @@ String userNamefromId(String userId) {
   } else {
     return "[unknown user]";
   }
+
+// /// Returns json as string representing passed in Map of events
+// String eventsToJson(Map<String, Event> data) => json.encode(toJsonMap(data));
+
+// /// Converts map of events to json map
+// Map<String, dynamic> toJsonMap(Map<String, Event> data) {
+//   return Map<String, dynamic>.fromEntries(
+//     data.entries.map((entry) => MapEntry(entry.key.toString(), entry.value.toJson())),
+//   );
+// }
 }
 
