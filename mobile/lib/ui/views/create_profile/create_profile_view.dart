@@ -3,7 +3,6 @@ import 'package:meuni_mobile/ui/common/ui_helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
-import '../create_event/text_input.dart';
 import 'create_profile_view.form.dart';
 import 'create_profile_viewmodel.dart';
 
@@ -31,17 +30,6 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
   @override
   Widget builder(
       BuildContext context, CreateProfileViewModel viewModel, Widget? child) {
-    const labelTextStyle = TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w700,
-    );
-
-    const errorTextStyle = TextStyle(
-      color: Colors.red,
-      fontSize: 12,
-      fontWeight: FontWeight.w700,
-    );
-
     return Scaffold(
       body: SafeArea(
         child: viewModel.isBusy
