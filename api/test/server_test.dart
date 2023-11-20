@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:test/test.dart';
@@ -16,11 +15,7 @@ void main() {
       environment: {'PORT': port},
     );
     // Wait for server to start and print to stdout.
-    p.stdout.transform(utf8.decoder).listen((data) {
-      print(data);
-    });
-    await p.exitCode;
-    //await p.stdout.first;
+    await p.stdout.first;
   });
 
   tearDown(() => p.kill());
