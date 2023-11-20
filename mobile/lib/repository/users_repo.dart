@@ -5,9 +5,6 @@ import '../app/app.locator.dart';
 import '../services/api_service.dart';
 
 abstract class UsersRepo {
-  //* Public Properties
-  User? loggedInUser;
-
   //* Public Methods
   Future<User> addUserAsync({
     required String id,

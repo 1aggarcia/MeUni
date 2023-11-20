@@ -121,10 +121,8 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i6.CreateProfileView: (data) {
-      final args = data.getArgs<CreateProfileViewArguments>(nullOk: false);
       return _i11.MaterialPageRoute<dynamic>(
-        builder: (context) =>
-            _i6.CreateProfileView(key: args.key, userId: args.userId),
+        builder: (context) => const _i6.CreateProfileView(),
         settings: data,
       );
     },
@@ -159,33 +157,6 @@ class StackedRouter extends _i1.RouterBase {
 
   @override
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
-}
-
-class CreateProfileViewArguments {
-  const CreateProfileViewArguments({
-    this.key,
-    required this.userId,
-  });
-
-  final _i11.Key? key;
-
-  final String userId;
-
-  @override
-  String toString() {
-    return '{"key": "$key", "userId": "$userId"}';
-  }
-
-  @override
-  bool operator ==(covariant CreateProfileViewArguments other) {
-    if (identical(this, other)) return true;
-    return other.key == key && other.userId == userId;
-  }
-
-  @override
-  int get hashCode {
-    return key.hashCode ^ userId.hashCode;
-  }
 }
 
 extension NavigatorStateExtension on _i12.NavigationService {
@@ -245,17 +216,14 @@ extension NavigatorStateExtension on _i12.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToCreateProfileView({
-    _i11.Key? key,
-    required String userId,
+  Future<dynamic> navigateToCreateProfileView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return navigateTo<dynamic>(Routes.createProfileView,
-        arguments: CreateProfileViewArguments(key: key, userId: userId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -374,17 +342,14 @@ extension NavigatorStateExtension on _i12.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithCreateProfileView({
-    _i11.Key? key,
-    required String userId,
+  Future<dynamic> replaceWithCreateProfileView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return replaceWith<dynamic>(Routes.createProfileView,
-        arguments: CreateProfileViewArguments(key: key, userId: userId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

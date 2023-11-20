@@ -17,14 +17,8 @@ import 'create_profile_viewmodel.dart';
 ])
 class CreateProfileView extends StackedView<CreateProfileViewModel>
     with $CreateProfileView {
-  //* Private Properties
-  final String userId;
-
   //* Constructors
-  const CreateProfileView({
-    Key? key,
-    required this.userId,
-  }) : super(key: key);
+  const CreateProfileView({Key? key}) : super(key: key);
 
   //* Overridden Methods
   @override
@@ -80,7 +74,8 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
                     // First Name
                     TextFormField(
                       controller: firstNameController,
-                      decoration: const InputDecoration(labelText: 'Last name'),
+                      decoration:
+                          const InputDecoration(labelText: 'First name'),
                     ),
 
                     verticalSpaceSmall,
@@ -138,7 +133,7 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
 
   @override
   CreateProfileViewModel viewModelBuilder(BuildContext context) =>
-      CreateProfileViewModel(userId: userId);
+      CreateProfileViewModel();
 
   @override
   void onViewModelReady(CreateProfileViewModel viewModel) {
