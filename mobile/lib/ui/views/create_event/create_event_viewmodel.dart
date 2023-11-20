@@ -24,28 +24,29 @@ class CreateEventViewModel extends FormViewModel {
       TimeOfDay endTime = _fromString(eventEndTimeValue!);
 
       Event event = Event(
-          id: -1,
-          title: eventNameValue!,
-          desc: eventDescriptionValue!,
-          location: eventLocationValue!,
-          max: -1,
-          startTime: DateTime(
-            dateTime.year,
-            dateTime.month,
-            dateTime.day,
-            startTime.hour,
-            startTime.minute,
-          ),
-          endTime: DateTime(
-            dateTime.year,
-            dateTime.month,
-            dateTime.day,
-            endTime.hour,
-            endTime.minute,
-          ),
-          hostId: -1,
-          hostName: "Ronals",
-          attendees: []);
+        id: '-1',
+        title: eventNameValue!,
+        desc: eventDescriptionValue!,
+        location: eventLocationValue!,
+        max: -1,
+        startTime: DateTime(
+          dateTime.year,
+          dateTime.month,
+          dateTime.day,
+          startTime.hour,
+          startTime.minute,
+        ),
+        endTime: DateTime(
+          dateTime.year,
+          dateTime.month,
+          dateTime.day,
+          endTime.hour,
+          endTime.minute,
+        ),
+        hostId: -1,
+        hostName: 'Ronals',
+        attendees: [],
+      );
 
       isLoading = true;
       rebuildUi();

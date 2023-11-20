@@ -13,7 +13,9 @@ import 'package:stacked_shared/stacked_shared.dart';
 
 import '../repository/events_repo.dart';
 import '../repository/mock/mock_events_repo.dart';
+import '../repository/mock/mock_study_groups_repo.dart';
 import '../repository/mock/mock_users_repo.dart';
+import '../repository/study_groups_repo.dart';
 import '../repository/users_repo.dart';
 import '../services/api_service.dart';
 
@@ -33,5 +35,6 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton<EventsRepo>(() => MockEventsRepo());
   locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
+  locator.registerLazySingleton<StudyGroupsRepo>(() => MockStudyGroupsRepo());
   locator.registerLazySingleton(() => ApiService());
 }

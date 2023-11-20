@@ -41,5 +41,5 @@ How to Build, Test, and Run this System Application (Instructions are for Setup 
 - Create a configuration that points to `MeUni/mobile/lib/main.dart` to run application
 - Create an emulator to run application on. We recommend Pixel 2 API 29
 - Run the mobile application (which can be done via the play button), or via the command `flutter run` within the `MeUni/mobile` directory
-- Run the server application via the command `flutter run` within the `MeUni/api` directory
+- Run the server application via the command `dart run server.dart` within the `MeUni/api/bin` directory
 - Application testing can be done via the command `flutter test` which is to be run either within the `MeUni/mobile` and/or `MeUni/api` directories to run the corresponding mobile or api tests

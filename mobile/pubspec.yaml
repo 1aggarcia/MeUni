@@ -13,6 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_sign_in: ^6.1.6
+  http: ^1.1.0
   intl: ^0.18.1
   stacked: ^3.4.0
   stacked_services: ^1.1.0

@@ -15,20 +15,17 @@ class EventsViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
 
   //* Public Properties
-  bool isLoading = false;
-
   String get userName => _usersRepo.loggedInUser!.firstName;
 
   List<Event> events = [];
 
   //* Public Methods
   Future getEventsAsync() async {
-    isLoading = true;
-    rebuildUi();
+    events = await runBusyFuture(
+      _eventsRepo.getEventsAsync(),
+      busyObject: events,
+    );
 
-    events = await _eventsRepo.getEventsAsync();
-
-    isLoading = false;
     rebuildUi();
   }
 

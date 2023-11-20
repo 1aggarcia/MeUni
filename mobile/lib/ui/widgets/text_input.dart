@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../common/ui_helpers.dart';
+import '../common/ui_helpers.dart';
 
 class TextInput extends StatelessWidget {
   //* Private Properties

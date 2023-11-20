@@ -1,6 +1,6 @@
 class Event {
   //* Public Properties
-  final int id;
+  final String id;
 
   final String title;
   final String desc;
@@ -13,7 +13,7 @@ class Event {
 
   final int hostId;
   final String hostName;
-  final List<int> attendees;
+  final List<String> attendees;
 
   //* Constructors
   Event({
@@ -28,4 +28,30 @@ class Event {
     required this.hostName,
     required this.attendees,
   });
+
+  factory Event.fromJson(Map<String, dynamic> json) => Event(
+        id: json['id'],
+        title: json['title'],
+        desc: json['desc'],
+        location: json['location'],
+        max: json['max'],
+        startTime: DateTime.parse(json['startTime']),
+        endTime: DateTime.parse(json['endTime']),
+        hostId: json['hostId'],
+        hostName: json['hostName'],
+        attendees: List<String>.from(json['attendees']),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'desc': desc,
+        'location': location,
+        'max': max,
+        'startTime': startTime.toIso8601String(),
+        'endTime': endTime.toIso8601String(),
+        'hostId': hostId,
+        'hostName': hostName,
+        'attendees': attendees,
+      };
 }

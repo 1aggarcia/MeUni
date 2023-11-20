@@ -47,7 +47,7 @@ class LoginViewModel extends BaseViewModel {
         // Set logged in user
         _usersRepo.loggedInUser = user;
 
-        _navigationService.replaceWithEventsView();
+        _navigationService.replaceWithHomeView();
       } else {
         // Create Profile
         _navigationService.replaceWithCreateProfileView(userId: userId);

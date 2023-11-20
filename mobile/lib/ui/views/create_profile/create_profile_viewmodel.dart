@@ -34,7 +34,7 @@ class CreateProfileViewModel extends FormViewModel {
 
       setBusy(false);
 
-      _navigationService.replaceWithEventsView();
+      _navigationService.replaceWithHomeView();
     }
   }
 }

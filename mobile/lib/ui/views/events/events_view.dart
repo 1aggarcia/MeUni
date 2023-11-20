@@ -1,67 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:meuni_mobile/ui/widgets/round_button.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
 import '../../widgets/event_card.dart';
+import '../../widgets/loading_indicator.dart';
 import 'events_viewmodel.dart';
 
 class EventsView extends StackedView<EventsViewModel> {
   const EventsView({Key? key}) : super(key: key);
 
   @override
+  EventsViewModel viewModelBuilder(BuildContext context) => EventsViewModel();
+
+  @override
   Widget builder(
       BuildContext context, EventsViewModel viewModel, Widget? child) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: kcBackgroundColor,
-        body: viewModel.isLoading
-            ? const Text('Loading...')
-            : Container(
-                padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-                child: Column(
-                  children: [
-                    Text('Hi! ${viewModel.userName}'),
-                    verticalSpaceLarge,
-                    Row(
-                      children: [
-                        MaterialButton(
-                          color: Colors.black,
-                          onPressed: () async => await viewModel.logoutAsync(),
-                          child: const Text(
-                            'Logout',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        MaterialButton(
-                          color: Colors.black,
-                          onPressed: () async =>
-                              await viewModel.getEventsAsync(),
-                          child: const Text(
-                            'Get Events',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        MaterialButton(
-                          color: Colors.black,
-                          onPressed: () async =>
-                              await viewModel.goToCreateEventPageAsync(),
-                          child: const Text(
-                            'Add Event',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                    for (var event in viewModel.events) ...[
-                      EventCard(event: event)
-                    ]
-                  ],
-                )),
+    return Container(
+      padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+      child: Column(
+        children: [
+          RoundButton(
+            label: 'Get Events',
+            onPressed: viewModel.busy(viewModel.events)
+                ? null
+                : () async => await viewModel.getEventsAsync(),
+          ),
+          verticalSpaceLarge,
+
+          //* Show all the Events
+          if (viewModel.busy(viewModel.events))
+            const LoadingIndicator(
+              loadingText: 'Fetching Events',
+            )
+          else if (viewModel.events.isEmpty)
+            _noEventIndicator()
+          else
+            ListView.separated(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemBuilder: (context, index) => EventCard(
+                event: viewModel.events[index],
+              ),
+              separatorBuilder: (context, index) => verticalSpaceMedium,
+              itemCount: viewModel.events.length,
+            ),
+
+          verticalSpaceMedium,
+          RoundButton(
+            label: 'Add an Event',
+            onPressed: () async => await viewModel.goToCreateEventPageAsync(),
+          )
+        ],
       ),
     );
   }
 
-  @override
-  EventsViewModel viewModelBuilder(BuildContext context) => EventsViewModel();
+  Widget _noEventIndicator() {
+    return const Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: 40,
+          ),
+          horizontalSpaceSmall,
+          Text(
+            "No Events",
+            style: TextStyle(
+              color: Color(0xFF685050),
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

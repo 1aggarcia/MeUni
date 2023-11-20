@@ -6,8 +6,13 @@ defaults:
 
 on:
   push:
+    branches:
+      - main
+      - 'mobile**'
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+      - 'mobile**'
 
 jobs:
   android:
