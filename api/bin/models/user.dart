@@ -23,7 +23,7 @@ class User {
     required this.admin
   });
 
-  final int id;
+  final String id;
   final String firstName;
   final String lastName;
   final int year;

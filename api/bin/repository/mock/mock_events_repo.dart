@@ -4,7 +4,7 @@ import '../events_repo.dart';
 class MockEventsRepo extends EventsRepo {
   //* Private Properties
   int _nextId = 0;
-  Map<int, Event> _events = {};
+  Map<String, Event> _events = {};
 
   //* Constructors
   MockEventsRepo() {
@@ -20,7 +20,8 @@ class MockEventsRepo extends EventsRepo {
   void resetEvents() {
     _nextId = 0;
     _events = {
-      -3:Event(
+      "-3":Event(
+        id: "-3",
         title: 'Pizza',
         desc: 'need ppl to chip in for pizza',
         location: 'The crib',
@@ -28,32 +29,34 @@ class MockEventsRepo extends EventsRepo {
         startTime: DateTime.parse('2023-11-04 03:04:15.537017Z'),
         endTime: DateTime.parse('2023-11-04 03:24:15.537017Z'),
         hostName: 'Fei',
-        hostId: 1,
-        attendees: [2, 3],
+        hostId: "1",
+        attendees: ["2", "3"],
         attendeeNames: ['John', 'Hannah'],
       ),
-      -2:Event(
+      "-2":Event(
+        id: "-2",
         title: 'Event 1',
         desc: 'This is a sample description for this event',
         location: 'UW CSE2 G21',
         max: 3,
         startTime: DateTime.parse('2023-11-04 02:24:25.537017Z'),
         endTime: DateTime.parse('2023-11-07 03:24:15.537017Z'),
-        hostId: 2,
+        hostId: "2",
         hostName: 'John',
-        attendees: [1, 3],
+        attendees: ["1", "3"],
         attendeeNames: ['Fei', 'Hannah'],
       ),
-      -1:Event(
+      "-1":Event(
+        id: "-1",
         title: 'Another event',
         desc: 'This time i really need people',
         location: '[Redacted]',
         max: 2,
         startTime: DateTime.parse('2023-11-05 03:04:15.537017Z'),
         endTime: DateTime.parse('2023-11-05 03:24:15.537017Z'),
-        hostId: 3,
+        hostId: "3",
         hostName: 'Hannah',
-        attendees: [1],
+        attendees: ["1"],
         attendeeNames: ['Fei'],
       ),
     };
@@ -61,32 +64,55 @@ class MockEventsRepo extends EventsRepo {
 
   //* Overriden Methods
   @override
-  Future<int> addEventAsync(Event event) async {
-    // Event newEvent = Event(
-    //   title: event.title,
-    //   desc: event.desc,
-    //   location: event.location,
-    //   max: event.max,
-    //   startTime: event.startTime,
-    //   endTime: event.endTime,
-    //   hostId: event.hostId,
-    //   hostName: event.hostName,
-    //   attendees: event.attendees,
-    //   attendeeNames: event.attendeeNames,
-    // );
-    _events[_nextId] = event;
+  Future<String> addEventAsync(Event event) async {
+    _events["$_nextId"] = event;
     _nextId++;
-
-    return _nextId - 1;
+    return "${_nextId - 1}";
   }
 
   @override
-  Future<Event?> getEventAsync(int id) async {
+  Future<String> deleteEventAsync(String id) async {
+    _events.remove(id);
+    return id;
+  }
+
+  @override
+  Future<Event?> getEventAsync(String id) async {
     return _events[id];
   }
 
   @override
-  Future<Map<int, Event>> getEventsAsync() async {
-    return _events;
+  Future<List<Event>> getEventsAsync() async {
+    List<Event> list = [];
+    _events.forEach((k, v) {
+      v.setId(k);
+      list.add(v);
+    });
+    return list;
+  }
+
+  @override
+  Future<List<String>?> joinEventAsync(String userId, String eventId) async {
+    Event? event = _events[eventId];
+    if (event == null ||
+          event.attendees.contains(userId) ||
+          event.attendees.length >= event.max) {
+      return null;
+    } else {
+      event.attendees.add(userId);
+      event.attendeeNames.add(userNamefromId(userId));
+      return event.attendees;
+    }
+  }
+
+  @override
+  Future<List<String>?> unjoinEventAsync(String userId, String eventId) async {
+    Event? event = _events[eventId];
+    if (event == null) {
+      return null;
+    } else {
+      event.attendees.remove(userId);
+      return event.attendees;
+    }
   }
 }

@@ -4,7 +4,7 @@ abstract class UsersRepo {
   //* Public Methods
 
   /// Returns the User if found, null otherwise
-  Future<User?> getUserAsync(int id);
+  Future<User?> getUserAsync(String id);
 }
 
 class UsersRepoImpl extends UsersRepo {
@@ -12,7 +12,7 @@ class UsersRepoImpl extends UsersRepo {
 
   //* Overriden Methods
   @override
-  Future<User?> getUserAsync(int id) {
+  Future<User?> getUserAsync(String id) {
     // TODO: implement getUserAsync
     throw UnimplementedError();
   }

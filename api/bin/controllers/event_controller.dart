@@ -1,5 +1,6 @@
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf/shelf.dart';
+import 'dart:convert';
 
 import '../locator.dart';
 import '../models/event.dart';
@@ -15,7 +16,10 @@ class EventController extends Controller {
   Router setUpRoutes(Router router, String endpoint) {
     return router
       ..get('$endpoint/get', getEventsHandler)
-      ..post('$endpoint/create', postEventsHandler);
+      ..post('$endpoint/create', postEventsHandler)
+      ..post('$endpoint/delete', deleteEventsHandler)
+      ..post('$endpoint/join', (request) => joinEventsHandler(request, true))
+      ..post('$endpoint/unjoin', (request) => joinEventsHandler(request, false));
   }
 
   //* Public API Methods
@@ -28,33 +32,80 @@ class EventController extends Controller {
 
     if (params.containsKey('id')) {
       try {
-        int eventId = int.parse(params['id']);
-        Event? event = await _eventsRepo.getEventAsync(eventId);
+        Event? event = await _eventsRepo.getEventAsync(params['id']);
 
         if (event != null) {
           return Response.ok(eventToJson(event));
         } else {
-          return Response(400);
+          throw Exception('Event was not found');
         }
       } catch (e) {
-        print("Failed to get event: $e");
         return Response(400);
       }
     } else {
-      Map<int, Event> events = await _eventsRepo.getEventsAsync();
+      List<Event> events = await _eventsRepo.getEventsAsync();
       return Response.ok(eventsToJson(events));
     }
   }
 
   // POST /
-  // TODO : ignore attendee params, set to empty list
   Future<Response> postEventsHandler(Request request) async {
     String body = await request.readAsString();
 
     try {
-      Event event = eventFromJson(body);
-      int newId = await _eventsRepo.addEventAsync(event);
-      return Response.ok("$newId");
+      Event? event = eventFromJson(body);
+      if (event != null) {
+        String newId = await _eventsRepo.addEventAsync(event);
+        return Response.ok(newId);
+      } else {
+        throw Exception('Json body could not be converted to event');
+      }
+    } catch (e) {
+      return Response(400);
+    }
+  }
+
+  Future<Response> deleteEventsHandler(Request request) async {
+    String json = await request.readAsString();
+
+    try {
+      dynamic body = jsonDecode(json);
+      String? id = body['id'];
+      if (id != null) {
+        String result = await _eventsRepo.deleteEventAsync(id);
+        return Response.ok(result);
+      } else {
+        throw Exception("Missing param 'id'");
+      }
+    } catch (e) {
+      return Response(400);
+    }
+  }
+
+  /// joining = true indicates request to join,
+  /// joining = false indicates request to unjoin
+  Future<Response> joinEventsHandler(Request request, bool joining) async {
+    String json = await request.readAsString();
+
+    try {
+      dynamic body = jsonDecode(json);
+      String? userId = body['userId'];
+      String? eventId = body['eventId'];
+      if (userId != null && eventId != null) {
+        List<String>? result;
+        if (joining) {
+          result = await _eventsRepo.joinEventAsync(userId, eventId);
+        } else {
+          result = await _eventsRepo.unjoinEventAsync(userId, eventId);
+        }
+        if (result != null) {
+          return Response.ok(jsonEncode(result));
+        } else {
+          throw Exception("Event did not allow specified join operation");
+        }
+      } else {
+        throw Exception("Missing one or more params, 'userId', 'eventId'");
+      }
     } catch (e) {
       return Response(400);
     }
