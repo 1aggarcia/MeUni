@@ -18,11 +18,13 @@ import '../ui/dialogs/info_alert/info_alert_dialog.dart';
 import '../ui/views/create_event/create_event_view.dart';
 import '../ui/views/create_study_group/create_study_group_view.dart';
 import '../ui/views/events/events_view.dart';
-import '../ui/views/study_groups/study_groups_view.dart';
-import '../ui/views/login/login_view.dart';
 import '../ui/views/startup/startup_view.dart';
+import 'package:meuni_mobile/ui/views/login/login_view.dart';
+import 'package:meuni_mobile/ui/views/create_profile/create_profile_view.dart';
+import '../ui/views/study_groups/study_groups_view.dart';
 import 'package:meuni_mobile/ui/views/home/home_view.dart';
 import 'package:meuni_mobile/ui/views/profile/profile_view.dart';
+import 'package:meuni_mobile/services/auth_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -31,6 +33,7 @@ import 'package:meuni_mobile/ui/views/profile/profile_view.dart';
     MaterialRoute(page: EventsView),
     MaterialRoute(page: CreateEventView),
     MaterialRoute(page: LoginView),
+    MaterialRoute(page: CreateProfileView),
     MaterialRoute(page: StudyGroupsView),
     MaterialRoute(page: CreateStudyGroupView),
     MaterialRoute(page: HomeView),
@@ -47,6 +50,7 @@ import 'package:meuni_mobile/ui/views/profile/profile_view.dart';
     // LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
     // LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
     LazySingleton(classType: ApiService),
+    LazySingleton(classType: AuthService),
 // @stacked-service
   ],
   bottomsheets: [

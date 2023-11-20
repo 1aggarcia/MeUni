@@ -5,11 +5,17 @@ import '../app/app.locator.dart';
 import '../services/api_service.dart';
 
 abstract class UsersRepo {
-  //* Public Properties
-  User? loggedInUser;
-
   //* Public Methods
-  Future<User> getUserAsync(String id);
+  Future<User> addUserAsync({
+    required String id,
+    required String firstName,
+    required String lastName,
+    required int year,
+    required String pronouns,
+  });
+
+  Future<User?> getUserAsync(String id);
+
   Future<List<String>> getUserClasses(String id);
 
   Future updateUserAsync(User user);
@@ -19,7 +25,7 @@ class UsersRepoImpl extends UsersRepo {
   final ApiService _apiService = locator<ApiService>();
 
   @override
-  Future<User> getUserAsync(String id) async {
+  Future<User?> getUserAsync(String id) async {
     Response response = await _apiService.getAsync(
       Endpoints.getUser,
       params: {"id": id},
@@ -40,5 +46,16 @@ class UsersRepoImpl extends UsersRepo {
       params: {"id": user.id},
       body: userToJson(user),
     );
+  }
+
+  @override
+  Future<User> addUserAsync(
+      {required String id,
+      required String firstName,
+      required String lastName,
+      required int year,
+      required String pronouns}) {
+    // TODO: implement addUserAsync
+    throw UnimplementedError();
   }
 }

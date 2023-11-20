@@ -5,21 +5,23 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i10;
+import 'package:flutter/material.dart' as _i11;
 import 'package:flutter/material.dart';
 import 'package:meuni_mobile/ui/views/create_event/create_event_view.dart'
     as _i4;
+import 'package:meuni_mobile/ui/views/create_profile/create_profile_view.dart'
+    as _i6;
 import 'package:meuni_mobile/ui/views/create_study_group/create_study_group_view.dart'
-    as _i7;
+    as _i8;
 import 'package:meuni_mobile/ui/views/events/events_view.dart' as _i3;
-import 'package:meuni_mobile/ui/views/home/home_view.dart' as _i8;
+import 'package:meuni_mobile/ui/views/home/home_view.dart' as _i9;
 import 'package:meuni_mobile/ui/views/login/login_view.dart' as _i5;
-import 'package:meuni_mobile/ui/views/profile/profile_view.dart' as _i9;
+import 'package:meuni_mobile/ui/views/profile/profile_view.dart' as _i10;
 import 'package:meuni_mobile/ui/views/startup/startup_view.dart' as _i2;
 import 'package:meuni_mobile/ui/views/study_groups/study_groups_view.dart'
-    as _i6;
+    as _i7;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i11;
+import 'package:stacked_services/stacked_services.dart' as _i12;
 
 class Routes {
   static const startupView = '/startup-view';
@@ -29,6 +31,8 @@ class Routes {
   static const createEventView = '/create-event-view';
 
   static const loginView = '/login-view';
+
+  static const createProfileView = '/create-profile-view';
 
   static const studyGroupsView = '/study-groups-view';
 
@@ -43,6 +47,7 @@ class Routes {
     eventsView,
     createEventView,
     loginView,
+    createProfileView,
     studyGroupsView,
     createStudyGroupView,
     homeView,
@@ -69,69 +74,79 @@ class StackedRouter extends _i1.RouterBase {
       page: _i5.LoginView,
     ),
     _i1.RouteDef(
+      Routes.createProfileView,
+      page: _i6.CreateProfileView,
+    ),
+    _i1.RouteDef(
       Routes.studyGroupsView,
-      page: _i6.StudyGroupsView,
+      page: _i7.StudyGroupsView,
     ),
     _i1.RouteDef(
       Routes.createStudyGroupView,
-      page: _i7.CreateStudyGroupView,
+      page: _i8.CreateStudyGroupView,
     ),
     _i1.RouteDef(
       Routes.homeView,
-      page: _i8.HomeView,
+      page: _i9.HomeView,
     ),
     _i1.RouteDef(
       Routes.profileView,
-      page: _i9.ProfileView,
+      page: _i10.ProfileView,
     ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.StartupView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.StartupView(),
         settings: data,
       );
     },
     _i3.EventsView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.EventsView(),
         settings: data,
       );
     },
     _i4.CreateEventView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.CreateEventView(),
         settings: data,
       );
     },
     _i5.LoginView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
+      return _i11.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.LoginView(),
         settings: data,
       );
     },
-    _i6.StudyGroupsView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i6.StudyGroupsView(),
+    _i6.CreateProfileView: (data) {
+      return _i11.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i6.CreateProfileView(),
         settings: data,
       );
     },
-    _i7.CreateStudyGroupView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i7.CreateStudyGroupView(),
+    _i7.StudyGroupsView: (data) {
+      return _i11.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i7.StudyGroupsView(),
         settings: data,
       );
     },
-    _i8.HomeView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i8.HomeView(),
+    _i8.CreateStudyGroupView: (data) {
+      return _i11.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i8.CreateStudyGroupView(),
         settings: data,
       );
     },
-    _i9.ProfileView: (data) {
-      return _i10.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i9.ProfileView(),
+    _i9.HomeView: (data) {
+      return _i11.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i9.HomeView(),
+        settings: data,
+      );
+    },
+    _i10.ProfileView: (data) {
+      return _i11.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i10.ProfileView(),
         settings: data,
       );
     },
@@ -144,7 +159,7 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i11.NavigationService {
+extension NavigatorStateExtension on _i12.NavigationService {
   Future<dynamic> navigateToStartupView([
     int? routerId,
     bool preventDuplicates = true,
@@ -195,6 +210,20 @@ extension NavigatorStateExtension on _i11.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.loginView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToCreateProfileView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.createProfileView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -307,6 +336,20 @@ extension NavigatorStateExtension on _i11.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.loginView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithCreateProfileView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.createProfileView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

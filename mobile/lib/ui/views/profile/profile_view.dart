@@ -14,7 +14,6 @@ class ProfileView extends StackedView<ProfileViewModel> {
     ProfileViewModel viewModel,
     Widget? child,
   ) {
-
     const labelTextStyle = TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.w700,
@@ -118,5 +117,4 @@ class ProfileView extends StackedView<ProfileViewModel> {
     model.getClassesAsync();
     return model;
   }
-
 }
