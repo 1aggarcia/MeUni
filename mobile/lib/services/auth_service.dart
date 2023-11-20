@@ -5,6 +5,7 @@ import '../app/app.locator.dart';
 import '../models/user.dart' as meuni;
 import '../repository/users_repo.dart';
 
+/// Responsible for authenticating users
 class AuthService {
   //* Private Properties
   final GoogleSignIn _googleSignIn = GoogleSignIn(hostedDomain: "uw.edu");
@@ -14,11 +15,17 @@ class AuthService {
   meuni.User? _currUser;
 
   //* Public Properties
+  /// Gets the currently signed in user. Throws an exception if [loginAsync] has
+  /// not ran before.
   meuni.User get currUser => _currUser!;
 
+  /// Checks is a user is logged in to the app.
   bool get isLoggedIn => _currUser != null;
 
   //* Public Methods
+
+  /// Tries to login a user with Firebase. Returns [true] if possible and sets
+  /// currUser if Firebase user has an account. Returns [false] if login failed.
   Future<bool> loginAsync() async {
     try {
       final googleUser = await _googleSignIn.signIn();
@@ -46,6 +53,7 @@ class AuthService {
     }
   }
 
+  /// Creates an account with the app, and update [currUser] appropriately.
   Future<void> signupAsync(
       String firstName, String lastName, int year, String pronouns) async {
     _currUser = await _usersRepo.addUserAsync(
