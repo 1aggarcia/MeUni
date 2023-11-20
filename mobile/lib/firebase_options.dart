@@ -17,13 +17,19 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -46,16 +52,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCVeFYnP03K23cGsb5JguWr43Hy2X3acvk',
-    appId: '1:807288899830:web:c24bb130aae6f4716dc4d7',
-    messagingSenderId: '807288899830',
-    projectId: 'meuni-9d616',
-    authDomain: 'meuni-9d616.firebaseapp.com',
-    databaseURL: 'https://meuni-9d616-default-rtdb.firebaseio.com',
-    storageBucket: 'meuni-9d616.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAyqaA7zfo3HeqjspDHMjZLBYJf7SY4y-Y',
     appId: '1:807288899830:android:5407e991c85f0d9c6dc4d7',
@@ -63,19 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'meuni-9d616',
     databaseURL: 'https://meuni-9d616-default-rtdb.firebaseio.com',
     storageBucket: 'meuni-9d616.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB1qna4rlGnwhIoX3bBBiGgZKIkHClR7Qg',
-    appId: '1:807288899830:ios:9d21d04b2568fc576dc4d7',
-    messagingSenderId: '807288899830',
-    projectId: 'meuni-9d616',
-    databaseURL: 'https://meuni-9d616-default-rtdb.firebaseio.com',
-    storageBucket: 'meuni-9d616.appspot.com',
-    androidClientId:
-        '807288899830-0ma7ogp71k689hqss9eehl5si8u9m3er.apps.googleusercontent.com',
-    iosClientId:
-        '807288899830-kt46aglaenp4f4tlvk039j0kkv4cvdn7.apps.googleusercontent.com',
-    iosBundleId: 'com.example.meuniMobile',
   );
 }
