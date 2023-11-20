@@ -82,7 +82,6 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
                       controller: firstNameController,
                       decoration: const InputDecoration(labelText: 'Last name'),
                     ),
-                    Text(firstNameController.text),
 
                     verticalSpaceSmall,
 
