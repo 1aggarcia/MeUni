@@ -18,6 +18,7 @@ import '../repository/mock/mock_users_repo.dart';
 import '../repository/study_groups_repo.dart';
 import '../repository/users_repo.dart';
 import '../services/api_service.dart';
+import '../services/auth_service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -37,4 +38,5 @@ Future<void> setupLocator({
   locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
   locator.registerLazySingleton<StudyGroupsRepo>(() => MockStudyGroupsRepo());
   locator.registerLazySingleton(() => ApiService());
+  locator.registerLazySingleton(() => AuthService());
 }

@@ -22,9 +22,4 @@ class ProfileViewModel extends BaseViewModel {
     isLoading = false;
     rebuildUi();
   }
-
-
-
-
-
 }

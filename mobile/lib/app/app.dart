@@ -24,6 +24,7 @@ import 'package:meuni_mobile/ui/views/create_profile/create_profile_view.dart';
 import '../ui/views/study_groups/study_groups_view.dart';
 import 'package:meuni_mobile/ui/views/home/home_view.dart';
 import 'package:meuni_mobile/ui/views/profile/profile_view.dart';
+import 'package:meuni_mobile/services/auth_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -49,6 +50,7 @@ import 'package:meuni_mobile/ui/views/profile/profile_view.dart';
     // LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
     // LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
     LazySingleton(classType: ApiService),
+    LazySingleton(classType: AuthService),
 // @stacked-service
   ],
   bottomsheets: [
