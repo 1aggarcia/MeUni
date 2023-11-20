@@ -2,25 +2,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../app/app.locator.dart';
-import '../models/user.dart' as m;
+import '../models/user.dart' as meuni;
 import '../repository/users_repo.dart';
 
 class AuthService {
   //* Private Properties
+  final GoogleSignIn _googleSignIn = GoogleSignIn(hostedDomain: "uw.edu");
   final UsersRepo _usersRepo = locator<UsersRepo>();
 
   String? _userId;
-  m.User? _currUser;
+  meuni.User? _currUser;
 
   //* Public Properties
-  m.User get currUser => _currUser!;
+  meuni.User get currUser => _currUser!;
 
   bool get isLoggedIn => _currUser != null;
 
   //* Public Methods
   Future<bool> loginAsync() async {
     try {
-      final googleUser = await GoogleSignIn(hostedDomain: "uw.edu").signIn();
+      final googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) return false;
 
@@ -56,5 +57,10 @@ class AuthService {
     );
   }
 
-  Future<void> logoutAsync() async {}
+  Future<void> logoutAsync() async {
+    _googleSignIn.signOut();
+
+    _currUser = null;
+    _userId = null;
+  }
 }
