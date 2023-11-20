@@ -4,11 +4,11 @@ import '../repository/events_repo.dart';
 import 'controller.dart';
 import 'event_template.dart';
 
-final _eventsRepo = EventsRepoImpl('events');
+final _studyGroupsRepo = EventsRepoImpl('study_groups');
 
-class EventController extends Controller {
+class StudyGroupController extends Controller {
   //* Private Properties
-  final EventTemplateController _controller = EventTemplateController(_eventsRepo);
+  final EventTemplateController _controller = EventTemplateController(_studyGroupsRepo);
 
   //* Overriden Methods
   @override

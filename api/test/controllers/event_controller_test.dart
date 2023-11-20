@@ -1,18 +1,19 @@
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 
-import '../../bin/controllers/event_controller.dart';
+import '../../bin/controllers/event_template.dart';
 import '../../bin/locator.dart';
 import '../../bin/models/event.dart';
 import '../../bin/repository/events_repo.dart';
 import '../../bin/repository/mock/mock_events_repo.dart';
 
 final String _rndUrl = 'https://example.com';
+final _eventsRepo = EventsRepoImpl('events');
 
-EventController _controller = EventController();
+EventTemplateController _controller = EventTemplateController(_eventsRepo);
 
 void main() {
-  group('Events Controller -', () {
+  group('Events Template Controller -', () {
     setUp(() async {
       locator.reset();
 
@@ -21,7 +22,7 @@ void main() {
       MockEventsRepo mockEventsRepo = locator<EventsRepo>() as MockEventsRepo;
       mockEventsRepo.clearEvents();
 
-      _controller = EventController();
+      _controller = EventTemplateController(mockEventsRepo);
     });
 
     Event event = Event(

@@ -34,15 +34,16 @@ abstract class EventsRepo {
 
 class EventsRepoImpl extends EventsRepo {
   //* Private Properties
+  final String endpoint;
   late db.DatabaseReference _eventsRef;
   late UserData _userEventsTable;
 
   //* Constructors
-  EventsRepoImpl() {
+  EventsRepoImpl(this.endpoint) {
     final dbRef = locator<db.DatabaseReference>();
-    _eventsRef = dbRef.child('events');
+    _eventsRef = dbRef.child(endpoint);
 
-    final userEventsRef = dbRef.child('user_events');
+    final userEventsRef = dbRef.child('user_$endpoint');
     _userEventsTable = UserData(userEventsRef, 'eventId');
   }
 
