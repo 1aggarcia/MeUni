@@ -1,14 +1,20 @@
 import 'dart:convert';
 
-User userFromJson(String str, int userId) {
-  var decode = json.decode(str);
-  return User.fromJson(decode, userId);
-}
+// User userFromJson(String str, int userId) {
+//   var decode = json.decode(str);
+//   return User.fromJson(decode, userId);
+// }
 
 String userToJson(User data) => json.encode(data.toJson());
 
-List<User> usersFromJson(String str) =>
-    List<User>.from(json.decode(str).map((x) => User.fromJson(x, -1)));
+User? userFromJson(String str) {
+  try {
+    return User.fromJsonMap(json.decode(str));
+  } catch (e) {
+    return null;
+  }
+}
+
 
 String usersToJson(List<User> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -37,7 +43,22 @@ class User {
         year: json['year'],
         pronouns: json['pronouns'],
         admin: json['admin'],
-      );
+    );
+
+  Map<String, User> fromJsonMap(Map<String, dynamic> data) {
+    Map<String, User> users = {};
+    data.forEach((k, v) {
+      if (int.tryParse(k) != null) {
+        try {
+          User e = User.fromJson(v);
+          users[k] = e;
+        } catch (e) {
+          print ("fromJsonMap: $e");
+        }
+      }
+    });
+    return users;
+  }
 
   Map<String, dynamic> toJson() => {
         'id' : id,
