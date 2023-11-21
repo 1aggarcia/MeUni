@@ -16,7 +16,7 @@ class ProfileViewModel extends BaseViewModel {
   bool isLoading = false;
 
   //* Public Methods
-  Future getClassesAsync() async {
+  Future<void> getClassesAsync() async {
     isLoading = true;
     rebuildUi();
 

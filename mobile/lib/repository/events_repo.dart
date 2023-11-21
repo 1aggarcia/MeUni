@@ -5,13 +5,18 @@ import 'package:http/http.dart';
 import '../app/app.locator.dart';
 import '../models/event.dart';
 import '../services/api_service.dart';
+import '../services/auth_service.dart';
 
 abstract class EventsRepo {
+
   //* Public Methods
   Future<List<Event>> getEventsAsync();
 
   Future<void> addEventAsync(Event event);
-}
+  Future<void> joinEventAsync(String id);
+  Future<Event?> getEventAsync(String id);
+
+  }
 
 class EventsRepoImpl extends EventsRepo {
   //* Private Properties
@@ -32,6 +37,11 @@ class EventsRepoImpl extends EventsRepo {
     return _eventsFromJson(response.body);
   }
 
+  @override
+  Future<Event?> getEventAsync(String id) async {
+    throw UnimplementedError();
+  }
+
   //* Private Methods
   String _eventToJson(Event event) => json.encode(event.toJson());
 
@@ -39,5 +49,11 @@ class EventsRepoImpl extends EventsRepo {
     final jsonMap = json.decode(str);
 
     return List<Event>.from(jsonMap.map(Event.fromJson));
+  }
+
+  @override
+  Future<void> joinEventAsync(String id) async {
+    // TODO: implement joinEventAsync
+    throw UnimplementedError();
   }
 }

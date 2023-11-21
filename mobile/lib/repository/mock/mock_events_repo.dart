@@ -1,10 +1,14 @@
 import '../../app/app.dart';
+import '../../app/app.locator.dart';
 import '../../models/event.dart';
+import '../../services/auth_service.dart';
 import '../events_repo.dart';
 
 class MockEventsRepo extends EventsRepo {
   //* Private Properties
   List<Event> _events = [];
+  final AuthService _authService = locator<AuthService>();
+
 
   //* Constructors
   MockEventsRepo() {
@@ -62,4 +66,23 @@ class MockEventsRepo extends EventsRepo {
 
     _events.add(event);
   }
+
+  @override
+  Future<Event?> getEventAsync(String id) async {
+    await Future.delayed(App.demoDuration);
+
+    try {
+      return _events.singleWhere((u) => u.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> joinEventAsync(String id) async {
+    Event event = (await getEventAsync(id))!;
+    event.attendees.add(_authService.currUser.id);
+  }
+
+
 }
