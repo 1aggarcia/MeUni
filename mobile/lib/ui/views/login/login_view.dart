@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../common/app_colors.dart';
+import '../../common/ui_helpers.dart';
+import '../../widgets/loading_indicator.dart';
 import 'login_viewmodel.dart';
 
 class LoginView extends StackedView<LoginViewModel> {
@@ -14,16 +16,46 @@ class LoginView extends StackedView<LoginViewModel> {
     return Scaffold(
       backgroundColor: kcBackgroundColor,
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-          child: GoogleAuthButton(
-            onPressed: () async => await viewModel.signInWithGoogleAsync(),
-            style: const AuthButtonStyle(
-              buttonColor: Color(0xff428554),
-              iconSize: 24,
-              iconBackground: Colors.white,
-              buttonType: AuthButtonType.secondary,
-            ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'MeUni',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: kcTextAccentColor,
+                  fontSize: 96,
+                  fontFamily: 'Cupertino',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Text(
+                'All Kind of Friendship',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF614545),
+                  fontSize: 21,
+                  fontFamily: 'Libre Baskerville',
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              ),
+              verticalSpaceMassive,
+              viewModel.isBusy
+                  ? const LoadingIndicator(
+                      loadingText: 'Logging in',
+                    )
+                  : GoogleAuthButton(
+                      onPressed: viewModel.signInWithGoogleAsync,
+                      style: const AuthButtonStyle(
+                        buttonColor: Color(0xff428554),
+                        iconSize: 24,
+                        iconBackground: Colors.white,
+                        buttonType: AuthButtonType.secondary,
+                      ),
+                    ),
+            ],
           ),
         ),
       ),

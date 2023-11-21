@@ -12,7 +12,9 @@ class LoginViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
 
   //* Public Methods
-  Future signInWithGoogleAsync() async {
+  Future<void> signInWithGoogleAsync() async {
+    setBusy(true);
+
     if (!(await _authService.loginAsync())) {
       // Login Failed
       await _dialogService.showDialog(
@@ -26,5 +28,7 @@ class LoginViewModel extends BaseViewModel {
         await _navigationService.replaceWithCreateProfileView();
       }
     }
+
+    setBusy(false);
   }
 }
