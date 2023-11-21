@@ -8,7 +8,7 @@ import '../repository/users_repo.dart';
 /// Responsible for authenticating users
 class AuthService {
   //* Private Properties
-  final GoogleSignIn _googleSignIn = GoogleSignIn(hostedDomain: "uw.edu");
+  final GoogleSignIn _googleSignIn = GoogleSignIn(hostedDomain: 'uw.edu');
   final UsersRepo _usersRepo = locator<UsersRepo>();
 
   String? _userId;
@@ -66,7 +66,7 @@ class AuthService {
   }
 
   Future<void> logoutAsync() async {
-    _googleSignIn.signOut();
+    await _googleSignIn.signOut();
 
     _currUser = null;
     _userId = null;

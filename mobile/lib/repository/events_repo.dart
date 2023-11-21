@@ -38,6 +38,6 @@ class EventsRepoImpl extends EventsRepo {
   List<Event> _eventsFromJson(String str) {
     final jsonMap = json.decode(str);
 
-    return List<Event>.from(jsonMap.map((e) => Event.fromJson(e)));
+    return List<Event>.from(jsonMap.map(Event.fromJson));
   }
 }

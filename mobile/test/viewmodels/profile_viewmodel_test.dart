@@ -5,7 +5,7 @@ import '../helpers/test_helpers.dart';
 
 void main() {
   group('ProfileViewModel Tests -', () {
-    setUp(() => registerServices());
-    tearDown(() => locator.reset());
+    setUp(registerServices);
+    tearDown(locator.reset);
   });
 }

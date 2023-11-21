@@ -69,8 +69,8 @@ class CreateStudyGroupViewModel extends FormViewModel {
 
     return TimeOfDay(
       // in case of a bad time format entered manually by the user
-      hour: hh + int.parse(time.split(":")[0]) % 24,
-      minute: int.parse(time.split(":")[1]) % 60,
+      hour: hh + int.parse(time.split(':')[0]) % 24,
+      minute: int.parse(time.split(':')[1]) % 60,
     );
   }
 }

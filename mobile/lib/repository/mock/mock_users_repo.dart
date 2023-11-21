@@ -64,7 +64,7 @@ class MockUsersRepo extends UsersRepo {
 
   @override
   Future<List<String>> getUserClasses(String id) async {
-    return ["CSE 403", "CSE 332", "MUS 350"];
+    return ['CSE 403', 'CSE 332', 'MUS 350'];
   }
 
   @override

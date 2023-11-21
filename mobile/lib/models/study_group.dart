@@ -8,7 +8,7 @@ StudyGroup studyGroupFromJson(String str) {
 String studyGroupToJson(StudyGroup data) => json.encode(data.toJson());
 
 List<StudyGroup> studyGroupsFromJson(String str) =>
-    List<StudyGroup>.from(json.decode(str).map((x) => StudyGroup.fromJson(x)));
+    List<StudyGroup>.from(json.decode(str).map(StudyGroup.fromJson));
 
 String studyGroupsToJson(List<StudyGroup> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

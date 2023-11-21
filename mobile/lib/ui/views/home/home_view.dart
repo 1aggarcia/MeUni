@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:meuni_mobile/ui/common/app_colors.dart';
-import 'package:meuni_mobile/ui/views/events/events_view.dart';
-import 'package:meuni_mobile/ui/views/profile/profile_view.dart';
-import 'package:meuni_mobile/ui/views/study_groups/study_groups_view.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../common/app_colors.dart';
+import '../events/events_view.dart';
+import '../profile/profile_view.dart';
+import '../study_groups/study_groups_view.dart';
 import 'home_viewmodel.dart';
 
 class HomeView extends StackedView<HomeViewModel> {

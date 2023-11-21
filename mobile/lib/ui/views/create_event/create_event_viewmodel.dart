@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import './create_event_view.form.dart';
 import '../../../app/app.locator.dart';
 import '../../../models/event.dart';
 import '../../../repository/events_repo.dart';
-import './create_event_view.form.dart';
 
 class CreateEventViewModel extends FormViewModel {
   //* Private Properties
@@ -69,8 +69,8 @@ class CreateEventViewModel extends FormViewModel {
 
     return TimeOfDay(
       // in case of a bad time format entered manually by the user
-      hour: hh + int.parse(time.split(":")[0]) % 24,
-      minute: int.parse(time.split(":")[1]) % 60,
+      hour: hh + int.parse(time.split(':')[0]) % 24,
+      minute: int.parse(time.split(':')[1]) % 60,
     );
   }
 }

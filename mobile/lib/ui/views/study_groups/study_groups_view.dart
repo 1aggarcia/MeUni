@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:meuni_mobile/ui/views/study_groups/study_groups_viewmodel.dart';
-import 'package:meuni_mobile/ui/widgets/study_group_card.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
+import '../../widgets/study_group_card.dart';
+import 'study_groups_viewmodel.dart';
 
 class StudyGroupsView extends StackedView<StudyGroupsViewModel> {
   const StudyGroupsView({Key? key}) : super(key: key);

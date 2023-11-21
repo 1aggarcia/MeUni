@@ -1,7 +1,7 @@
 import 'package:http/http.dart';
 
-import '../models/user.dart';
 import '../app/app.locator.dart';
+import '../models/user.dart';
 import '../services/api_service.dart';
 
 abstract class UsersRepo {
@@ -28,7 +28,7 @@ class UsersRepoImpl extends UsersRepo {
   Future<User?> getUserAsync(String id) async {
     Response response = await _apiService.getAsync(
       Endpoints.getUser,
-      params: {"id": id},
+      params: {'id': id},
     );
     return userFromJson(response.body);
   }
@@ -43,7 +43,7 @@ class UsersRepoImpl extends UsersRepo {
   Future updateUserAsync(User user) async {
     await _apiService.postAsync(
       Endpoints.updateUser,
-      params: {"id": user.id},
+      params: {'id': user.id},
       body: userToJson(user),
     );
   }

@@ -1,12 +1,12 @@
-import 'package:meuni_mobile/services/auth_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import '../../../app/app.router.dart';
 import '../../../app/app.locator.dart';
+import '../../../app/app.router.dart';
 import '../../../models/event.dart';
 import '../../../models/study_group.dart';
 import '../../../repository/study_groups_repo.dart';
+import '../../../services/auth_service.dart';
 
 class StudyGroupsViewModel extends BaseViewModel {
   //* Private Properties

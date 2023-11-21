@@ -1,8 +1,8 @@
-import 'package:meuni_mobile/app/app.router.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../app/app.router.dart';
 import '../../../services/auth_service.dart';
 import 'create_profile_view.form.dart';
 
@@ -25,7 +25,7 @@ class CreateProfileViewModel extends FormViewModel {
 
       setBusy(false);
 
-      _navigationService.replaceWithHomeView();
+      await _navigationService.replaceWithHomeView();
     }
   }
 }

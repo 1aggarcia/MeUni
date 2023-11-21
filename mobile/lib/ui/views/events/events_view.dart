@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:meuni_mobile/ui/widgets/round_button.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../common/ui_helpers.dart';
 import '../../widgets/event_card.dart';
 import '../../widgets/loading_indicator.dart';
+import '../../widgets/round_button.dart';
 import 'events_viewmodel.dart';
 
 class EventsView extends StackedView<EventsViewModel> {
@@ -67,7 +67,7 @@ class EventsView extends StackedView<EventsViewModel> {
           ),
           horizontalSpaceSmall,
           Text(
-            "No Events",
+            'No Events',
             style: TextStyle(
               color: Color(0xFF685050),
               fontSize: 24,

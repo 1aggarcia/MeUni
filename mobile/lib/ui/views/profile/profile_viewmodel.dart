@@ -1,7 +1,8 @@
-import 'package:meuni_mobile/services/auth_service.dart';
 import 'package:stacked/stacked.dart';
+
 import '../../../app/app.locator.dart';
 import '../../../repository/users_repo.dart';
+import '../../../services/auth_service.dart';
 
 class ProfileViewModel extends BaseViewModel {
   final _usersRepo = locator<UsersRepo>();

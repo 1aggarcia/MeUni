@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:meuni_mobile/ui/common/ui_helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
+import '../../common/ui_helpers.dart';
 import 'create_profile_view.form.dart';
 import 'create_profile_viewmodel.dart';
 
@@ -32,7 +32,7 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Creating Profile ...",
+                      'Creating Profile ...',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

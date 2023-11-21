@@ -1,9 +1,9 @@
-import 'package:meuni_mobile/app/app.router.dart';
-import 'package:meuni_mobile/services/auth_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../app/app.router.dart';
+import '../../../services/auth_service.dart';
 
 class LoginViewModel extends BaseViewModel {
   //* Private Properties
@@ -15,15 +15,15 @@ class LoginViewModel extends BaseViewModel {
   Future signInWithGoogleAsync() async {
     if (!(await _authService.loginAsync())) {
       // Login Failed
-      _dialogService.showDialog(
+      await _dialogService.showDialog(
         title: 'Error!',
         description: 'Please try again another time.',
       );
     } else {
       if (_authService.isLoggedIn) {
-        _navigationService.replaceWithHomeView();
+        await _navigationService.replaceWithHomeView();
       } else {
-        _navigationService.replaceWithCreateProfileView();
+        await _navigationService.replaceWithCreateProfileView();
       }
     }
   }

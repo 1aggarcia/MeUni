@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -110,11 +112,9 @@ class ProfileView extends StackedView<ProfileViewModel> {
   }
 
   @override
-  ProfileViewModel viewModelBuilder(
-    BuildContext context,
-  ) {
+  ProfileViewModel viewModelBuilder(BuildContext context) {
     ProfileViewModel model = ProfileViewModel();
-    model.getClassesAsync();
+    unawaited(model.getClassesAsync());
     return model;
   }
 }

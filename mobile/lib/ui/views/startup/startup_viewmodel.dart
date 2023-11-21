@@ -1,9 +1,9 @@
 import 'package:stacked/stacked.dart';
-import 'package:meuni_mobile/app/app.locator.dart';
-import 'package:meuni_mobile/app/app.router.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.dart';
+import '../../../app/app.locator.dart';
+import '../../../app/app.router.dart';
 
 class StartupViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
@@ -15,6 +15,6 @@ class StartupViewModel extends BaseViewModel {
     // This is where you can make decisions on where your app should navigate when
     // you have custom startup logic
 
-    _navigationService.replaceWithLoginView();
+    await _navigationService.replaceWithLoginView();
   }
 }

@@ -5,26 +5,23 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../repository/events_repo.dart';
 import '../repository/mock/mock_events_repo.dart';
-import '../repository/mock/mock_users_repo.dart';
 import '../repository/mock/mock_study_groups_repo.dart';
-import '../repository/users_repo.dart';
+import '../repository/mock/mock_users_repo.dart';
 import '../repository/study_groups_repo.dart';
-
+import '../repository/users_repo.dart';
 import '../services/api_service.dart';
-
+import '../services/auth_service.dart';
 import '../ui/bottom_sheets/notice/notice_sheet.dart';
 import '../ui/dialogs/info_alert/info_alert_dialog.dart';
-
 import '../ui/views/create_event/create_event_view.dart';
+import '../ui/views/create_profile/create_profile_view.dart';
 import '../ui/views/create_study_group/create_study_group_view.dart';
 import '../ui/views/events/events_view.dart';
+import '../ui/views/home/home_view.dart';
+import '../ui/views/login/login_view.dart';
+import '../ui/views/profile/profile_view.dart';
 import '../ui/views/startup/startup_view.dart';
-import 'package:meuni_mobile/ui/views/login/login_view.dart';
-import 'package:meuni_mobile/ui/views/create_profile/create_profile_view.dart';
 import '../ui/views/study_groups/study_groups_view.dart';
-import 'package:meuni_mobile/ui/views/home/home_view.dart';
-import 'package:meuni_mobile/ui/views/profile/profile_view.dart';
-import 'package:meuni_mobile/services/auth_service.dart';
 // @stacked-import
 
 @StackedApp(

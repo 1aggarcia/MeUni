@@ -3,9 +3,9 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
 import '../../common/ui_helpers.dart';
+import '../../widgets/text_input.dart';
 import 'create_event_view.form.dart';
 import 'create_event_viewmodel.dart';
-import '../../widgets/text_input.dart';
 
 @FormView(fields: [
   FormTextField(
