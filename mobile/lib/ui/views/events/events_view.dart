@@ -40,10 +40,15 @@ class EventsView extends StackedView<EventsViewModel> {
             ListView.separated(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemBuilder: (context, index) => EventCard(
-                event: viewModel.events[index],
-              ),
-              separatorBuilder: (context, index) => verticalSpaceMedium,
+              itemBuilder: (_, index) {
+                return GestureDetector(
+                  onTap: () async => viewModel.goToEventDetailPageAsync(index),
+                  child: EventCard(
+                    event: viewModel.events[index],
+                  ),
+                );
+              },
+              separatorBuilder: (_, __) => verticalSpaceMedium,
               itemCount: viewModel.events.length,
             ),
 

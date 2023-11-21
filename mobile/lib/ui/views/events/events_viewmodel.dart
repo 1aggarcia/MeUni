@@ -20,7 +20,7 @@ class EventsViewModel extends BaseViewModel {
   List<Event> events = [];
 
   //* Public Methods
-  Future getEventsAsync() async {
+  Future<void> getEventsAsync() async {
     events = await runBusyFuture(
       _eventsRepo.getEventsAsync(),
       busyObject: events,
@@ -29,8 +29,13 @@ class EventsViewModel extends BaseViewModel {
     rebuildUi();
   }
 
-  Future goToCreateEventPageAsync() async =>
+  Future<void> goToCreateEventPageAsync() async =>
       await _navigationService.navigateToCreateEventView();
 
-  Future logoutAsync() async => await _navigationService.replaceWithLoginView();
+  Future<void> goToEventDetailPageAsync(int index) async =>
+      await _navigationService.navigateToEventDetailView(
+          eventId: events[index].id);
+
+  Future<void> logoutAsync() async =>
+      await _navigationService.replaceWithLoginView();
 }
