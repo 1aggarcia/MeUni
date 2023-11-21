@@ -6,60 +6,60 @@ import '../../bin/models/event.dart';
 void main() {
   group('Events Model -', () {
     Event evt = Event(
-      id: "0",
+      id: '0',
       title: 'Another event',
       desc: 'This time i really need people',
       location: '[Redacted]',
       max: 2,
       startTime: DateTime.parse('2023-11-05 03:04:15.537017Z'),
       endTime: DateTime.parse('2023-11-05 03:24:15.537017Z'),
-      hostId: "3",
+      hostId: '3',
       hostName: 'Hannah',
-      attendees: ["1"],
+      attendees: ['1'],
       attendeeNames: ['Fei'],
     );
 
     // copy of evt
     Event evtA = Event(
-      id: "1",
+      id: '1',
       title: 'Another event',
       desc: 'This time i really need people',
       location: '[Redacted]',
       max: 2,
       startTime: DateTime.parse('2023-11-05 03:04:15.537017Z'),
       endTime: DateTime.parse('2023-11-05 03:24:15.537017Z'),
-      hostId: "3",
+      hostId: '3',
       hostName: 'Hannah',
-      attendees: ["1"],
-      attendeeNames: ['Fei'],    
+      attendees: ['1'],
+      attendeeNames: ['Fei'],
     );
 
     Event evtB = Event(
-        id: "2",
-        title: 'Pizza',
-        desc: 'need ppl to chip in for pizza',
-        location: 'The crib',
-        max: 4,
-        startTime: DateTime.parse('2023-11-04 03:04:15.537017Z'),
-        endTime: DateTime.parse('2023-11-04 03:24:15.537017Z'),
-        hostName: 'Fei',
-        hostId: "1",
-        attendees: ["2", "3"],
-        attendeeNames: ['John', 'Hannah'],
+      id: '2',
+      title: 'Pizza',
+      desc: 'need ppl to chip in for pizza',
+      location: 'The crib',
+      max: 4,
+      startTime: DateTime.parse('2023-11-04 03:04:15.537017Z'),
+      endTime: DateTime.parse('2023-11-04 03:24:15.537017Z'),
+      hostName: 'Fei',
+      hostId: '1',
+      attendees: ['2', '3'],
+      attendeeNames: ['John', 'Hannah'],
     );
 
     Map<String, dynamic> evtJsonMap = {
-        "id": "0",
-        "title": 'Another event',
-        "desc": 'This time i really need people',
-        "location": '[Redacted]',
-        "max": 2,
-        "startTime": "2023-11-05T03:04:15.537017Z",
-        "endTime": "2023-11-05T03:24:15.537017Z",
-        "hostId": "3",
-        "hostName": 'Hannah',
-        "attendees": ["1"],
-        "attendeeNames": ['Fei'],
+      'id': '0',
+      'title': 'Another event',
+      'desc': 'This time i really need people',
+      'location': '[Redacted]',
+      'max': 2,
+      'startTime': '2023-11-05T03:04:15.537017Z',
+      'endTime': '2023-11-05T03:24:15.537017Z',
+      'hostId': '3',
+      'hostName': 'Hannah',
+      'attendees': ['1'],
+      'attendeeNames': ['Fei'],
     };
 
     test('equals', () {
@@ -134,7 +134,7 @@ void main() {
       json = '{"title": "Another event",'
           '"desc": "This time i really need people",'
           '"location": "[Redacted]",'
-          '"max": ${maxCapacity+1},'
+          '"max": ${maxCapacity + 1},'
           '"startTime": "2023-11-05T03:04:15.537017Z",'
           '"endTime": "2023-11-05T03:24:15.537017Z",'
           '"hostId": "3",'
@@ -169,28 +169,31 @@ void main() {
     test('eventsToJson', () {
       List<Event> data = [evt, evtA, evtB];
       String test = eventsToJson(data);
-      expect(test, 
-      jsonEncode([evt.toJson(), evtA.toJson(), evtB.toJson()])); 
+      expect(test, jsonEncode([evt.toJson(), evtA.toJson(), evtB.toJson()]));
     });
 
     test('eventsFromMap', () {
       Map<String, dynamic> data = {
-        "0":evt.toJson(), "1":evtA.toJson(), "2":evtB.toJson()
+        '0': evt.toJson(),
+        '1': evtA.toJson(),
+        '2': evtB.toJson()
       };
       List<Event> test = eventsFromMap(data);
       expect(test.length, 3);
       for (int i = 0; i < test.length; i++) {
-        expect(test[i].toJson(), data["$i"]);
+        expect(test[i].toJson(), data['$i']);
       }
     });
 
     test('eventsFromMap - improper formatting', () {
       Map<String, dynamic> data = {
-        "1":"hola", "2":23, "0":evt.toJson(), 
+        '1': 'hola',
+        '2': 23,
+        '0': evt.toJson(),
       };
       List<Event> test = eventsFromMap(data);
       expect(test.length, 1);
-      expect(test[0].toJson(), data["0"]);
+      expect(test[0].toJson(), data['0']);
     });
 
     test('eventsFromJson', () {
@@ -214,7 +217,7 @@ void main() {
     //     "0":evt, "1":evtA, "2":evtB
     //   };
     //   String json = eventsToJson(data);
-    //   expect(json, jsonEncode(toJsonMap(data))); 
+    //   expect(json, jsonEncode(toJsonMap(data)));
     // });
 
     // test('toJsonMap', () {

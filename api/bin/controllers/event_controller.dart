@@ -1,6 +1,7 @@
-import 'package:shelf_router/shelf_router.dart';
-import 'package:shelf/shelf.dart';
 import 'dart:convert';
+
+import 'package:shelf/shelf.dart';
+import 'package:shelf_router/shelf_router.dart';
 
 import '../locator.dart';
 import '../models/event.dart';
@@ -18,8 +19,10 @@ class EventController extends Controller {
       ..get('$endpoint/get', getEventsHandler)
       ..post('$endpoint/create', postEventsHandler)
       ..post('$endpoint/delete', deleteEventsHandler)
-      ..post('$endpoint/join', (request) => joinEventsHandler(request, true))
-      ..post('$endpoint/unjoin', (request) => joinEventsHandler(request, false));
+      ..post('$endpoint/join',
+          (request) async => await joinEventsHandler(request, true))
+      ..post('$endpoint/unjoin',
+          (request) async => await joinEventsHandler(request, false));
   }
 
   //* Public API Methods
@@ -101,7 +104,7 @@ class EventController extends Controller {
         if (result != null) {
           return Response.ok(jsonEncode(result));
         } else {
-          throw Exception("Event did not allow specified join operation");
+          throw Exception('Event did not allow specified join operation');
         }
       } else {
         throw Exception("Missing one or more params, 'userId', 'eventId'");

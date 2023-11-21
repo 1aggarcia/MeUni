@@ -1,10 +1,10 @@
-import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf/shelf.dart';
+import 'package:shelf_router/shelf_router.dart';
 
 import '../locator.dart';
+import '../models/user.dart';
 import '../repository/users_repo.dart';
 import 'controller.dart';
-import '../models/user.dart';
 
 class UserController extends Controller {
   //* Private Properties
@@ -31,7 +31,7 @@ class UserController extends Controller {
         return Response(400);
       }
     } catch (e) {
-      print("Failed to get user: $e");
+      print('Failed to get user: $e');
       return Response(400);
     }
   }
