@@ -9,7 +9,7 @@ class LoginViewModel extends BaseViewModel {
   //* Private Properties
   final _authService = locator<AuthService>();
   final _dialogService = locator<DialogService>();
-  final _navigationService = locator<NavigationService>();
+  final _navService = locator<NavigationService>();
 
   //* Public Methods
   Future<void> signInWithGoogleAsync() async {
@@ -23,9 +23,9 @@ class LoginViewModel extends BaseViewModel {
       );
     } else {
       if (_authService.isLoggedIn) {
-        await _navigationService.replaceWithHomeView();
+        await _navService.replaceWithHomeView();
       } else {
-        await _navigationService.replaceWithCreateProfileView();
+        await _navService.replaceWithCreateProfileView();
       }
     }
 

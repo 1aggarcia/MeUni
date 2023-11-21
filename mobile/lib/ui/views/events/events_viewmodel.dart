@@ -12,7 +12,7 @@ class EventsViewModel extends BaseViewModel {
   final _eventsRepo = locator<EventsRepo>();
 
   final _authService = locator<AuthService>();
-  final _navigationService = locator<NavigationService>();
+  final _navService = locator<NavigationService>();
 
   //* Public Properties
   String get userName => _authService.currUser.firstName;
@@ -30,12 +30,10 @@ class EventsViewModel extends BaseViewModel {
   }
 
   Future<void> goToCreateEventPageAsync() async =>
-      await _navigationService.navigateToCreateEventView();
+      await _navService.navigateToCreateEventView();
 
   Future<void> goToEventDetailPageAsync(int index) async =>
-      await _navigationService.navigateToEventDetailView(
-          eventId: events[index].id);
+      await _navService.navigateToEventDetailView(eventId: events[index].id);
 
-  Future<void> logoutAsync() async =>
-      await _navigationService.replaceWithLoginView();
+  Future<void> logoutAsync() async => await _navService.replaceWithLoginView();
 }

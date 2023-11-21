@@ -11,7 +11,7 @@ class CreateStudyGroupViewModel extends FormViewModel {
   //* Private Properties
   final _studyGroupsRepo = locator<StudyGroupsRepo>();
 
-  final _navigationService = locator<NavigationService>();
+  final _navService = locator<NavigationService>();
 
   //* Public Properties
   bool isLoading = false;
@@ -58,7 +58,7 @@ class CreateStudyGroupViewModel extends FormViewModel {
     }
   }
 
-  void goToPrevPage() => _navigationService.back();
+  void goToPrevPage() => _navService.back();
 
   //* Private Methods
   TimeOfDay _fromString(String time) {

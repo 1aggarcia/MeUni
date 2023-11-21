@@ -13,7 +13,7 @@ class StudyGroupsViewModel extends BaseViewModel {
   final _studyGroupsRepo = locator<StudyGroupsRepo>();
 
   final _authService = locator<AuthService>();
-  final _navigationService = locator<NavigationService>();
+  final _navService = locator<NavigationService>();
 
   //* Public Properties
   bool isLoading = false;
@@ -35,7 +35,7 @@ class StudyGroupsViewModel extends BaseViewModel {
   }
 
   Future goToCreateStudyGroupPageAsync() async =>
-      await _navigationService.navigateToCreateStudyGroupView();
+      await _navService.navigateToCreateStudyGroupView();
 
-  Future logoutAsync() async => await _navigationService.replaceWithLoginView();
+  Future logoutAsync() async => await _navService.replaceWithLoginView();
 }

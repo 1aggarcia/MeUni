@@ -11,7 +11,7 @@ class CreateEventViewModel extends FormViewModel {
   //* Private Properties
   final _eventsRepo = locator<EventsRepo>();
 
-  final _navigationService = locator<NavigationService>();
+  final _navService = locator<NavigationService>();
 
   //* Public Properties
   bool isLoading = false;
@@ -58,7 +58,7 @@ class CreateEventViewModel extends FormViewModel {
     }
   }
 
-  void goToPrevPage() => _navigationService.back();
+  void goToPrevPage() => _navService.back();
 
   //* Private Methods
   TimeOfDay _fromString(String time) {

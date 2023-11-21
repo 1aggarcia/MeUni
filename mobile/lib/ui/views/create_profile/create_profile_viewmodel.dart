@@ -9,7 +9,7 @@ import 'create_profile_view.form.dart';
 class CreateProfileViewModel extends FormViewModel {
   //* Properties
   final _authService = locator<AuthService>();
-  final _navigationService = locator<NavigationService>();
+  final _navService = locator<NavigationService>();
 
   //* Public Methods
   Future createProfileAsync() async {
@@ -25,7 +25,7 @@ class CreateProfileViewModel extends FormViewModel {
 
       setBusy(false);
 
-      await _navigationService.replaceWithHomeView();
+      await _navService.replaceWithHomeView();
     }
   }
 }

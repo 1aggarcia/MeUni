@@ -5,7 +5,7 @@ import '../../../app/app.locator.dart';
 
 class EventDetailViewModel extends BaseViewModel {
   //* Private Properties
-  final _navigationService = locator<NavigationService>();
+  final _navService = locator<NavigationService>();
 
   //* Public Properties
   final String eventId;
@@ -14,5 +14,5 @@ class EventDetailViewModel extends BaseViewModel {
   EventDetailViewModel(this.eventId);
 
   //* Public Methods
-  void goBack() => _navigationService.back();
+  void goBack() => _navService.back();
 }
