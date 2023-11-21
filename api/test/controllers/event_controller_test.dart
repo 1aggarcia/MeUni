@@ -15,9 +15,9 @@ EventTemplateController _controller = EventTemplateController(_eventsRepo);
 void main() {
   group('Events Template Controller -', () {
     setUp(() async {
-      locator.reset();
+      await locator.reset();
 
-      locator.registerLazySingleton<EventsRepo>(() => MockEventsRepo());
+      locator.registerLazySingleton<EventsRepo>(MockEventsRepo.new);
 
       MockEventsRepo mockEventsRepo = locator<EventsRepo>() as MockEventsRepo;
       mockEventsRepo.clearEvents();
@@ -26,40 +26,40 @@ void main() {
     });
 
     Event event = Event(
-      id:"0",
+      id: '0',
       title: 'Pizza',
       desc: 'need ppl to chip in for pizza',
       location: 'The crib',
       max: 4,
       startTime: DateTime.parse('2023-11-04T03:04:15.537017Z'),
       endTime: DateTime.parse('2023-11-04T03:24:15.537017Z'),
-      hostId: "1a",
+      hostId: '1a',
       hostName: '[unknown user]',
       attendees: [],
       attendeeNames: [],
     );
     Event tennisEvent = Event(
-      id:"1",
+      id: '1',
       title: 'Tennis',
       desc: 'At the IMA tennis court! Hang out with me!',
       location: 'IMA tennis court',
       max: 3,
       startTime: DateTime.parse('2024-01-04T15:14:15.537017Z'),
       endTime: DateTime.parse('2023-11-04T16:14:15.567017Z'),
-      hostId: "2b",
+      hostId: '2b',
       hostName: '[unknown user]',
       attendees: [],
       attendeeNames: [],
     );
     Event dingDongEvent = Event(
-      id:"2",
+      id: '2',
       title: 'Ding Dong Ditching',
       desc: 'Lets go make my neighbors mad!',
       location: 'Community Center',
       max: 5,
       startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
       endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
-      hostId: "3b",
+      hostId: '3b',
       hostName: '[unknown user]',
       attendees: [],
       attendeeNames: [],
@@ -78,7 +78,7 @@ void main() {
       Response response = await _controller.postEventsHandler(req);
       expect(response.statusCode, 200);
 
-      expect(await response.readAsString(),"0");
+      expect(await response.readAsString(), '0');
     });
 
     test('events/create with no body', () async {
@@ -92,8 +92,7 @@ void main() {
     });
 
     test('events/create with wrong types', () async {
-      String eventJson = 
-          '{"title":0,'
+      String eventJson = '{"title":0,'
           '"desc":"need ppl to chip in for pizza",'
           '"location":"The crib",'
           '"max":"",'
@@ -144,12 +143,10 @@ void main() {
       response = await _controller.getEventsHandler(req);
 
       expect(response.statusCode, 200);
-      expect(await response.readAsString(),
-        eventsToJson([
-          event,
-          tennisEvent,
-          dingDongEvent
-        ]),);
+      expect(
+        await response.readAsString(),
+        eventsToJson([event, tennisEvent, dingDongEvent]),
+      );
     });
 
     test('events/get with id param', () async {
@@ -160,7 +157,7 @@ void main() {
         max: 3,
         startTime: DateTime.parse('2024-01-04T15:14:15.537017Z'),
         endTime: DateTime.parse('2023-11-04T16:14:15.567017Z'),
-        hostId: "2b",
+        hostId: '2b',
         hostName: '[unknown user]',
         attendees: [],
         attendeeNames: [],
@@ -182,8 +179,7 @@ void main() {
       response = await _controller.getEventsHandler(req);
 
       expect(response.statusCode, 200);
-      expect(eventJson,
-          await response.readAsString());
+      expect(eventJson, await response.readAsString());
     });
 
     test('events/get with bad id', () async {
@@ -213,7 +209,7 @@ void main() {
       );
       response = await _controller.deleteEventsHandler(req);
       expect(response.statusCode, 200);
-      expect(await response.readAsString(),"0");
+      expect(await response.readAsString(), '0');
 
       // Verify event no longer in dataase
       req = Request(
@@ -242,7 +238,7 @@ void main() {
       );
       response = await _controller.joinEventsHandler(req, true);
       expect(response.statusCode, 200);
-      expect(await response.readAsString(),'["2c"]');
+      expect(await response.readAsString(), '["2c"]');
     });
 
     test('events/join - user already in event', () async {
@@ -292,7 +288,7 @@ void main() {
         max: 1,
         startTime: DateTime.parse('2023-11-04T03:04:15.537017Z'),
         endTime: DateTime.parse('2023-11-04T03:24:15.537017Z'),
-        hostId: "1a",
+        hostId: '1a',
         hostName: 'Fei',
         attendees: [],
         attendeeNames: [],
@@ -343,7 +339,7 @@ void main() {
       );
       response = await _controller.joinEventsHandler(req, true);
       expect(response.statusCode, 200);
-      expect(await response.readAsString(),'["2c"]');
+      expect(await response.readAsString(), '["2c"]');
 
       // Unoin event
       req = Request(
@@ -353,7 +349,7 @@ void main() {
       );
       response = await _controller.joinEventsHandler(req, false);
       expect(response.statusCode, 200);
-      expect(await response.readAsString(),'[]');
+      expect(await response.readAsString(), '[]');
     });
   });
 }

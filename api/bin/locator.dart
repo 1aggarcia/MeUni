@@ -15,10 +15,10 @@ void setupLocator(DatabaseReference dbRef) {
   locator.registerSingleton<DatabaseReference>(dbRef);
 
   if (useMocks) {
-    locator.registerLazySingleton<EventsRepo>(() => MockEventsRepo());
-    locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
+    locator.registerLazySingleton<EventsRepo>(MockEventsRepo.new);
+    locator.registerLazySingleton<UsersRepo>(MockUsersRepo.new);
   } else {
     locator.registerLazySingleton<EventsRepo>(() => EventsRepoImpl('events'));
-    locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
+    locator.registerLazySingleton<UsersRepo>(MockUsersRepo.new);
   }
 }

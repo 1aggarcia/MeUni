@@ -9,7 +9,7 @@ class MockUsersRepo extends UsersRepo {
   MockUsersRepo() {
     _users = [
       User(
-        id: "1a",
+        id: '1a',
         firstName: 'Fei',
         lastName: 'Huang',
         year: 4,
@@ -17,7 +17,7 @@ class MockUsersRepo extends UsersRepo {
         admin: true,
       ),
       User(
-        id: "2a",
+        id: '2a',
         firstName: 'John',
         lastName: 'Stuart',
         year: 3,
@@ -25,7 +25,7 @@ class MockUsersRepo extends UsersRepo {
         admin: false,
       ),
       User(
-        id: "3a",
+        id: '3a',
         firstName: 'Hannah',
         lastName: 'Brown',
         year: 1,
@@ -33,7 +33,7 @@ class MockUsersRepo extends UsersRepo {
         admin: false,
       ),
       User(
-        id: "4a",
+        id: '4a',
         firstName: 'Ronald',
         lastName: 'McDonald',
         year: 2,

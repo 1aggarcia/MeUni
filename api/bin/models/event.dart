@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'user.dart';
 import '../controllers/mock_users.dart';
+import 'user.dart';
 
 final List<User> mockUsers = MockUsersRepo().getMockUsers();
 final int maxCapacity = 15;
@@ -47,16 +47,18 @@ class Event {
   /// @requires json['attendees'] is List<String> if included
   factory Event.fromJson(Map<String, dynamic> json) {
     if (json['title'] is! String ||
-          json['desc'] is! String ||
-          json['location'] is! String ||
-          json['max'] is! int ||
-          json['startTime'] is! String ||
-          json['endTime'] is! String ||
-          json['hostId'] is! String) {
-      throw Exception("json map passed in with incorrect or missing params for Event:\n$json");
+        json['desc'] is! String ||
+        json['location'] is! String ||
+        json['max'] is! int ||
+        json['startTime'] is! String ||
+        json['endTime'] is! String ||
+        json['hostId'] is! String) {
+      throw Exception(
+          'json map passed in with incorrect or missing params for Event:\n$json');
     }
     if (1 > json['max'] || json['max'] > maxCapacity) {
-      throw Exception("param 'max' must be within range 1-$maxCapacity:\n$json");
+      throw Exception(
+          "param 'max' must be within range 1-$maxCapacity:\n$json");
     }
     List<String> attendees = [];
     List<String> attendeeNames = [];
@@ -69,21 +71,21 @@ class Event {
         attendeeNames.add(userNamefromId(id));
       }
     } else if (json['attendees'] != null) {
-      throw Exception("Optional param 'attendees' must be of type List<String> if included:\n$json");
+      throw Exception(
+          "Optional param 'attendees' must be of type List<String> if included:\n$json");
     }
 
     return Event(
-      title: json['title'],
-      desc: json['desc'],
-      location: json['location'],
-      max: json['max'],
-      startTime: DateTime.parse(json['startTime']),
-      endTime: DateTime.parse(json['endTime']),
-      hostId: json['hostId'],
-      hostName: hostName,
-      attendees: attendees,
-      attendeeNames: attendeeNames
-    );
+        title: json['title'],
+        desc: json['desc'],
+        location: json['location'],
+        max: json['max'],
+        startTime: DateTime.parse(json['startTime']),
+        endTime: DateTime.parse(json['endTime']),
+        hostId: json['hostId'],
+        hostName: hostName,
+        attendees: attendees,
+        attendeeNames: attendeeNames);
   }
 
   // Sets event id to given id
@@ -96,23 +98,22 @@ class Event {
 
   /// Returns a json map of Event instance
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'title': title,
-    'desc': desc,
-    'location': location,
-    'max': max,
-    'startTime': startTime.toIso8601String(),
-    'endTime': endTime.toIso8601String(),
-    'hostId': hostId,
-    'hostName': hostName,
-    'attendees': attendees,
-    'attendeeNames': attendeeNames
-  };
+        'id': id,
+        'title': title,
+        'desc': desc,
+        'location': location,
+        'max': max,
+        'startTime': startTime.toIso8601String(),
+        'endTime': endTime.toIso8601String(),
+        'hostId': hostId,
+        'hostName': hostName,
+        'attendees': attendees,
+        'attendeeNames': attendeeNames
+      };
 
   /// Does not check equality of attendees, attendeeNames, or id
   bool equals(Event other) {
-    return 
-        title == other.title &&
+    return title == other.title &&
         desc == other.desc &&
         location == other.location &&
         max == other.max &&
@@ -124,12 +125,12 @@ class Event {
 }
 
 /// Given json string representing event, returns Event or null if improperly formatted
-Event? eventFromJson(String str){
+Event? eventFromJson(String str) {
   try {
     return Event.fromJson(json.decode(str));
-  } catch(e) {
-    print("ERROR: eventFromJson() $e");
-    return null; 
+  } catch (e) {
+    print('ERROR: eventFromJson() $e');
+    return null;
   }
 }
 
@@ -137,7 +138,7 @@ Event? eventFromJson(String str){
 String eventToJson(Event data) => json.encode(data.toJson());
 
 /// Returns json string representing passed in Event list
-String eventsToJson(List<Event> data) => 
+String eventsToJson(List<Event> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 /// Converts json string to event list, improperly formatted entires ignored
@@ -145,7 +146,7 @@ List<Event> eventsFromJson(String str) {
   try {
     return eventsFromMap(json.decode(str));
   } catch (e) {
-    print("ERROR: eventsFromJson() $e");
+    print('ERROR: eventsFromJson() $e');
     return [];
   }
 }
@@ -159,7 +160,7 @@ List<Event> eventsFromMap(Map<String, dynamic> data) {
       e.setId(k);
       events.add(e);
     } catch (e) {
-      print("ERROR: eventsFromMap() $e");
+      print('ERROR: eventsFromMap() $e');
     }
   });
   return events;
@@ -180,7 +181,7 @@ String userNamefromId(String userId) {
   if (u.id == userId) {
     return u.firstName;
   } else {
-    return "[unknown user]";
+    return '[unknown user]';
   }
 
 // /// Returns json as string representing passed in Map of events
@@ -193,4 +194,3 @@ String userNamefromId(String userId) {
 //   );
 // }
 }
-

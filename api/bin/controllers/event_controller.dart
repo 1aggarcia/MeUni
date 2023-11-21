@@ -8,7 +8,8 @@ final _eventsRepo = EventsRepoImpl('events');
 
 class EventController extends Controller {
   //* Private Properties
-  final EventTemplateController _controller = EventTemplateController(_eventsRepo);
+  final EventTemplateController _controller =
+      EventTemplateController(_eventsRepo);
 
   //* Overriden Methods
   @override
