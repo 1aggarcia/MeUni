@@ -27,10 +27,10 @@ class EventCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _cardLabel('Title: ${event.title}'),
-          _cardLabel('Description: ${event.desc}'),
-          _cardLabel('Time: $startDate @ $startTime - $endTime'),
-          _cardLabel('Location: ${event.location}'),
+          _cardLabel(event.title),
+          _cardLabel(event.desc),
+          _cardLabel('$startDate @ $startTime - $endTime'),
+          _cardLabel(event.location),
         ],
       ),
     );

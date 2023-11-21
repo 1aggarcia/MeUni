@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+// ignore_for_file: directives_ordering
 import './create_event_view.form.dart';
 import '../../../app/app.locator.dart';
 import '../../../models/event.dart';

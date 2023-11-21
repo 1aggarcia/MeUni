@@ -5,18 +5,15 @@ import 'package:http/http.dart';
 import '../app/app.locator.dart';
 import '../models/event.dart';
 import '../services/api_service.dart';
-import '../services/auth_service.dart';
 
 abstract class EventsRepo {
-
   //* Public Methods
   Future<List<Event>> getEventsAsync();
 
   Future<void> addEventAsync(Event event);
   Future<void> joinEventAsync(String id);
   Future<Event?> getEventAsync(String id);
-
-  }
+}
 
 class EventsRepoImpl extends EventsRepo {
   //* Private Properties
