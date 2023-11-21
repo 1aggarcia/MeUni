@@ -26,28 +26,26 @@ import '../ui/views/study_groups/study_groups_view.dart';
 
 @StackedApp(
   routes: [
-    MaterialRoute(page: StartupView),
-    MaterialRoute(page: EventsView),
     MaterialRoute(page: CreateEventView),
-    MaterialRoute(page: LoginView),
     MaterialRoute(page: CreateProfileView),
-    MaterialRoute(page: StudyGroupsView),
     MaterialRoute(page: CreateStudyGroupView),
+    MaterialRoute(page: EventsView),
     MaterialRoute(page: HomeView),
+    MaterialRoute(page: LoginView),
     MaterialRoute(page: ProfileView),
+    MaterialRoute(page: StartupView),
+    MaterialRoute(page: StudyGroupsView),
 // @stacked-route
   ],
   dependencies: [
-    LazySingleton(classType: BottomSheetService),
-    LazySingleton(classType: DialogService),
-    LazySingleton(classType: NavigationService),
-    LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
-    LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
-    LazySingleton(classType: MockStudyGroupsRepo, asType: StudyGroupsRepo),
-    // LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
-    // LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
     LazySingleton(classType: ApiService),
     LazySingleton(classType: AuthService),
+    LazySingleton(classType: BottomSheetService),
+    LazySingleton(classType: DialogService),
+    LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
+    LazySingleton(classType: MockStudyGroupsRepo, asType: StudyGroupsRepo),
+    LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
+    LazySingleton(classType: NavigationService),
 // @stacked-service
   ],
   bottomsheets: [

@@ -57,7 +57,7 @@ class MockEventsRepo extends EventsRepo {
   }
 
   @override
-  Future addEventAsync(Event event) async {
+  Future<void> addEventAsync(Event event) async {
     await Future.delayed(App.demoDuration);
 
     _events.add(event);

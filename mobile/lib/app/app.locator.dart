@@ -31,12 +31,12 @@ Future<void> setupLocator({
       environment: environment, environmentFilter: environmentFilter);
 
 // Register dependencies
-  locator.registerLazySingleton(() => BottomSheetService());
-  locator.registerLazySingleton(() => DialogService());
-  locator.registerLazySingleton(() => NavigationService());
-  locator.registerLazySingleton<EventsRepo>(() => MockEventsRepo());
-  locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
-  locator.registerLazySingleton<StudyGroupsRepo>(() => MockStudyGroupsRepo());
   locator.registerLazySingleton(() => ApiService());
   locator.registerLazySingleton(() => AuthService());
+  locator.registerLazySingleton(() => BottomSheetService());
+  locator.registerLazySingleton(() => DialogService());
+  locator.registerLazySingleton<EventsRepo>(() => MockEventsRepo());
+  locator.registerLazySingleton<StudyGroupsRepo>(() => MockStudyGroupsRepo());
+  locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
+  locator.registerLazySingleton(() => NavigationService());
 }

@@ -37,6 +37,8 @@ class MockUsersRepo extends UsersRepo {
     required int year,
     required String pronouns,
   }) async {
+    await Future.delayed(App.demoDuration);
+
     User user = User(
       id: id,
       firstName: firstName,
@@ -64,11 +66,15 @@ class MockUsersRepo extends UsersRepo {
 
   @override
   Future<List<String>> getUserClasses(String id) async {
+    await Future.delayed(App.demoDuration);
+
     return ['CSE 403', 'CSE 332', 'MUS 350'];
   }
 
   @override
-  Future updateUserAsync(User user) async {
+  Future<void> updateUserAsync(User user) async {
+    await Future.delayed(App.demoDuration);
+
     for (int i = 0; i < _users.length; i++) {
       if (_users[i].id == user.id) {
         _users[i] = user;

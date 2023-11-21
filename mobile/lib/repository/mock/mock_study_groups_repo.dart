@@ -57,7 +57,7 @@ class MockStudyGroupsRepo extends StudyGroupsRepo {
   }
 
   @override
-  Future addStudyGroupAsync(StudyGroup studyGroup) async {
+  Future<void> addStudyGroupAsync(StudyGroup studyGroup) async {
     await Future.delayed(App.demoDuration);
 
     _studyGroups.add(studyGroup);

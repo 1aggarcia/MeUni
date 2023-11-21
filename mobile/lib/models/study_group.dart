@@ -1,18 +1,3 @@
-import 'dart:convert';
-
-StudyGroup studyGroupFromJson(String str) {
-  var decode = json.decode(str);
-  return StudyGroup.fromJson(decode);
-}
-
-String studyGroupToJson(StudyGroup data) => json.encode(data.toJson());
-
-List<StudyGroup> studyGroupsFromJson(String str) =>
-    List<StudyGroup>.from(json.decode(str).map(StudyGroup.fromJson));
-
-String studyGroupsToJson(List<StudyGroup> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 class StudyGroup {
   //* Public Properties
   final String id;

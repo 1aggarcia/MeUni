@@ -10,7 +10,7 @@ abstract class EventsRepo {
   //* Public Methods
   Future<List<Event>> getEventsAsync();
 
-  Future addEventAsync(Event event);
+  Future<void> addEventAsync(Event event);
 }
 
 class EventsRepoImpl extends EventsRepo {
@@ -19,7 +19,7 @@ class EventsRepoImpl extends EventsRepo {
 
   //* Overridden Methods
   @override
-  Future addEventAsync(Event event) async {
+  Future<void> addEventAsync(Event event) async {
     await _apiService.postAsync(
       Endpoints.createEvent,
       body: _eventToJson(event),

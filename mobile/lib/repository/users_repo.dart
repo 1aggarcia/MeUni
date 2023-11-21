@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart';
 
 import '../app/app.locator.dart';
@@ -5,7 +7,6 @@ import '../models/user.dart';
 import '../services/api_service.dart';
 
 abstract class UsersRepo {
-  //* Public Methods
   Future<User> addUserAsync({
     required String id,
     required String firstName,
@@ -18,19 +19,21 @@ abstract class UsersRepo {
 
   Future<List<String>> getUserClasses(String id);
 
-  Future updateUserAsync(User user);
+  Future<void> updateUserAsync(User user);
 }
 
 class UsersRepoImpl extends UsersRepo {
+  //* Private Properties
   final ApiService _apiService = locator<ApiService>();
 
+  //* Overridden Methods
   @override
   Future<User?> getUserAsync(String id) async {
     Response response = await _apiService.getAsync(
       Endpoints.getUser,
       params: {'id': id},
     );
-    return userFromJson(response.body);
+    return _userFromJson(response.body);
   }
 
   @override
@@ -40,11 +43,11 @@ class UsersRepoImpl extends UsersRepo {
   }
 
   @override
-  Future updateUserAsync(User user) async {
+  Future<void> updateUserAsync(User user) async {
     await _apiService.postAsync(
       Endpoints.updateUser,
       params: {'id': user.id},
-      body: userToJson(user),
+      body: _userToJson(user),
     );
   }
 
@@ -58,4 +61,9 @@ class UsersRepoImpl extends UsersRepo {
     // TODO: implement addUserAsync
     throw UnimplementedError();
   }
+
+  //* Private Methods
+  User _userFromJson(String str) => User.fromJson(json.decode(str));
+
+  String _userToJson(User data) => json.encode(data.toJson());
 }
