@@ -18,14 +18,6 @@ class EventCard extends StatelessWidget {
     final startTime = DateFormat.jm().format(event.startTime);
     final endTime = DateFormat.jm().format(event.endTime);
 
-    const textStyle = TextStyle(
-      color: kcTextPrimaryColor,
-      fontSize: 15,
-      fontFamily: 'Hind Siliguri',
-      fontWeight: FontWeight.w600,
-      letterSpacing: 0.07,
-    );
-
     return Container(
       decoration: ShapeDecoration(
         color: kcSecondaryColor,
@@ -35,47 +27,31 @@ class EventCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              child: Text(
-                'Title: ${event.title}',
-                textAlign: TextAlign.center,
-                style: textStyle,
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              child: Text(
-                'Description: ${event.desc}',
-                textAlign: TextAlign.center,
-                style: textStyle,
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              child: Text(
-                'Time: $startDate @ $startTime - $endTime',
-                textAlign: TextAlign.center,
-                style: textStyle,
-              ),
-            ),
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              child: Text(
-                'Location: ${event.location}',
-                textAlign: TextAlign.center,
-                style: textStyle,
-              ),
-            ),
-          ),
+          _cardLabel('Title: ${event.title}'),
+          _cardLabel('Description: ${event.desc}'),
+          _cardLabel('Time: $startDate @ $startTime - $endTime'),
+          _cardLabel('Location: ${event.location}'),
         ],
+      ),
+    );
+  }
+
+  //* Private Methods
+  Widget _cardLabel(String label) {
+    return Container(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: kcTextPrimaryColor,
+            fontSize: 15,
+            fontFamily: 'Hind Siliguri',
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.07,
+          ),
+        ),
       ),
     );
   }
