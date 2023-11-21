@@ -16,13 +16,13 @@ import '../ui/dialogs/info_alert/info_alert_dialog.dart';
 import '../ui/views/create_event/create_event_view.dart';
 import '../ui/views/create_profile/create_profile_view.dart';
 import '../ui/views/create_study_group/create_study_group_view.dart';
+import '../ui/views/event_detail/event_detail_view.dart';
 import '../ui/views/events/events_view.dart';
 import '../ui/views/home/home_view.dart';
 import '../ui/views/login/login_view.dart';
 import '../ui/views/profile/profile_view.dart';
 import '../ui/views/startup/startup_view.dart';
 import '../ui/views/study_groups/study_groups_view.dart';
-import 'package:meuni_mobile/ui/views/event_detail/event_detail_view.dart';
 // @stacked-import
 
 @StackedApp(

@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:recase/recase.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../common/app_colors.dart';
-import 'package:recase/recase.dart';
 import '../../common/ui_helpers.dart';
-
 import 'profile_viewmodel.dart';
 
 class ProfileView extends StackedView<ProfileViewModel> {
