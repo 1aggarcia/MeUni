@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../common/app_colors.dart';
+import 'package:recase/recase.dart';
 import '../../common/ui_helpers.dart';
 
 import 'profile_viewmodel.dart';
@@ -12,62 +14,43 @@ class ProfileView extends StackedView<ProfileViewModel> {
 
   @override
   Widget builder(
-    BuildContext context,
-    ProfileViewModel viewModel,
-    Widget? child,
-  ) {
+      BuildContext context, ProfileViewModel viewModel, Widget? child) {
     const labelTextStyle = TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w700,
-    );
-
-    const infoTextStyle = TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.w700,
     );
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: Container(
-        padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-        child: SingleChildScrollView(
+    const infoTextStyle = TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w700,
+    );
+
+    return Container(
+      padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+      child: SingleChildScrollView(
+        child: Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              verticalSpaceMedium,
-
-              // First Name
-              const Text(
-                'First Name',
-                style: labelTextStyle,
-              ),
-              verticalSpaceSmall,
-              Text(
-                viewModel.firstName,
-                style: infoTextStyle,
+              CircleAvatar(
+                radius: 60,
+                backgroundColor: kcMediumGrey.withAlpha(150),
+                child: const Icon(
+                  Icons.person_2_outlined,
+                  color: kcPrimaryColor,
+                  size: 90,
+                ),
               ),
               verticalSpaceMedium,
 
-              // Last Name
-              const Text(
-                'Last Name',
+              // Name
+              Text(
+                '${viewModel.firstName.titleCase} ${viewModel.lastName.titleCase}',
                 style: labelTextStyle,
               ),
-              verticalSpaceSmall,
-              Text(
-                viewModel.lastName,
-                style: infoTextStyle,
-              ),
-              verticalSpaceMedium,
 
               // Pronouns
-              const Text(
-                'Pronouns',
-                style: labelTextStyle,
-              ),
-              verticalSpaceSmall,
               Text(
-                viewModel.pronouns,
+                '(${viewModel.pronouns})',
                 style: infoTextStyle,
               ),
               verticalSpaceMedium,
