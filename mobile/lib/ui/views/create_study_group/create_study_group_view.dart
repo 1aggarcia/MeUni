@@ -4,7 +4,6 @@ import 'package:stacked/stacked_annotations.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
-import '../../widgets/text_input.dart';
 import 'create_study_group_view.form.dart';
 import 'create_study_group_viewmodel.dart';
 
@@ -41,17 +40,6 @@ class CreateStudyGroupView extends StackedView<CreateStudyGroupViewModel>
   @override
   Widget builder(BuildContext context, CreateStudyGroupViewModel viewModel,
       Widget? child) {
-    const labelTextStyle = TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w700,
-    );
-
-    const errorTextStyle = TextStyle(
-      color: kcTextErrorColor,
-      fontSize: 12,
-      fontWeight: FontWeight.w700,
-    );
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(title: const Text('Create Study Group')),
@@ -66,60 +54,47 @@ class CreateStudyGroupView extends StackedView<CreateStudyGroupViewModel>
                       verticalSpaceMedium,
 
                       // StudyGroup Course Name
-                      TextInput(
-                        label: 'Study Group Course Name',
-                        placeholder: 'Course Name',
-                        labelTextStyle: labelTextStyle,
-                        errorTextStyle: errorTextStyle,
+                      TextFormField(
                         controller: studyGroupCourseController,
-                        hasValidationMessage:
-                            viewModel.hasStudyGroupCourseValidationMessage,
-                        validationMessage:
-                            viewModel.studyGroupCourseValidationMessage,
+                        decoration: InputDecoration(
+                          labelText: 'Study Group Course Name',
+                          errorText:
+                              viewModel.studyGroupCourseValidationMessage,
+                        ),
                       ),
 
                       verticalSpaceSmall,
 
                       // Study Group Description
-                      TextInput(
-                        label: 'Study Group Description',
-                        placeholder: 'Description',
-                        labelTextStyle: labelTextStyle,
-                        errorTextStyle: errorTextStyle,
+                      TextFormField(
                         controller: studyGroupDescriptionController,
-                        hasValidationMessage:
-                            viewModel.hasStudyGroupDescriptionValidationMessage,
-                        validationMessage:
-                            viewModel.studyGroupDescriptionValidationMessage,
+                        decoration: InputDecoration(
+                          labelText: 'Study Group Description',
+                          errorText:
+                              viewModel.studyGroupDescriptionValidationMessage,
+                        ),
                       ),
 
                       verticalSpaceSmall,
 
                       // Study Group Location
-                      TextInput(
-                        label: 'Study Group Location',
-                        placeholder: 'Location',
-                        labelTextStyle: labelTextStyle,
-                        errorTextStyle: errorTextStyle,
+                      TextFormField(
                         controller: studyGroupLocationController,
-                        hasValidationMessage:
-                            viewModel.hasStudyGroupLocationValidationMessage,
-                        validationMessage:
-                            viewModel.studyGroupLocationValidationMessage,
+                        decoration: InputDecoration(
+                          labelText: 'Study Group Location',
+                          errorText:
+                              viewModel.studyGroupLocationValidationMessage,
+                        ),
                       ),
 
                       verticalSpaceSmall,
 
                       // Study Group Date
-                      const Text(
-                        'Study Group Date (yyyy-mm-dd)',
-                        style: labelTextStyle,
-                      ),
-                      verticalSpaceSmall,
                       TextFormField(
                         controller: studyGroupDateController,
-                        decoration: const InputDecoration(
-                          labelText: 'Date',
+                        decoration: InputDecoration(
+                          labelText: 'Study Group Date',
+                          errorText: viewModel.studyGroupDateValidationMessage,
                         ),
                         onTap: () async {
                           DateTime? picked = await showDatePicker(
@@ -134,26 +109,16 @@ class CreateStudyGroupView extends StackedView<CreateStudyGroupViewModel>
                           }
                         },
                       ),
-                      if (viewModel.hasStudyGroupDateValidationMessage) ...[
-                        verticalSpaceTiny,
-                        Text(
-                          viewModel.studyGroupDateValidationMessage!,
-                          style: errorTextStyle,
-                        ),
-                      ],
 
                       verticalSpaceSmall,
 
                       // Study Group Start Time
-                      const Text(
-                        'Study Group Start Time',
-                        style: labelTextStyle,
-                      ),
-                      verticalSpaceSmall,
                       TextFormField(
                         controller: studyGroupStartTimeController,
-                        decoration: const InputDecoration(
-                          labelText: 'Start Time',
+                        decoration: InputDecoration(
+                          labelText: 'Study Group Start Time',
+                          errorText:
+                              viewModel.studyGroupStartTimeValidationMessage,
                         ),
                         onTap: () async {
                           TimeOfDay time = TimeOfDay.now();
@@ -170,27 +135,16 @@ class CreateStudyGroupView extends StackedView<CreateStudyGroupViewModel>
                           }
                         },
                       ),
-                      if (viewModel
-                          .hasStudyGroupStartTimeValidationMessage) ...[
-                        verticalSpaceTiny,
-                        Text(
-                          viewModel.studyGroupStartTimeValidationMessage!,
-                          style: errorTextStyle,
-                        ),
-                      ],
 
                       verticalSpaceSmall,
 
                       // Study Group End Time
-                      const Text(
-                        'Study Group End Time',
-                        style: labelTextStyle,
-                      ),
-                      verticalSpaceSmall,
                       TextFormField(
                         controller: studyGroupEndTimeController,
-                        decoration: const InputDecoration(
-                          labelText: 'End Time',
+                        decoration: InputDecoration(
+                          labelText: 'Study Group End Time',
+                          errorText:
+                              viewModel.studyGroupEndTimeValidationMessage,
                         ),
                         onTap: () async {
                           TimeOfDay time = TimeOfDay.now();
@@ -207,13 +161,6 @@ class CreateStudyGroupView extends StackedView<CreateStudyGroupViewModel>
                           }
                         },
                       ),
-                      if (viewModel.hasStudyGroupEndTimeValidationMessage) ...[
-                        verticalSpaceTiny,
-                        Text(
-                          viewModel.studyGroupEndTimeValidationMessage!,
-                          style: errorTextStyle,
-                        ),
-                      ],
 
                       verticalSpaceSmall,
 
@@ -224,7 +171,7 @@ class CreateStudyGroupView extends StackedView<CreateStudyGroupViewModel>
                             await viewModel.addStudyGroupAsync(),
                         child: const Text(
                           'Add Study Group',
-                          style: TextStyle(color: kcTextAccentColor),
+                          style: TextStyle(color: kcSecondaryColor),
                         ),
                       ),
                     ],

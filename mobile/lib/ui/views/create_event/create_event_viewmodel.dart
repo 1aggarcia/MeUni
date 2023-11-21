@@ -13,9 +13,6 @@ class CreateEventViewModel extends FormViewModel {
 
   final _navService = locator<NavigationService>();
 
-  //* Public Properties
-  bool isLoading = false;
-
   //* Public Methods
   Future addEventAsync() async {
     if (isFormValid) {
@@ -48,12 +45,8 @@ class CreateEventViewModel extends FormViewModel {
         attendees: [],
       );
 
-      isLoading = true;
-      rebuildUi();
+      await runBusyFuture(_eventsRepo.addEventAsync(event));
 
-      await _eventsRepo.addEventAsync(event);
-
-      isLoading = false;
       goToPrevPage();
     }
   }

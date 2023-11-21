@@ -37,26 +37,30 @@ class EventsView extends StackedView<EventsViewModel> {
           else if (viewModel.events.isEmpty)
             _noEventIndicator()
           else
-            ListView.separated(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemBuilder: (_, index) {
-                return GestureDetector(
-                  onTap: () async => viewModel.goToEventDetailPageAsync(index),
-                  child: EventCard(
-                    event: viewModel.events[index],
-                  ),
-                );
-              },
-              separatorBuilder: (_, __) => verticalSpaceMedium,
-              itemCount: viewModel.events.length,
+            Expanded(
+              child: ListView.separated(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemBuilder: (_, index) {
+                  return GestureDetector(
+                    onTap: () async =>
+                        viewModel.goToEventDetailPageAsync(index),
+                    child: EventCard(
+                      event: viewModel.events[index],
+                    ),
+                  );
+                },
+                separatorBuilder: (_, __) => verticalSpaceMedium,
+                itemCount: viewModel.events.length,
+              ),
             ),
 
           verticalSpaceMedium,
           RoundButton(
             label: 'Add an Event',
             onPressed: () async => await viewModel.goToCreateEventPageAsync(),
-          )
+          ),
+          verticalSpaceSmall,
         ],
       ),
     );

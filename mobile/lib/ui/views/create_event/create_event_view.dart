@@ -4,7 +4,7 @@ import 'package:stacked/stacked_annotations.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
-import '../../widgets/text_input.dart';
+import '../../widgets/loading_indicator.dart';
 import 'create_event_view.form.dart';
 import 'create_event_viewmodel.dart';
 
@@ -41,119 +41,86 @@ class CreateEventView extends StackedView<CreateEventViewModel>
   @override
   Widget builder(
       BuildContext context, CreateEventViewModel viewModel, Widget? child) {
-    const labelTextStyle = TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w700,
-    );
-
-    const errorTextStyle = TextStyle(
-      color: kcTextErrorColor,
-      fontSize: 12,
-      fontWeight: FontWeight.w700,
-    );
-
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: const Text('Create Event')),
-        body: viewModel.isLoading
-            ? const Text('Loading...')
+        appBar: AppBar(
+          title: const Text('Create Event'),
+          backgroundColor: kcPrimaryColor,
+        ),
+        backgroundColor: kcBackgroundColor,
+        body: viewModel.isBusy
+            ? const LoadingIndicator(loadingText: 'Creating Event')
             : Container(
                 padding: const EdgeInsets.only(left: 25.0, right: 25.0),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      verticalSpaceMedium,
-
                       // Event Name
-                      TextInput(
-                        label: 'Event Name',
-                        placeholder: 'Name',
-                        labelTextStyle: labelTextStyle,
-                        errorTextStyle: errorTextStyle,
+                      TextFormField(
                         controller: eventNameController,
-                        hasValidationMessage:
-                            viewModel.hasEventNameValidationMessage,
-                        validationMessage: viewModel.eventNameValidationMessage,
+                        decoration: InputDecoration(
+                          labelText: 'Event Name',
+                          errorText: viewModel.eventNameValidationMessage,
+                        ),
                       ),
 
                       verticalSpaceSmall,
 
                       // Event Description
-                      TextInput(
-                        label: 'Event Description',
-                        placeholder: 'Description',
-                        labelTextStyle: labelTextStyle,
-                        errorTextStyle: errorTextStyle,
+                      TextFormField(
                         controller: eventDescriptionController,
-                        hasValidationMessage:
-                            viewModel.hasEventDescriptionValidationMessage,
-                        validationMessage:
-                            viewModel.eventDescriptionValidationMessage,
+                        decoration: InputDecoration(
+                          labelText: 'Event Description',
+                          errorText:
+                              viewModel.eventDescriptionValidationMessage,
+                        ),
                       ),
 
                       verticalSpaceSmall,
 
                       // Event Location
-                      TextInput(
-                        label: 'Event Location',
-                        placeholder: 'Location',
-                        labelTextStyle: labelTextStyle,
-                        errorTextStyle: errorTextStyle,
+                      TextFormField(
                         controller: eventLocationController,
-                        hasValidationMessage:
-                            viewModel.hasEventLocationValidationMessage,
-                        validationMessage:
-                            viewModel.eventLocationValidationMessage,
+                        decoration: InputDecoration(
+                          labelText: 'Event Location',
+                          errorText: viewModel.eventLocationValidationMessage,
+                        ),
                       ),
 
                       verticalSpaceSmall,
 
                       // Event Date
-                      const Text(
-                        'Event Date (yyyy-mm-dd)',
-                        style: labelTextStyle,
-                      ),
-                      verticalSpaceSmall,
                       TextFormField(
                         controller: eventDateController,
-                        decoration: const InputDecoration(
-                          labelText: 'Date',
+                        decoration: InputDecoration(
+                          labelText: 'Event Date',
+                          errorText: viewModel.eventDateValidationMessage,
                         ),
                         onTap: () async {
                           DateTime? picked = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
                             firstDate: DateTime.now(),
-                            lastDate:
-                                DateTime.now().add(const Duration(days: 365)),
+                            lastDate: DateTime.now().add(
+                              const Duration(days: 365),
+                            ),
                           );
                           if (picked != null) {
                             eventDateController.text = picked.toString();
                           }
                         },
                       ),
-                      if (viewModel.hasEventDateValidationMessage) ...[
-                        verticalSpaceTiny,
-                        Text(
-                          viewModel.eventDateValidationMessage!,
-                          style: errorTextStyle,
-                        ),
-                      ],
 
                       verticalSpaceSmall,
 
                       // Event Start Time
-                      const Text(
-                        'Event Start Time',
-                        style: labelTextStyle,
-                      ),
-                      verticalSpaceSmall,
                       TextFormField(
                         controller: eventStartTimeController,
-                        decoration: const InputDecoration(
-                          labelText: 'Start Time',
-                        ),
+                        decoration: InputDecoration(
+                            labelText: 'Event Start Time',
+                            errorText:
+                                viewModel.eventStartTimeValidationMessage),
                         onTap: () async {
                           TimeOfDay time = TimeOfDay.now();
                           FocusScope.of(context).requestFocus(FocusNode());
@@ -169,26 +136,15 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                           }
                         },
                       ),
-                      if (viewModel.hasEventStartTimeValidationMessage) ...[
-                        verticalSpaceTiny,
-                        Text(
-                          viewModel.eventStartTimeValidationMessage!,
-                          style: errorTextStyle,
-                        ),
-                      ],
 
                       verticalSpaceSmall,
 
                       // Event End Time
-                      const Text(
-                        'Event End Time',
-                        style: labelTextStyle,
-                      ),
-                      verticalSpaceSmall,
                       TextFormField(
                         controller: eventEndTimeController,
-                        decoration: const InputDecoration(
-                          labelText: 'End Time',
+                        decoration: InputDecoration(
+                          labelText: 'Event End Time',
+                          errorText: viewModel.eventEndTimeValidationMessage,
                         ),
                         onTap: () async {
                           TimeOfDay time = TimeOfDay.now();
@@ -205,23 +161,19 @@ class CreateEventView extends StackedView<CreateEventViewModel>
                           }
                         },
                       ),
-                      if (viewModel.hasEventEndTimeValidationMessage) ...[
-                        verticalSpaceTiny,
-                        Text(
-                          viewModel.eventEndTimeValidationMessage!,
-                          style: errorTextStyle,
-                        ),
-                      ],
 
                       verticalSpaceSmall,
 
                       // Add Event Button
                       MaterialButton(
                         color: kcPrimaryColor,
-                        onPressed: () async => await viewModel.addEventAsync(),
+                        disabledColor: kcPrimaryColor.withAlpha(100),
+                        onPressed: viewModel.isFormValid
+                            ? () async => await viewModel.addEventAsync()
+                            : null,
                         child: const Text(
                           'Add Event',
-                          style: TextStyle(color: kcTextAccentColor),
+                          style: TextStyle(color: kcSecondaryColor),
                         ),
                       ),
                     ],
