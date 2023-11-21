@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/event.dart';
+import '../common/app_colors.dart';
 
 class EventCard extends StatelessWidget {
   //* Public Properties
@@ -18,7 +19,7 @@ class EventCard extends StatelessWidget {
     final endTime = DateFormat.jm().format(event.endTime);
 
     const textStyle = TextStyle(
-      color: Colors.black,
+      color: kcTextPrimaryColor,
       fontSize: 15,
       fontFamily: 'Hind Siliguri',
       fontWeight: FontWeight.w600,
@@ -27,7 +28,7 @@ class EventCard extends StatelessWidget {
 
     return Container(
       decoration: ShapeDecoration(
-        color: Colors.white,
+        color: kcSecondaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),

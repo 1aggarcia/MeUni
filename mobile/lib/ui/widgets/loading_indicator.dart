@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../common/app_colors.dart';
 import '../common/ui_helpers.dart';
 
 class LoadingIndicator extends StatelessWidget {
@@ -22,13 +23,13 @@ class LoadingIndicator extends StatelessWidget {
           Text(
             '$loadingText...',
             style: const TextStyle(
-              color: Color(0xFF685050),
+              color: kcTextAccentColor,
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
           verticalSpaceMedium,
-          const CircularProgressIndicator(color: Color(0xFF685050)),
+          const CircularProgressIndicator(color: kcTextAccentColor),
         ],
       ),
     );

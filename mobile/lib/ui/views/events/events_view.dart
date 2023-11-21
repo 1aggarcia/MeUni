@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
 import '../../widgets/event_card.dart';
 import '../../widgets/loading_indicator.dart';
@@ -69,7 +70,7 @@ class EventsView extends StackedView<EventsViewModel> {
           Text(
             'No Events',
             style: TextStyle(
-              color: Color(0xFF685050),
+              color: kcTextAccentColor,
               fontSize: 24,
               fontWeight: FontWeight.w600,
             ),

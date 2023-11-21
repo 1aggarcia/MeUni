@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../common/app_colors.dart';
+
 class RoundButton extends StatelessWidget {
   //* Public Properties
   final String label;
@@ -18,10 +20,10 @@ class RoundButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(15),
         backgroundColor: const Color(0xFF00004D),
         disabledBackgroundColor: const Color(0xFF00004D).withAlpha(120),
-        foregroundColor: Colors.white,
+        foregroundColor: kcSecondaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         ),
@@ -29,7 +31,7 @@ class RoundButton extends StatelessWidget {
       child: Text(
         label,
         style: const TextStyle(
-          color: Colors.white,
+          color: kcSecondaryColor,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),

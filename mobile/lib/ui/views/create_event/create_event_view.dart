@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
 import '../../widgets/text_input.dart';
 import 'create_event_view.form.dart';
@@ -46,7 +47,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
     );
 
     const errorTextStyle = TextStyle(
-      color: Colors.red,
+      color: kcTextErrorColor,
       fontSize: 12,
       fontWeight: FontWeight.w700,
     );
@@ -216,11 +217,11 @@ class CreateEventView extends StackedView<CreateEventViewModel>
 
                       // Add Event Button
                       MaterialButton(
-                        color: Colors.black,
+                        color: kcPrimaryColor,
                         onPressed: () async => await viewModel.addEventAsync(),
                         child: const Text(
                           'Add Event',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: kcTextAccentColor),
                         ),
                       ),
                     ],

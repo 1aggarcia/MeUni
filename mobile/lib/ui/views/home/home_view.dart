@@ -20,7 +20,7 @@ class HomeView extends StackedView<HomeViewModel> {
           title: const Text(
             'MeUni',
             style: TextStyle(
-              color: Color(0xFF685050),
+              color: kcTextAccentColor,
               fontSize: 36,
               fontWeight: FontWeight.bold,
             ),
@@ -30,22 +30,28 @@ class HomeView extends StackedView<HomeViewModel> {
         body: _getViewForIndex(viewModel.currentIndex),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: const Color(0xFFB5A8A0),
+          backgroundColor: kcMediumGrey,
           currentIndex: viewModel.currentIndex,
-          selectedItemColor: Colors.orange[700],
-          unselectedItemColor: const Color(0xFF00004D),
+          selectedItemColor: kcTextAccentColor,
+          unselectedItemColor: kcPrimaryColor,
           onTap: viewModel.setIndex,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: viewModel.currentIndex == 0
+                  ? const Icon(Icons.home)
+                  : const Icon(Icons.home_outlined),
               label: 'Events',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.book_outlined),
+              icon: viewModel.currentIndex == 1
+                  ? const Icon(Icons.book)
+                  : const Icon(Icons.book_outlined),
               label: 'Study Groups',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
+              icon: viewModel.currentIndex == 2
+                  ? const Icon(Icons.person)
+                  : const Icon(Icons.person_outline),
               label: 'Profile',
             ),
           ],

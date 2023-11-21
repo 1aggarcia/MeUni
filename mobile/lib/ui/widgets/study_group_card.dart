@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/study_group.dart';
+import '../common/app_colors.dart';
 import '../common/ui_helpers.dart';
 
 class StudyGroupCard extends StatelessWidget {
@@ -19,7 +20,7 @@ class StudyGroupCard extends StatelessWidget {
     final endTime = DateFormat.jm().format(studyGroup.endTime);
 
     const textStyle = TextStyle(
-      color: Colors.black,
+      color: kcTextPrimaryColor,
       fontSize: 15,
       fontFamily: 'Hind Siliguri',
       fontWeight: FontWeight.w600,
@@ -31,7 +32,7 @@ class StudyGroupCard extends StatelessWidget {
         verticalSpaceLarge,
         Container(
           decoration: ShapeDecoration(
-            color: Colors.white,
+            color: kcBackgroundColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),

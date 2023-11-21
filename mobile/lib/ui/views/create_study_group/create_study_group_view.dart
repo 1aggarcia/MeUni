@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
 import '../../widgets/text_input.dart';
 import 'create_study_group_view.form.dart';
@@ -46,7 +47,7 @@ class CreateStudyGroupView extends StackedView<CreateStudyGroupViewModel>
     );
 
     const errorTextStyle = TextStyle(
-      color: Colors.red,
+      color: kcTextErrorColor,
       fontSize: 12,
       fontWeight: FontWeight.w700,
     );
@@ -218,12 +219,12 @@ class CreateStudyGroupView extends StackedView<CreateStudyGroupViewModel>
 
                       // Add Study Group Button
                       MaterialButton(
-                        color: Colors.black,
+                        color: kcTextPrimaryColor,
                         onPressed: () async =>
                             await viewModel.addStudyGroupAsync(),
                         child: const Text(
                           'Add Study Group',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: kcTextAccentColor),
                         ),
                       ),
                     ],

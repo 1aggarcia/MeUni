@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
+import '../../widgets/loading_indicator.dart';
 import 'create_profile_view.form.dart';
 import 'create_profile_viewmodel.dart';
 
@@ -25,24 +27,10 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
   Widget builder(
       BuildContext context, CreateProfileViewModel viewModel, Widget? child) {
     return Scaffold(
+      backgroundColor: kcBackgroundColor,
       body: SafeArea(
         child: viewModel.isBusy
-            ? const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Creating Profile ...',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    verticalSpaceMedium,
-                    CircularProgressIndicator(),
-                  ],
-                ),
-              )
+            ? const LoadingIndicator(loadingText: 'Creating Profile')
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
@@ -61,9 +49,10 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
                     GestureDetector(
                       child: CircleAvatar(
                         radius: 60,
-                        backgroundColor: Colors.grey[300],
+                        backgroundColor: kcMediumGrey.withAlpha(150),
                         child: const Icon(
                           Icons.add_a_photo,
+                          color: kcPrimaryColor,
                           size: 50,
                         ),
                       ),
@@ -99,7 +88,7 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
                       Text(
                         viewModel.yearValidationMessage!,
                         style: const TextStyle(
-                          color: Colors.red,
+                          color: kcTextErrorColor,
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),
@@ -118,6 +107,7 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
 
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: kcPrimaryColor,
                         minimumSize: const Size(double.infinity, 50),
                       ),
                       onPressed: () async =>
