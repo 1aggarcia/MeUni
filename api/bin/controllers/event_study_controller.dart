@@ -54,12 +54,12 @@ class EventStudyController extends Controller {
 
   // POST /
   Future<Response> createHandler(Request request) async {
-    // TODO: throw away attendee lists
     String body = await request.readAsString();
 
     try {
       Event? event = eventFromJson(body);
       if (event != null) {
+        event.attendees.clear(); // new events shouldn't have attendees
         String newId = await _eventsRepo.addEventAsync(event);
         return Response.ok(newId);
       } else {
