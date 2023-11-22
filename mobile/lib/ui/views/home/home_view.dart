@@ -10,6 +10,10 @@ import 'home_viewmodel.dart';
 class HomeView extends StackedView<HomeViewModel> {
   const HomeView({Key? key}) : super(key: key);
 
+  //* Overridden Methods
+  @override
+  HomeViewModel viewModelBuilder(BuildContext context) => HomeViewModel();
+
   @override
   Widget builder(BuildContext context, HomeViewModel viewModel, Widget? child) {
     return SafeArea(
@@ -60,19 +64,20 @@ class HomeView extends StackedView<HomeViewModel> {
     );
   }
 
-  @override
-  HomeViewModel viewModelBuilder(BuildContext context) => HomeViewModel();
-
+  //* Private Methods
   Widget _getViewForIndex(int index) {
     switch (index) {
       case 0:
         return const EventsView();
+
       case 1:
         return const StudyGroupsView();
+
       case 2:
         return const ProfileView();
-    }
 
-    return const Placeholder();
+      default:
+        return const Placeholder();
+    }
   }
 }

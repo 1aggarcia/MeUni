@@ -15,18 +15,19 @@ class LoginViewModel extends BaseViewModel {
   Future<void> signInWithGoogleAsync() async {
     setBusy(true);
 
-    if (!(await _authService.loginAsync())) {
-      // Login Failed
-      await _dialogService.showDialog(
-        title: 'Error!',
-        description: 'Please try again another time.',
-      );
-    } else {
+    if (await _authService.loginAsync()) {
+      // Login Success!
       if (_authService.isLoggedIn) {
         await _navService.replaceWithHomeView();
       } else {
         await _navService.replaceWithCreateProfileView();
       }
+    } else {
+      // Login Failed
+      await _dialogService.showDialog(
+        title: 'Error!',
+        description: 'Please try again another time.',
+      );
     }
 
     setBusy(false);

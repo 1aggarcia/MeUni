@@ -24,6 +24,20 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
 
   //* Overridden Methods
   @override
+  CreateProfileViewModel viewModelBuilder(BuildContext context) =>
+      CreateProfileViewModel();
+
+  @override
+  void onViewModelReady(CreateProfileViewModel viewModel) =>
+      syncFormWithViewModel(viewModel);
+
+  @override
+  void onDispose(CreateProfileViewModel viewModel) {
+    super.onDispose(viewModel);
+    disposeForm();
+  }
+
+  @override
   Widget builder(
       BuildContext context, CreateProfileViewModel viewModel, Widget? child) {
     return Scaffold(
@@ -81,19 +95,11 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
                     TextFormField(
                       controller: yearController,
                       // keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Year'),
-                    ),
-                    if (viewModel.hasYearValidationMessage) ...[
-                      verticalSpaceTiny,
-                      Text(
-                        viewModel.yearValidationMessage!,
-                        style: const TextStyle(
-                          color: kcTextErrorColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      decoration: InputDecoration(
+                        labelText: 'Year',
+                        errorText: viewModel.yearValidationMessage,
                       ),
-                    ],
+                    ),
 
                     verticalSpaceSmall,
 
@@ -119,20 +125,5 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
               ),
       ),
     );
-  }
-
-  @override
-  CreateProfileViewModel viewModelBuilder(BuildContext context) =>
-      CreateProfileViewModel();
-
-  @override
-  void onViewModelReady(CreateProfileViewModel viewModel) {
-    syncFormWithViewModel(viewModel);
-  }
-
-  @override
-  void onDispose(CreateProfileViewModel viewModel) {
-    super.onDispose(viewModel);
-    disposeForm();
   }
 }

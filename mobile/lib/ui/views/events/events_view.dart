@@ -11,6 +11,7 @@ import 'events_viewmodel.dart';
 class EventsView extends StackedView<EventsViewModel> {
   const EventsView({Key? key}) : super(key: key);
 
+  //* Overridden Methods
   @override
   EventsViewModel viewModelBuilder(BuildContext context) => EventsViewModel();
 
@@ -66,6 +67,7 @@ class EventsView extends StackedView<EventsViewModel> {
     );
   }
 
+  //* Private Methods
   Widget _noEventIndicator() {
     return const Center(
       child: Row(

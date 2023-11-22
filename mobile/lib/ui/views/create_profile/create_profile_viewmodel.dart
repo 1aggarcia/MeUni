@@ -14,16 +14,12 @@ class CreateProfileViewModel extends FormViewModel {
   //* Public Methods
   Future createProfileAsync() async {
     if (isFormValid) {
-      setBusy(true);
-
-      await _authService.signupAsync(
+      await runBusyFuture(_authService.signupAsync(
         firstNameValue!,
         lastNameValue!,
         int.parse(yearValue!),
         pronounsValue!,
-      );
-
-      setBusy(false);
+      ));
 
       await _navService.replaceWithHomeView();
     }

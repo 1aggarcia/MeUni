@@ -9,11 +9,16 @@ class StartupView extends StackedView<StartupViewModel> {
   const StartupView({Key? key}) : super(key: key);
 
   @override
+  StartupViewModel viewModelBuilder(BuildContext context) => StartupViewModel();
+
+  @override
+  void onViewModelReady(StartupViewModel viewModel) =>
+      SchedulerBinding.instance.addPostFrameCallback(
+          (timeStamp) async => await viewModel.runStartupLogic());
+
+  @override
   Widget builder(
-    BuildContext context,
-    StartupViewModel viewModel,
-    Widget? child,
-  ) {
+      BuildContext context, StartupViewModel viewModel, Widget? child) {
     return Scaffold(
       backgroundColor: kcBackgroundColor,
       body: Center(
@@ -21,12 +26,4 @@ class StartupView extends StackedView<StartupViewModel> {
       ),
     );
   }
-
-  @override
-  StartupViewModel viewModelBuilder(BuildContext context) => StartupViewModel();
-
-  @override
-  void onViewModelReady(StartupViewModel viewModel) =>
-      SchedulerBinding.instance.addPostFrameCallback(
-          (timeStamp) async => await viewModel.runStartupLogic());
 }

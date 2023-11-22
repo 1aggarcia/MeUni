@@ -1,28 +1,41 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:recase/recase.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
+import '../../widgets/loading_indicator.dart';
+import '../../widgets/round_button.dart';
 import 'profile_viewmodel.dart';
 
 class ProfileView extends StackedView<ProfileViewModel> {
+  //* Private Properties
+  final _labelTextStyle = const TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+  );
+
+  final _infoTextStyle = const TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+  );
+
+  //* Constructors
   const ProfileView({Key? key}) : super(key: key);
+
+  //* Overridden Methods
+  @override
+  ProfileViewModel viewModelBuilder(BuildContext context) => ProfileViewModel();
+
+  @override
+  void onViewModelReady(ProfileViewModel viewModel) async =>
+      await viewModel.getClassesAsync();
 
   @override
   Widget builder(
       BuildContext context, ProfileViewModel viewModel, Widget? child) {
-    const labelTextStyle = TextStyle(
-      fontSize: 24,
-      fontWeight: FontWeight.w700,
-    );
-
-    const infoTextStyle = TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w700,
-    );
+    final fullName = '${viewModel.user.firstName.titleCase} '
+        '${viewModel.user.lastName.titleCase}';
 
     return Container(
       padding: const EdgeInsets.only(left: 25.0, right: 25.0),
@@ -43,49 +56,38 @@ class ProfileView extends StackedView<ProfileViewModel> {
 
               // Name
               Text(
-                '${viewModel.firstName.titleCase} ${viewModel.lastName.titleCase}',
-                style: labelTextStyle,
+                fullName,
+                style: _labelTextStyle,
               ),
 
               // Pronouns
               Text(
-                '(${viewModel.pronouns})',
-                style: infoTextStyle,
+                '(${viewModel.user.pronouns})',
+                style: _infoTextStyle,
               ),
               verticalSpaceMedium,
 
               // Year
-              const Text(
-                'Year',
-                style: labelTextStyle,
-              ),
-              verticalSpaceSmall,
-              Text(
-                viewModel.year.toString(),
-                style: infoTextStyle,
+              _fieldLabel(
+                label: 'Year',
+                value: viewModel.user.year.toString(),
               ),
               verticalSpaceMedium,
 
-              // Year
-              const Text(
-                'Classes',
-                style: labelTextStyle,
-              ),
-              verticalSpaceSmall,
-              Text(
-                viewModel.classes.toString(),
-                style: infoTextStyle,
-              ),
+              // Classes
+              viewModel.busy(viewModel.classes)
+                  ? const LoadingIndicator(loadingText: 'Fetching Classes')
+                  : _fieldLabel(
+                      label: 'Classes',
+                      value: viewModel.classes.toString(),
+                    ),
+
               verticalSpaceMedium,
 
-              MaterialButton(
-                color: Colors.black,
+              RoundButton(
+                label: 'Edit Profile',
                 onPressed: () async => (),
-                child: const Text(
-                  'Edit Profile',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+              )
             ],
           ),
         ),
@@ -93,10 +95,20 @@ class ProfileView extends StackedView<ProfileViewModel> {
     );
   }
 
-  @override
-  ProfileViewModel viewModelBuilder(BuildContext context) {
-    ProfileViewModel model = ProfileViewModel();
-    unawaited(model.getClassesAsync());
-    return model;
+  //* Private Methods
+  Widget _fieldLabel({required String label, required String value}) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: _labelTextStyle,
+        ),
+        verticalSpaceSmall,
+        Text(
+          value,
+          style: _infoTextStyle,
+        ),
+      ],
+    );
   }
 }

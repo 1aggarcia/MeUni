@@ -1,28 +1,30 @@
 import 'package:stacked/stacked.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../models/user.dart';
 import '../../../repository/users_repo.dart';
 import '../../../services/auth_service.dart';
 
 class ProfileViewModel extends BaseViewModel {
+  //* Private Properties
   final _usersRepo = locator<UsersRepo>();
-  final _authService = locator<AuthService>();
-  String get firstName => _authService.currUser.firstName;
-  String get lastName => _authService.currUser.lastName;
-  String get pronouns => _authService.currUser.pronouns;
-  int get year => _authService.currUser.year;
-  List<String> classes = [];
 
-  bool isLoading = false;
+  final _authService = locator<AuthService>();
+
+  //* Public Properties
+  List<String> classes = [];
+  late final User user;
+
+  //* Constructors
+  ProfileViewModel() {
+    user = _authService.currUser;
+  }
 
   //* Public Methods
   Future<void> getClassesAsync() async {
-    isLoading = true;
-    rebuildUi();
-
-    classes = await _usersRepo.getUserClasses(_authService.currUser.id);
-
-    isLoading = false;
-    rebuildUi();
+    classes = await runBusyFuture(
+      _usersRepo.getUserClasses(_authService.currUser.id),
+      busyObject: classes,
+    );
   }
 }

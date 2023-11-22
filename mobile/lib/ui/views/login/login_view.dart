@@ -10,6 +10,10 @@ import 'login_viewmodel.dart';
 class LoginView extends StackedView<LoginViewModel> {
   const LoginView({Key? key}) : super(key: key);
 
+  //* Overridden Methods
+  @override
+  LoginViewModel viewModelBuilder(BuildContext context) => LoginViewModel();
+
   @override
   Widget builder(
       BuildContext context, LoginViewModel viewModel, Widget? child) {
@@ -61,7 +65,4 @@ class LoginView extends StackedView<LoginViewModel> {
       ),
     );
   }
-
-  @override
-  LoginViewModel viewModelBuilder(BuildContext context) => LoginViewModel();
 }

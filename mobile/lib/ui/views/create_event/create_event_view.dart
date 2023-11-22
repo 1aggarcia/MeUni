@@ -38,6 +38,21 @@ class CreateEventView extends StackedView<CreateEventViewModel>
     with $CreateEventView {
   const CreateEventView({Key? key}) : super(key: key);
 
+  //* Overriden Methods
+  @override
+  CreateEventViewModel viewModelBuilder(BuildContext context) =>
+      CreateEventViewModel();
+
+  @override
+  void onViewModelReady(CreateEventViewModel viewModel) =>
+      syncFormWithViewModel(viewModel);
+
+  @override
+  void onDispose(CreateEventViewModel viewModel) {
+    super.onDispose(viewModel);
+    disposeForm();
+  }
+
   @override
   Widget builder(
       BuildContext context, CreateEventViewModel viewModel, Widget? child) {
@@ -51,7 +66,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
         body: viewModel.isBusy
             ? const LoadingIndicator(loadingText: 'Creating Event')
             : Container(
-                padding: const EdgeInsets.only(left: 25.0, right: 25.0),
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,20 +197,5 @@ class CreateEventView extends StackedView<CreateEventViewModel>
               ),
       ),
     );
-  }
-
-  //* Overriden Methods
-  @override
-  CreateEventViewModel viewModelBuilder(BuildContext context) =>
-      CreateEventViewModel();
-
-  @override
-  void onViewModelReady(CreateEventViewModel viewModel) =>
-      syncFormWithViewModel(viewModel);
-
-  @override
-  void onDispose(CreateEventViewModel viewModel) {
-    super.onDispose(viewModel);
-    disposeForm();
   }
 }
