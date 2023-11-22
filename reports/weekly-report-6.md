@@ -12,7 +12,9 @@
 - Progress on Frontend: Implement Google Authentication specific to UW domain, begin implementing UI-database processer connection for some pages 
 
 ### Issues
-- VSCode didn't work for 1 memeber, Dart extention was 
+- VSCode didn't work for 1 memeber, Dart extention was missing making debugging essentially impossible.
+- Issues with server deployment, Google Cloud requires billing to be set up, and there is another issue of unknown origin causing deployment to fail.
+- Main branch lost functionality of events page.
 
 ## Plans and Goals
 - Begin designing search algorithm
