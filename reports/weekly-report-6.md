@@ -85,9 +85,14 @@ None - no meeting this week
 - finish implementing UI for the 'Profile' page. (User-view and other people's view) 
 - finish implementing UI for chat function, friendliest, and conversation UI.
 ### Progress and Issues
-
+- The friendliest and chat feature has been temporarily paused, due to overcomplicate and time concerns. 
+- The bottom navigate bar to switch between "Home", "Save", "Going", "Profile" is partially fixed, but still needs to be optimized.
+- partially implement "Profile" page 
 
 ### Plans and Goals
+- optimized and finalize Bottom navigate bar to switch between "Home", "Save", "Going", "Profile"
+- optimized and finalized implemented UI for the 'Profile' page.
+- Push for final release!
 
 
 ## Jintae
