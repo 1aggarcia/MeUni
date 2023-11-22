@@ -85,7 +85,7 @@ class MockEventsRepo extends EventsRepo {
   Future<List<Event>> getEventsAsync() async {
     List<Event> list = [];
     _events.forEach((k, v) {
-      v.setId(k);
+      v.id = k;
       list.add(v);
     });
     return list;

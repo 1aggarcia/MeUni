@@ -1,9 +1,5 @@
 import 'dart:convert';
 
-import '../controllers/mock_users.dart';
-import 'user.dart';
-
-final List<User> mockUsers = MockUsersRepo().getMockUsers();
 final int maxCapacity = 15;
 
 class Event {
@@ -88,11 +84,11 @@ class Event {
         attendeeNames: attendeeNames);
   }
 
-  // Sets event id to given id
-  bool setId(String id) {
-    this.id = id;
-    return true;
-  }
+  // // Sets event id to given id
+  // bool setId(String id) {
+  //   this.id = id;
+  //   return true;
+  // }
 
   // TODO: create 2nd toJson for database, leave this for clients
 
@@ -157,7 +153,7 @@ List<Event> eventsFromMap(Map<String, dynamic> data) {
   data.forEach((k, v) {
     try {
       Event e = Event.fromJson(v);
-      e.setId(k);
+      e.id = k;
       events.add(e);
     } catch (e) {
       print('ERROR: eventsFromMap() $e');
@@ -170,17 +166,6 @@ List<Event> eventsFromMap(Map<String, dynamic> data) {
 /// @param userId - of desired user
 /// @returns first name of user with userId, or "[unknown user]" if unavaliable
 String userNamefromId(String userId) {
-  int i = 0;
-  User u = mockUsers[i];
-  // mockUsers will be exausted or desired user found
-  while (i < mockUsers.length && u.id != userId) {
-    u = mockUsers[i];
-    i++;
-  }
-
-  if (u.id == userId) {
-    return u.firstName;
-  } else {
     return '[unknown user]';
   }
 
@@ -193,4 +178,3 @@ String userNamefromId(String userId) {
 //     data.entries.map((entry) => MapEntry(entry.key.toString(), entry.value.toJson())),
 //   );
 // }
-}

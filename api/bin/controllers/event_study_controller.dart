@@ -8,23 +8,22 @@ import '../repository/events_repo.dart';
 import 'controller.dart';
 
 /// Only to be used within EventController or StudyGroupController
-class EventTemplateController extends Controller {
+class EventStudyController extends Controller {
   //* Private Properties
   final EventsRepo _eventsRepo;
+  final String _paramName;
 
-  EventTemplateController(this._eventsRepo);
+  EventStudyController(this._eventsRepo, this._paramName);
 
   //* Overriden Methods
   @override
   Router setUpRoutes(Router router, String endpoint) {
     return router
-      ..get('$endpoint/get', getEventsHandler)
-      ..post('$endpoint/create', postEventsHandler)
-      ..post('$endpoint/delete', deleteEventsHandler)
-      ..post('$endpoint/join',
-          (request) async => await joinEventsHandler(request, true))
-      ..post('$endpoint/unjoin',
-          (request) async => await joinEventsHandler(request, false));
+      ..get('$endpoint/get', getHandler)
+      ..post('$endpoint/create', createHandler)
+      ..post('$endpoint/delete', deleteHandler)
+      ..post('$endpoint/join', joinHandler)
+      ..post('$endpoint/unjoin', unjoinHandler);
   }
 
   //* Public API Methods
@@ -32,7 +31,7 @@ class EventTemplateController extends Controller {
   // GET /
   /// Optional id parameter
   /// Returns event with given id or list of all events, if param not included
-  Future<Response> getEventsHandler(Request request) async {
+  Future<Response> getHandler(Request request) async {
     Map<String, dynamic> params = request.url.queryParameters;
 
     if (params.containsKey('id')) {
@@ -42,7 +41,7 @@ class EventTemplateController extends Controller {
         if (event != null) {
           return Response.ok(eventToJson(event));
         } else {
-          throw Exception('Event was not found');
+          return Response(404);
         }
       } catch (e) {
         return Response(400);
@@ -54,7 +53,7 @@ class EventTemplateController extends Controller {
   }
 
   // POST /
-  Future<Response> postEventsHandler(Request request) async {
+  Future<Response> createHandler(Request request) async {
     String body = await request.readAsString();
 
     try {
@@ -70,7 +69,7 @@ class EventTemplateController extends Controller {
     }
   }
 
-  Future<Response> deleteEventsHandler(Request request) async {
+  Future<Response> deleteHandler(Request request) async {
     String json = await request.readAsString();
 
     try {
@@ -87,15 +86,24 @@ class EventTemplateController extends Controller {
     }
   }
 
+  Future<Response> joinHandler(Request request) {
+    return dualJoinHandler(request, true);
+  }
+
+  Future<Response> unjoinHandler(Request request) {
+    return dualJoinHandler(request, false);
+  }
+
+  /// Handles both join and unjoin requests
   /// joining = true indicates request to join,
   /// joining = false indicates request to unjoin
-  Future<Response> joinEventsHandler(Request request, bool joining) async {
+  Future<Response> dualJoinHandler(Request request, bool joining) async {
     String json = await request.readAsString();
 
     try {
       dynamic body = jsonDecode(json);
       String? userId = body['userId'];
-      String? eventId = body['eventId'];
+      String? eventId = body[_paramName];
       if (userId != null && eventId != null) {
         List<String>? result;
         if (joining) {
@@ -109,7 +117,7 @@ class EventTemplateController extends Controller {
           throw Exception('Event did not allow specified join operation');
         }
       } else {
-        throw Exception("Missing one or more params, 'userId', 'eventId'");
+        throw Exception("Missing one or more params, 'userId', '$_paramName'");
       }
     } catch (e) {
       return Response(400);

@@ -2,13 +2,16 @@ import 'package:shelf_router/shelf_router.dart';
 
 import '../repository/events_repo.dart';
 import 'controller.dart';
-import 'event_template.dart';
+import 'event_study_controller.dart';
 
-final _studyGroupsRepo = EventsRepoImpl('study_groups');
+// TODO: consider a generic name for this param
+final paramName = 'studyGroupId';
+final _studyGroupsRepo = EventsRepoImpl('study_groups', paramName);
 
 class StudyGroupController extends Controller {
   //* Private Properties
-  final EventTemplateController _controller = EventTemplateController(_studyGroupsRepo);
+  final EventStudyController _controller = 
+      EventStudyController(_studyGroupsRepo, paramName);
 
   //* Overriden Methods
   @override

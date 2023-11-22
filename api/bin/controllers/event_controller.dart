@@ -2,14 +2,15 @@ import 'package:shelf_router/shelf_router.dart';
 
 import '../repository/events_repo.dart';
 import 'controller.dart';
-import 'event_template.dart';
+import 'event_study_controller.dart';
 
-final _eventsRepo = EventsRepoImpl('events');
+final paramName = 'eventId';
+final _eventsRepo = EventsRepoImpl('events', paramName);
 
 class EventController extends Controller {
   //* Private Properties
-  final EventTemplateController _controller =
-      EventTemplateController(_eventsRepo);
+  final EventStudyController _controller =
+      EventStudyController(_eventsRepo, paramName);
 
   //* Overriden Methods
   @override

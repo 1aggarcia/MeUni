@@ -1,10 +1,11 @@
 import 'package:firebase_dart/database.dart';
 
-/// Module to manage a database reference as a user table, assigning users to string data,
+/// Service to manage a database reference as a user table, assigning users to string data,
 /// for example an event id or friend id
 class UserData {
   //* Private Properties
   final DatabaseReference _reference;
+  // TODO: refactor not to use _varName, just call it 'data'
   final String _varName;
 
   //* Constructors
