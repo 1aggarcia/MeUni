@@ -1,22 +1,19 @@
 import 'package:firebase_dart/database.dart';
 
-/// Service to manage a database reference as a user table, assigning users to string data,
-/// for example an event id or friend id
+/// Service to manage a database reference as a list of pairs, pairing user ids to string data
 class UserData {
   //* Private Properties
   final DatabaseReference _reference;
-  // TODO: refactor not to use _varName, just call it 'data'
-  final String _varName;
 
   //* Constructors
-  UserData(this._reference, this._varName);
+  UserData(this._reference);
 
   //* Public Methods
 
   /// Assigned given data to given user id
   /// @returns true if successful
   Future<bool> add(String userId, String data) async {
-    final pair = {'userId': userId, _varName: data};
+    final pair = {'userId': userId, 'data': data};
     final DatabaseReference newRef = _reference.push();
     await newRef.set(pair);
     return true;
@@ -30,7 +27,7 @@ class UserData {
     final dynamic value = snapshot.value;
 
     if (value is Map<String, dynamic>) {
-      final pair = {'userId': userId, _varName: data};
+      final pair = {'userId': userId, 'data': data};
       value.forEach((k, v) async {
         if (v is Map<String, dynamic> && v == pair) {
           // potential for multiple database calls
@@ -51,7 +48,7 @@ class UserData {
   /// Removes all entries containing given data
   /// @returns success
   Future<bool> removeData(String data) async {
-    return _removeEveryInstance(_varName, data);
+    return _removeEveryInstance('data', data);
   }
 
   /// Finds all entries assigned to user with given id
@@ -65,8 +62,8 @@ class UserData {
       value.forEach((k, v) {
         if (v is Map<String, dynamic> &&
             v['userId'] == userId &&
-            v[_varName] is String) {
-          entries.add(v[_varName]);
+            v['data'] is String) {
+          entries.add(v['data']);
         }
       });
     }

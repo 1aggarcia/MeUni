@@ -46,7 +46,7 @@ class EventsRepoImpl extends EventsRepo {
     _eventsRef = dbRef.child(endpoint);
 
     final userEventsRef = dbRef.child('user_$endpoint');
-    _userEventsTable = UserData(userEventsRef, paramName);
+    _userEventsTable = UserData(userEventsRef);
   }
 
   //* Overriden Methods

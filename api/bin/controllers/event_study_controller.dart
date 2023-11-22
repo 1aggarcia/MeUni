@@ -54,6 +54,7 @@ class EventStudyController extends Controller {
 
   // POST /
   Future<Response> createHandler(Request request) async {
+    // TODO: throw away attendee lists
     String body = await request.readAsString();
 
     try {

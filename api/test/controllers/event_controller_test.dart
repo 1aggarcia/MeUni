@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 
@@ -66,9 +68,9 @@ void main() {
       attendeeNames: [],
     );
 
-    String eventJson = eventToJson(event);
-    String tennisJson = eventToJson(tennisEvent);
-    String dingDongJson = eventToJson(dingDongEvent);
+    String eventJson = jsonEncode(event.toJsonFull());
+    String tennisJson = jsonEncode(tennisEvent.toJsonFull());
+    String dingDongJson = jsonEncode(dingDongEvent.toJsonFull());
 
     test('events/create', () async {
       Request req = Request(

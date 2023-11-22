@@ -58,6 +58,17 @@ void main() {
       'endTime': '2023-11-05T03:24:15.537017Z',
       'hostId': '3',
       'hostName': '[unknown user]',
+    };
+
+    Map<String, dynamic> evtJsonMapFull = {
+      'title': 'Another event',
+      'desc': 'This time i really need people',
+      'location': '[Redacted]',
+      'max': 2,
+      'startTime': '2023-11-05T03:04:15.537017Z',
+      'endTime': '2023-11-05T03:24:15.537017Z',
+      'hostId': '3',
+      'hostName': '[unknown user]',
       'attendees': ['1'],
       'attendeeNames': ['[unknown user]'],
     };
@@ -76,8 +87,12 @@ void main() {
       expect(evt.toJson(), evtJsonMap);
     });
 
+    test('Event.toJsonFull', () {
+      expect(evt.toJsonFull(), evtJsonMapFull);
+    });
+
     test('eventToJson', () {
-      expect(eventToJson(evt), json.encode(evtJsonMap));
+      expect(eventToJson(evt), json.encode(evtJsonMapFull));
     });
 
     test('eventFromJson', () {
