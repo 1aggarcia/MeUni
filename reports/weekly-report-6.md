@@ -19,7 +19,6 @@
 - Complete study groups endpoint methods
 - Continue progress on user endpoint methods
 - Remodel pages for visual appeal
-- 
 
 ## Meeting Agenda
 None - no meeting this week
