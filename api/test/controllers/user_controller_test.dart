@@ -23,14 +23,14 @@ void main() {
     test('GET user profile', () async {
       Request req = Request(
         'GET',
-        Uri.parse('$_rndUrl/profile/get?id=1'),
+        Uri.parse('$_rndUrl/profile/get?id=1a'),
       );
       Response response = await _controller.getUserHandler(req);
 
       expect(response.statusCode, 200);
       expect(
           await response.readAsString(),
-          '{"id":1,'
+          '{"id":"1a",'
           '"firstName":"Fei",'
           '"lastName":"Huang",'
           '"year":4,'

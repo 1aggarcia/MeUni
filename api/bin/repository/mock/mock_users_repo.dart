@@ -9,7 +9,7 @@ class MockUsersRepo extends UsersRepo {
   MockUsersRepo() {
     _users = [
       User(
-        id: 1,
+        id: "1a",
         firstName: 'Fei',
         lastName: 'Huang',
         year: 4,
@@ -17,7 +17,7 @@ class MockUsersRepo extends UsersRepo {
         admin: true,
       ),
       User(
-        id: 2,
+        id: "2a",
         firstName: 'John',
         lastName: 'Stuart',
         year: 3,
@@ -25,7 +25,7 @@ class MockUsersRepo extends UsersRepo {
         admin: false,
       ),
       User(
-        id: 3,
+        id: "3a",
         firstName: 'Hannah',
         lastName: 'Brown',
         year: 1,
@@ -33,7 +33,7 @@ class MockUsersRepo extends UsersRepo {
         admin: false,
       ),
       User(
-        id: 4,
+        id: "4a",
         firstName: 'Ronald',
         lastName: 'McDonald',
         year: 2,
@@ -46,7 +46,7 @@ class MockUsersRepo extends UsersRepo {
   //* Overriden Methods
 
   @override
-  Future<User?> getUserAsync(int id) async {
+  Future<User?> getUserAsync(String id) async {
     try {
       return _users.singleWhere((e) => e.id == id);
     } catch (e) {
