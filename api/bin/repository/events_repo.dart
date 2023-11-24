@@ -16,11 +16,14 @@ abstract class EventsRepo {
   /// @returns id of deleted event
   Future<String> deleteEventAsync(String id);
 
-  /// @returns the Event if found, null otherwise
-  Future<Event?> getEventAsync(String id);
-
   /// @returns list of all events
   Future<List<Event>> getEventsAsync();
+
+  /// @returns list of events ranked in order of relevance between query and title/desc
+  Future<List<Event>> searchEventsAsync(String query);
+
+  /// @returns the Event if found, null otherwise
+  Future<Event?> getEventAsync(String id);
 
   /// Adds user with given id to event with given id
   /// @returns new attendees list or null if event is at max capacity,
@@ -71,6 +74,13 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   @override
+  Future<List<Event>> getEventsAsync() async {
+    final db.DataSnapshot snapshot = await _eventsRef.once();
+    final json = jsonEncode(snapshot.value);
+    return eventsFromJson(json);
+  }
+
+  @override
   Future<Event?> getEventAsync(String id) async {
     final db.DataSnapshot snapshot = await _eventsRef.child(id).once();
     final Event? event = eventFromJson(jsonEncode(snapshot.value));
@@ -81,10 +91,21 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   @override
-  Future<List<Event>> getEventsAsync() async {
-    final db.DataSnapshot snapshot = await _eventsRef.once();
-    final json = jsonEncode(snapshot.value);
-    return eventsFromJson(json);
+  // Very basic verion as proof of concept
+  // TODO: implement a ranking system by string similarity
+  Future<List<Event>> searchEventsAsync(String query) async {
+    final String lowerQuery = query.toLowerCase();
+    final List<Event> all = await getEventsAsync();
+    final List<Event> result = [];
+
+    String eventText;
+    for (Event event in all) {
+      eventText = (event.title + event.desc).toLowerCase();
+      if (eventText.contains(lowerQuery)) {
+        result.add(event);
+      }
+    }
+    return result;
   }
 
   @override

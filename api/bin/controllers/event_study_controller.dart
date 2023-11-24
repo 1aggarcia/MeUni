@@ -29,27 +29,44 @@ class EventStudyController extends Controller {
   //* Public API Methods
 
   // GET /
-  /// Optional id parameter
-  /// Returns event with given id or list of all events, if param not included
+  /// No more than 1 parameter is allowed on a single request
+  /// * if no params, returns list of all events
+  /// * if 'id' param, returns event with given id or 404 if not found
+  /// * if 'query' param, returns list of events sorted by relevance
   Future<Response> getHandler(Request request) async {
     Map<String, dynamic> params = request.url.queryParameters;
 
-    if (params.containsKey('id')) {
-      try {
-        Event? event = await _eventsRepo.getEventAsync(params['id']);
-
-        if (event != null) {
-          return Response.ok(eventToJson(event));
-        } else {
-          return Response(404);
-        }
-      } catch (e) {
-        return Response(400);
-      }
+    if (params.containsKey('id') && params['id'] is String) {
+      return getSingleEvent(params['id']);
+    } else if (params.containsKey('query') && params['query'] is String) {
+      return searchEvents(params['query']);
     } else {
-      List<Event> events = await _eventsRepo.getEventsAsync();
-      return Response.ok(eventsToJson(events));
+      return getAllEvents();
     }
+  }
+
+  Future<Response> getSingleEvent(String id) async {
+    try {
+      Event? event = await _eventsRepo.getEventAsync(id);
+
+      if (event != null) {
+        return Response.ok(eventToJson(event));
+      } else {
+        return Response(404);
+      }
+    } catch (e) {
+      return Response(400);
+    }
+  }
+
+  Future<Response> searchEvents(String query) async {
+    List<Event> events = await _eventsRepo.searchEventsAsync(query);
+    return Response.ok(eventsToJson(events));
+  }
+
+  Future<Response> getAllEvents() async {
+    List<Event> events = await _eventsRepo.getEventsAsync();
+    return Response.ok(eventsToJson(events));
   }
 
   // POST /

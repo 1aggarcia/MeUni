@@ -33,14 +33,14 @@ class Event {
   });
 
   /// Creates an instance event from a json map.
-  /// @requires json['title'] is String,
-  /// @requires json['desc'] is String,
-  /// @requires json['location'] is String,
-  /// @requires json['max'] is int,
-  /// @requires json['startTime'] is String formatted as ISO timestamp,
-  /// @requires json['endTime'] is String formatted as ISO timestamp,
-  /// @requires json['hostId'] is String,
-  /// @requires json['attendees'] is List<String> if included
+  /// * requires json['title'] is String
+  /// * requires json['desc'] is String
+  /// * requires json['location'] is String
+  /// * requires json['max'] is int
+  /// * requires json['startTime'] is String formatted as ISO timestamp
+  /// * requires json['endTime'] is String formatted as ISO timestamp
+  /// * requires json['hostId'] is String
+  /// * requires json['attendees'] is List<String> or null
   factory Event.fromJson(Map<String, dynamic> json) {
     if (json['title'] is! String ||
         json['desc'] is! String ||

@@ -92,6 +92,22 @@ class MockEventsRepo extends EventsRepo {
   }
 
   @override
+  Future<List<Event>> searchEventsAsync(String query) async {
+    final String lowerQuery = query.toLowerCase();
+    final List<Event> all = await getEventsAsync();
+    final List<Event> result = [];
+
+    String eventText;
+    for (Event event in all) {
+      eventText = (event.title + event.desc).toLowerCase();
+      if (eventText.contains(lowerQuery)) {
+        result.add(event);
+      }
+    }
+    return result;
+  }
+
+  @override
   Future<List<String>?> joinEventAsync(String userId, String eventId) async {
     Event? event = _events[eventId];
     if (event == null ||
