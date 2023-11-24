@@ -7,12 +7,12 @@ defaults:
 on:
   push:
     branches:
-        - main
-        - 'mobile**'
+      - main
+      - 'mobile**'
   pull_request:
     branches:
-        - main
-        - 'mobile**'
+      - main
+      - 'mobile**'
 
 jobs:
   android:
@@ -39,6 +39,36 @@ jobs:
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
         run: flutter analyze
+
+      # Download stacked CLI
+      - name: Get stacked CLI
+        run: dart pub global activate stacked_cli
+
+      - name: Run stacked generate
+        run: $PUB_CACHE/bin/stacked generate
+
+      # Check If stacked generate changed any files
+      - name: Ensure stacked generate changed nothing
+        run: |
+          git diff lib test
+          LINES=$(git diff lib test | wc -l)
+          echo
+          echo $LINES
+          if [ "$LINES" -gt 0 ]; then exit 1; fi
+
+      - name: Download Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: meuni.jks
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      - name: Create key.properties
+        run: |
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
+          echo "storePassword=${{ secrets.ANDROID_STORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
