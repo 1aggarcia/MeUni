@@ -114,6 +114,7 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: kcPrimaryColor,
+                        foregroundColor: kcSecondaryColor,
                         minimumSize: const Size(double.infinity, 50),
                       ),
                       onPressed: () async =>

@@ -61,6 +61,7 @@ class CreateEventView extends StackedView<CreateEventViewModel>
         appBar: AppBar(
           title: const Text('Create Event'),
           backgroundColor: kcPrimaryColor,
+          foregroundColor: kcSecondaryColor,
         ),
         backgroundColor: kcBackgroundColor,
         body: viewModel.isBusy

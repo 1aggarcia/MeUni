@@ -37,6 +37,7 @@ class EventDetailView extends StackedView<EventDetailViewModel> {
         appBar: AppBar(
           title: const Text('Event Detail'),
           backgroundColor: kcPrimaryColor,
+          foregroundColor: kcSecondaryColor,
         ),
         backgroundColor: kcBackgroundColor,
         body: viewModel.isBusy
