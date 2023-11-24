@@ -44,6 +44,7 @@ import '../ui/views/study_groups/study_groups_view.dart';
     LazySingleton(classType: AuthService),
     LazySingleton(classType: BottomSheetService),
     LazySingleton(classType: DialogService),
+    // LazySingleton(classType: EventsRepoImpl, asType: EventsRepo),
     LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
     LazySingleton(classType: MockStudyGroupsRepo, asType: StudyGroupsRepo),
     LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
@@ -60,5 +61,5 @@ import '../ui/views/study_groups/study_groups_view.dart';
   ],
 )
 class App {
-  static const demoDuration = Duration(seconds: 3);
+  static const demoDuration = Duration(seconds: 0);
 }

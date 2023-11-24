@@ -6,14 +6,16 @@ import '../events_repo.dart';
 
 class MockEventsRepo extends EventsRepo {
   //* Private Properties
+  int _nextId = 1;
   List<Event> _events = [];
-  final AuthService _authService = locator<AuthService>();
+
+  final _authService = locator<AuthService>();
 
   //* Constructors
   MockEventsRepo() {
     _events = [
       Event(
-        id: '1',
+        id: '${_nextId++}',
         title: 'Pizza',
         desc: 'need ppl to chip in for pizza',
         location: 'The crib',
@@ -25,7 +27,7 @@ class MockEventsRepo extends EventsRepo {
         attendees: ['2', '3'],
       ),
       Event(
-        id: '2',
+        id: '${_nextId++}',
         title: 'Event 1',
         desc: 'This is a sample description for this event',
         location: 'UW CSE2 G21',
@@ -37,7 +39,7 @@ class MockEventsRepo extends EventsRepo {
         attendees: ['1', '3'],
       ),
       Event(
-        id: '3',
+        id: '${_nextId++}',
         title: 'Another event',
         desc: 'This time i really need people',
         location: '[Redacted]',
@@ -51,35 +53,79 @@ class MockEventsRepo extends EventsRepo {
     ];
   }
 
-  //* Public Properties
-  @override
-  Future<List<Event>> getEventsAsync() async {
-    await Future.delayed(App.demoDuration);
-
-    return _events;
-  }
-
-  @override
-  Future<void> addEventAsync(Event event) async {
-    await Future.delayed(App.demoDuration);
-
-    _events.add(event);
-  }
-
+  //* Overridden Methods
   @override
   Future<Event?> getEventAsync(String id) async {
     await Future.delayed(App.demoDuration);
 
     try {
-      return _events.singleWhere((u) => u.id == id);
-    } catch (e) {
+      return _events.singleWhere((e) => e.id == id);
+    } catch (ex) {
       return null;
     }
   }
 
   @override
-  Future<void> joinEventAsync(String id) async {
-    Event event = (await getEventAsync(id))!;
+  Future<List<Event>> getEventsAsync({String? searchQuery}) async {
+    await Future.delayed(App.demoDuration);
+
+    if (searchQuery == null) return _events;
+
+    // Filter events based on search query
+    return _events.where((e) => e.title.contains(searchQuery)).toList();
+  }
+
+  @override
+  Future<bool> addEventAsync({
+    required String title,
+    required String desc,
+    required String location,
+    required int max,
+    required DateTime startTime,
+    required DateTime endTime,
+  }) async {
+    await Future.delayed(App.demoDuration);
+
+    Event event = Event(
+      id: '${_nextId++}',
+      title: title,
+      desc: desc,
+      location: location,
+      max: max,
+      startTime: startTime,
+      endTime: endTime,
+      hostId: _authService.currUser.id,
+      hostName: _authService.currUser.fullName,
+      attendees: [],
+    );
+
+    _events.add(event);
+
+    return true;
+  }
+
+  @override
+  Future<bool> joinEventAsync(String id) async {
+    Event? event = await getEventAsync(id);
+
+    if (event == null) {
+      return false;
+    } else if (event.attendees.contains(_authService.currUser.id)) {
+      return false;
+    }
+
     event.attendees.add(_authService.currUser.id);
+    return true;
+  }
+
+  @override
+  Future<bool> unJoinEventAsync(String id) async {
+    Event? event = await getEventAsync(id);
+
+    if (event == null) {
+      return false;
+    }
+
+    return event.attendees.remove(_authService.currUser.id);
   }
 }

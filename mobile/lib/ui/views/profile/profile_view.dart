@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:recase/recase.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../common/app_colors.dart';
@@ -34,9 +33,6 @@ class ProfileView extends StackedView<ProfileViewModel> {
   @override
   Widget builder(
       BuildContext context, ProfileViewModel viewModel, Widget? child) {
-    final fullName = '${viewModel.user.firstName.titleCase} '
-        '${viewModel.user.lastName.titleCase}';
-
     return Container(
       padding: const EdgeInsets.only(left: 25.0, right: 25.0),
       child: SingleChildScrollView(
@@ -56,7 +52,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
 
               // Name
               Text(
-                fullName,
+                viewModel.user.fullName,
                 style: _labelTextStyle,
               ),
 

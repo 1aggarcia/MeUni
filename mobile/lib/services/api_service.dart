@@ -94,3 +94,5 @@ class ApiService {
     return await post(url, body: body);
   }
 }
+
+bool responseOk(Response response) => response.statusCode == 200;

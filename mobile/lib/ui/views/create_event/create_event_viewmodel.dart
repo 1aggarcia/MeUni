@@ -1,11 +1,11 @@
+// ignore_for_file: directives_ordering
+
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-// ignore_for_file: directives_ordering
 import './create_event_view.form.dart';
 import '../../../app/app.locator.dart';
-import '../../../models/event.dart';
 import '../../../repository/events_repo.dart';
 
 class CreateEventViewModel extends FormViewModel {
@@ -18,35 +18,31 @@ class CreateEventViewModel extends FormViewModel {
   Future addEventAsync() async {
     if (isFormValid) {
       DateTime dateTime = DateTime.parse(eventDateValue!);
-      TimeOfDay startTime = _fromString(eventStartTimeValue!);
-      TimeOfDay endTime = _fromString(eventEndTimeValue!);
+      TimeOfDay startTime = _timeFromString(eventStartTimeValue!);
+      TimeOfDay endTime = _timeFromString(eventEndTimeValue!);
 
-      Event event = Event(
-        id: '-1',
-        title: eventNameValue!,
-        desc: eventDescriptionValue!,
-        location: eventLocationValue!,
-        max: 15,
-        startTime: DateTime(
-          dateTime.year,
-          dateTime.month,
-          dateTime.day,
-          startTime.hour,
-          startTime.minute,
+      await runBusyFuture(
+        _eventsRepo.addEventAsync(
+          title: eventNameValue!,
+          desc: eventDescriptionValue!,
+          location: eventLocationValue!,
+          max: 15,
+          startTime: DateTime(
+            dateTime.year,
+            dateTime.month,
+            dateTime.day,
+            startTime.hour,
+            startTime.minute,
+          ),
+          endTime: DateTime(
+            dateTime.year,
+            dateTime.month,
+            dateTime.day,
+            endTime.hour,
+            endTime.minute,
+          ),
         ),
-        endTime: DateTime(
-          dateTime.year,
-          dateTime.month,
-          dateTime.day,
-          endTime.hour,
-          endTime.minute,
-        ),
-        hostId: '-1',
-        hostName: 'Ronals',
-        attendees: [],
       );
-
-      await runBusyFuture(_eventsRepo.addEventAsync(event));
 
       goToPrevPage();
     }
@@ -55,7 +51,7 @@ class CreateEventViewModel extends FormViewModel {
   void goToPrevPage() => _navService.back();
 
   //* Private Methods
-  TimeOfDay _fromString(String time) {
+  TimeOfDay _timeFromString(String time) {
     int hh = 0;
     if (time.endsWith('PM')) hh = 12;
 

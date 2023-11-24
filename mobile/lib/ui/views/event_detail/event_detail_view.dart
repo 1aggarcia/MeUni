@@ -113,10 +113,15 @@ class EventDetailView extends StackedView<EventDetailViewModel> {
 
                       verticalSpaceMedium,
 
-                      RoundButton(
-                        label: 'Join Event',
-                        onPressed: () async => await viewModel.joinEventAsync(),
-                      )
+                      if (!viewModel.isUserHost)
+                        RoundButton(
+                          label: viewModel.canUnJoin
+                              ? 'Leave Event'
+                              : 'Join Event',
+                          onPressed: () async => viewModel.canUnJoin
+                              ? await viewModel.unJoinEventAsync()
+                              : await viewModel.joinEventAsync(),
+                        )
                     ],
                   ),
                 ),

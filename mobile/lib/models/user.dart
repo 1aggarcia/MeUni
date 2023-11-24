@@ -4,6 +4,7 @@ class User {
 
   final String firstName;
   final String lastName;
+  String get fullName => '$firstName $lastName';
 
   final int year;
   final String pronouns;
