@@ -11,7 +11,7 @@ class Event {
   final DateTime startTime;
   final DateTime endTime;
 
-  final int hostId;
+  final String hostId;
   final String hostName;
   final List<String> attendees;
 

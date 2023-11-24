@@ -9,7 +9,6 @@ class MockEventsRepo extends EventsRepo {
   List<Event> _events = [];
   final AuthService _authService = locator<AuthService>();
 
-
   //* Constructors
   MockEventsRepo() {
     _events = [
@@ -22,7 +21,7 @@ class MockEventsRepo extends EventsRepo {
         startTime: DateTime.parse('2023-11-04 03:04:15.537017Z'),
         endTime: DateTime.parse('2023-11-04 03:24:15.537017Z'),
         hostName: 'Fei',
-        hostId: 1,
+        hostId: '1',
         attendees: ['2', '3'],
       ),
       Event(
@@ -33,7 +32,7 @@ class MockEventsRepo extends EventsRepo {
         max: 3,
         startTime: DateTime.parse('2023-11-04 02:24:25.537017Z'),
         endTime: DateTime.parse('2023-11-07 03:24:15.537017Z'),
-        hostId: 2,
+        hostId: '2',
         hostName: 'John',
         attendees: ['1', '3'],
       ),
@@ -45,7 +44,7 @@ class MockEventsRepo extends EventsRepo {
         max: 2,
         startTime: DateTime.parse('2023-11-05 03:04:15.537017Z'),
         endTime: DateTime.parse('2023-11-05 03:24:15.537017Z'),
-        hostId: 3,
+        hostId: '3',
         hostName: 'Hannah',
         attendees: ['1'],
       ),
@@ -83,6 +82,4 @@ class MockEventsRepo extends EventsRepo {
     Event event = (await getEventAsync(id))!;
     event.attendees.add(_authService.currUser.id);
   }
-
-
 }

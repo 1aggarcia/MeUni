@@ -26,7 +26,7 @@ class CreateEventViewModel extends FormViewModel {
         title: eventNameValue!,
         desc: eventDescriptionValue!,
         location: eventLocationValue!,
-        max: -1,
+        max: 15,
         startTime: DateTime(
           dateTime.year,
           dateTime.month,
@@ -41,7 +41,7 @@ class CreateEventViewModel extends FormViewModel {
           endTime.hour,
           endTime.minute,
         ),
-        hostId: -1,
+        hostId: '-1',
         hostName: 'Ronals',
         attendees: [],
       );
