@@ -34,16 +34,19 @@ abstract class EventsRepo {
 
 class EventsRepoImpl extends EventsRepo {
   //* Private Properties
+  final String endpoint;
+  final String paramName;
+
   late db.DatabaseReference _eventsRef;
   late UserData _userEventsTable;
 
   //* Constructors
-  EventsRepoImpl() {
+  EventsRepoImpl(this.endpoint, this.paramName) {
     final dbRef = locator<db.DatabaseReference>();
-    _eventsRef = dbRef.child('events');
+    _eventsRef = dbRef.child(endpoint);
 
-    final userEventsRef = dbRef.child('user_events');
-    _userEventsTable = UserData(userEventsRef, 'eventId');
+    final userEventsRef = dbRef.child('user_$endpoint');
+    _userEventsTable = UserData(userEventsRef);
   }
 
   //* Overriden Methods
@@ -72,7 +75,7 @@ class EventsRepoImpl extends EventsRepo {
     final db.DataSnapshot snapshot = await _eventsRef.child(id).once();
     final Event? event = eventFromJson(jsonEncode(snapshot.value));
     if (event is Event) {
-      event.setId(id);
+      event.id = id;
     }
     return event;
   }

@@ -1,18 +1,22 @@
+import 'dart:convert';
+
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 
-import '../../bin/controllers/event_controller.dart';
+import '../../bin/controllers/event_study_controller.dart';
 import '../../bin/locator.dart';
 import '../../bin/models/event.dart';
 import '../../bin/repository/events_repo.dart';
 import '../../bin/repository/mock/mock_events_repo.dart';
 
 final String _rndUrl = 'https://example.com';
+final paramName = 'eventId';
+final _eventsRepo = EventsRepoImpl('events', paramName);
 
-EventController _controller = EventController();
+EventStudyController _controller = EventStudyController(_eventsRepo, paramName);
 
 void main() {
-  group('Events Controller -', () {
+  group('Event Study Controller -', () {
     setUp(() async {
       await locator.reset();
 
@@ -21,7 +25,7 @@ void main() {
       MockEventsRepo mockEventsRepo = locator<EventsRepo>() as MockEventsRepo;
       mockEventsRepo.clearEvents();
 
-      _controller = EventController();
+      _controller = EventStudyController(mockEventsRepo, paramName);
     });
 
     Event event = Event(
@@ -64,9 +68,9 @@ void main() {
       attendeeNames: [],
     );
 
-    String eventJson = eventToJson(event);
-    String tennisJson = eventToJson(tennisEvent);
-    String dingDongJson = eventToJson(dingDongEvent);
+    String eventJson = jsonEncode(event.toJsonFull());
+    String tennisJson = jsonEncode(tennisEvent.toJsonFull());
+    String dingDongJson = jsonEncode(dingDongEvent.toJsonFull());
 
     test('events/create', () async {
       Request req = Request(
@@ -74,7 +78,7 @@ void main() {
         Uri.parse('$_rndUrl/events/create'),
         body: eventJson,
       );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await _controller.createHandler(req);
       expect(response.statusCode, 200);
 
       expect(await response.readAsString(), '0');
@@ -85,7 +89,7 @@ void main() {
         'POST',
         Uri.parse('$_rndUrl/events/create'),
       );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await _controller.createHandler(req);
 
       expect(response.statusCode, 400);
     });
@@ -105,7 +109,7 @@ void main() {
         Uri.parse('$_rndUrl/events/create'),
         body: eventJson,
       );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await _controller.createHandler(req);
 
       expect(response.statusCode, 400);
     });
@@ -116,7 +120,7 @@ void main() {
         Uri.parse('$_rndUrl/events/create'),
         body: eventJson,
       );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await _controller.createHandler(req);
       expect(response.statusCode, 200);
 
       req = Request(
@@ -124,7 +128,7 @@ void main() {
         Uri.parse('$_rndUrl/events/create'),
         body: tennisJson,
       );
-      response = await _controller.postEventsHandler(req);
+      response = await _controller.createHandler(req);
       expect(response.statusCode, 200);
 
       req = Request(
@@ -132,14 +136,14 @@ void main() {
         Uri.parse('$_rndUrl/events/create'),
         body: dingDongJson,
       );
-      response = await _controller.postEventsHandler(req);
+      response = await _controller.createHandler(req);
       expect(response.statusCode, 200);
 
       req = Request(
         'GET',
         Uri.parse('$_rndUrl/events/get'),
       );
-      response = await _controller.getEventsHandler(req);
+      response = await _controller.getHandler(req);
 
       expect(response.statusCode, 200);
       expect(
@@ -168,14 +172,14 @@ void main() {
         Uri.parse('$_rndUrl/events/create'),
         body: eventJson,
       );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await _controller.createHandler(req);
       expect(response.statusCode, 200);
 
       req = Request(
         'GET',
         Uri.parse('$_rndUrl/events/get?id=0'),
       );
-      response = await _controller.getEventsHandler(req);
+      response = await _controller.getHandler(req);
 
       expect(response.statusCode, 200);
       expect(eventJson, await response.readAsString());
@@ -186,8 +190,8 @@ void main() {
         'GET',
         Uri.parse('$_rndUrl/events/get?id=999'),
       );
-      Response response = await _controller.getEventsHandler(req);
-      expect(response.statusCode, 400);
+      Response response = await _controller.getHandler(req);
+      expect(response.statusCode, 404);
     });
 
     test('events/delete', () async {
@@ -197,7 +201,7 @@ void main() {
         Uri.parse('$_rndUrl/events/create'),
         body: eventJson,
       );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await _controller.createHandler(req);
       expect(response.statusCode, 200);
 
       // Delete event
@@ -206,7 +210,7 @@ void main() {
         Uri.parse('$_rndUrl/events/delete'),
         body: '{"id":"0"}',
       );
-      response = await _controller.deleteEventsHandler(req);
+      response = await _controller.deleteHandler(req);
       expect(response.statusCode, 200);
       expect(await response.readAsString(), '0');
 
@@ -215,8 +219,8 @@ void main() {
         'GET',
         Uri.parse('$_rndUrl/events/get?id=0'),
       );
-      response = await _controller.getEventsHandler(req);
-      expect(response.statusCode, 400);
+      response = await _controller.getHandler(req);
+      expect(response.statusCode, 404);
     });
 
     test('events/join', () async {
@@ -226,7 +230,7 @@ void main() {
         Uri.parse('$_rndUrl/events/create'),
         body: eventJson,
       );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await _controller.createHandler(req);
       expect(response.statusCode, 200);
 
       // Join event
@@ -235,7 +239,7 @@ void main() {
         Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"2c","eventId":"0"}',
       );
-      response = await _controller.joinEventsHandler(req, true);
+      response = await _controller.joinHandler(req);
       expect(response.statusCode, 200);
       expect(await response.readAsString(), '["2c"]');
     });
@@ -247,7 +251,7 @@ void main() {
         Uri.parse('$_rndUrl/events/create'),
         body: eventJson,
       );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await _controller.createHandler(req);
       expect(response.statusCode, 200);
 
       // Join event twice
@@ -256,7 +260,7 @@ void main() {
         Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"2c","eventId":"0"}',
       );
-      response = await _controller.joinEventsHandler(req, true);
+      response = await _controller.joinHandler(req);
       expect(response.statusCode, 200);
 
       req = Request(
@@ -264,7 +268,7 @@ void main() {
         Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"2c","eventId":"0"}',
       );
-      response = await _controller.joinEventsHandler(req, true);
+      response = await _controller.joinHandler(req);
       expect(response.statusCode, 400);
     });
 
@@ -274,7 +278,7 @@ void main() {
         Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"2c","eventId":235}',
       );
-      Response response = await _controller.joinEventsHandler(req, true);
+      Response response = await _controller.joinHandler(req);
       expect(response.statusCode, 400);
     });
 
@@ -299,7 +303,7 @@ void main() {
         Uri.parse('$_rndUrl/events/create'),
         body: eventJson,
       );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await _controller.createHandler(req);
       expect(response.statusCode, 200);
 
       // Exceed capacity
@@ -308,7 +312,7 @@ void main() {
         Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"ff","eventId":0}',
       );
-      response = await _controller.joinEventsHandler(req, true);
+      response = await _controller.joinHandler(req);
       expect(response.statusCode, 400);
 
       req = Request(
@@ -316,7 +320,7 @@ void main() {
         Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"2c","eventId":0}',
       );
-      response = await _controller.joinEventsHandler(req, true);
+      response = await _controller.joinHandler(req);
       expect(response.statusCode, 400);
     });
 
@@ -327,7 +331,7 @@ void main() {
         Uri.parse('$_rndUrl/events/create'),
         body: eventJson,
       );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await _controller.createHandler(req);
       expect(response.statusCode, 200);
 
       // Join event
@@ -336,7 +340,7 @@ void main() {
         Uri.parse('$_rndUrl/events/join'),
         body: '{"userId":"2c","eventId":"0"}',
       );
-      response = await _controller.joinEventsHandler(req, true);
+      response = await _controller.joinHandler(req);
       expect(response.statusCode, 200);
       expect(await response.readAsString(), '["2c"]');
 
@@ -346,7 +350,7 @@ void main() {
         Uri.parse('$_rndUrl/events/unjoin'),
         body: '{"userId":"2c","eventId":"0"}',
       );
-      response = await _controller.joinEventsHandler(req, false);
+      response = await _controller.unjoinHandler(req);
       expect(response.statusCode, 200);
       expect(await response.readAsString(), '[]');
     });

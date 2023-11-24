@@ -14,9 +14,9 @@ void main() {
       startTime: DateTime.parse('2023-11-05 03:04:15.537017Z'),
       endTime: DateTime.parse('2023-11-05 03:24:15.537017Z'),
       hostId: '3',
-      hostName: 'Hannah',
+      hostName: '[unknown user]',
       attendees: ['1'],
-      attendeeNames: ['Fei'],
+      attendeeNames: ['[unknown user]'],
     );
 
     // copy of evt
@@ -29,9 +29,9 @@ void main() {
       startTime: DateTime.parse('2023-11-05 03:04:15.537017Z'),
       endTime: DateTime.parse('2023-11-05 03:24:15.537017Z'),
       hostId: '3',
-      hostName: 'Hannah',
+      hostName: '[unknown user]',
       attendees: ['1'],
-      attendeeNames: ['Fei'],
+      attendeeNames: ['[unknown user]'],
     );
 
     Event evtB = Event(
@@ -42,10 +42,10 @@ void main() {
       max: 4,
       startTime: DateTime.parse('2023-11-04 03:04:15.537017Z'),
       endTime: DateTime.parse('2023-11-04 03:24:15.537017Z'),
-      hostName: 'Fei',
+      hostName: '[unknown user]',
       hostId: '1',
       attendees: ['2', '3'],
-      attendeeNames: ['John', 'Hannah'],
+      attendeeNames: ['[unknown user]', '[unknown user]'],
     );
 
     Map<String, dynamic> evtJsonMap = {
@@ -57,9 +57,20 @@ void main() {
       'startTime': '2023-11-05T03:04:15.537017Z',
       'endTime': '2023-11-05T03:24:15.537017Z',
       'hostId': '3',
-      'hostName': 'Hannah',
+      'hostName': '[unknown user]',
+    };
+
+    Map<String, dynamic> evtJsonMapFull = {
+      'title': 'Another event',
+      'desc': 'This time i really need people',
+      'location': '[Redacted]',
+      'max': 2,
+      'startTime': '2023-11-05T03:04:15.537017Z',
+      'endTime': '2023-11-05T03:24:15.537017Z',
+      'hostId': '3',
+      'hostName': '[unknown user]',
       'attendees': ['1'],
-      'attendeeNames': ['Fei'],
+      'attendeeNames': ['[unknown user]'],
     };
 
     test('equals', () {
@@ -76,8 +87,12 @@ void main() {
       expect(evt.toJson(), evtJsonMap);
     });
 
+    test('Event.toJsonFull', () {
+      expect(evt.toJsonFull(), evtJsonMapFull);
+    });
+
     test('eventToJson', () {
-      expect(eventToJson(evt), json.encode(evtJsonMap));
+      expect(eventToJson(evt), json.encode(evtJsonMapFull));
     });
 
     test('eventFromJson', () {

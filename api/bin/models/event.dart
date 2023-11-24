@@ -1,9 +1,5 @@
 import 'dart:convert';
 
-import '../controllers/mock_users.dart';
-import 'user.dart';
-
-final List<User> mockUsers = MockUsersRepo().getMockUsers();
 final int maxCapacity = 15;
 
 class Event {
@@ -76,40 +72,44 @@ class Event {
     }
 
     return Event(
-        title: json['title'],
-        desc: json['desc'],
-        location: json['location'],
-        max: json['max'],
-        startTime: DateTime.parse(json['startTime']),
-        endTime: DateTime.parse(json['endTime']),
-        hostId: json['hostId'],
-        hostName: hostName,
-        attendees: attendees,
-        attendeeNames: attendeeNames);
+      title: json['title'],
+      desc: json['desc'],
+      location: json['location'],
+      max: json['max'],
+      startTime: DateTime.parse(json['startTime']),
+      endTime: DateTime.parse(json['endTime']),
+      hostId: json['hostId'],
+      hostName: hostName,
+      attendees: attendees,
+      attendeeNames: attendeeNames);
   }
-
-  // Sets event id to given id
-  bool setId(String id) {
-    this.id = id;
-    return true;
-  }
-
-  // TODO: create 2nd toJson for database, leave this for clients
 
   /// Returns a json map of Event instance
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'desc': desc,
-        'location': location,
-        'max': max,
-        'startTime': startTime.toIso8601String(),
-        'endTime': endTime.toIso8601String(),
-        'hostId': hostId,
-        'hostName': hostName,
-        'attendees': attendees,
-        'attendeeNames': attendeeNames
-      };
+    'id': id,
+    'title': title,
+    'desc': desc,
+    'location': location,
+    'max': max,
+    'startTime': startTime.toIso8601String(),
+    'endTime': endTime.toIso8601String(),
+    'hostId': hostId,
+    'hostName': hostName,
+  };
+
+  /// Returns a json map of Event instance with all details except id
+  Map<String, dynamic> toJsonFull() => {
+    'title': title,
+    'desc': desc,
+    'location': location,
+    'max': max,
+    'startTime': startTime.toIso8601String(),
+    'endTime': endTime.toIso8601String(),
+    'hostId': hostId,
+    'hostName': hostName,
+    'attendees': attendees,
+    'attendeeNames': attendeeNames
+  };
 
   /// Does not check equality of attendees, attendeeNames, or id
   bool equals(Event other) {
@@ -135,7 +135,7 @@ Event? eventFromJson(String str) {
 }
 
 /// Returns json string representing passed in Event
-String eventToJson(Event data) => json.encode(data.toJson());
+String eventToJson(Event data) => json.encode(data.toJsonFull());
 
 /// Returns json string representing passed in Event list
 String eventsToJson(List<Event> data) =>
@@ -157,7 +157,7 @@ List<Event> eventsFromMap(Map<String, dynamic> data) {
   data.forEach((k, v) {
     try {
       Event e = Event.fromJson(v);
-      e.setId(k);
+      e.id = k;
       events.add(e);
     } catch (e) {
       print('ERROR: eventsFromMap() $e');
@@ -166,31 +166,7 @@ List<Event> eventsFromMap(Map<String, dynamic> data) {
   return events;
 }
 
-/// Given id, returns first name of given user, if it exists
-/// @param userId - of desired user
-/// @returns first name of user with userId, or "[unknown user]" if unavaliable
+/// Does not work
 String userNamefromId(String userId) {
-  int i = 0;
-  User u = mockUsers[i];
-  // mockUsers will be exausted or desired user found
-  while (i < mockUsers.length && u.id != userId) {
-    u = mockUsers[i];
-    i++;
-  }
-
-  if (u.id == userId) {
-    return u.firstName;
-  } else {
     return '[unknown user]';
-  }
-
-// /// Returns json as string representing passed in Map of events
-// String eventsToJson(Map<String, Event> data) => json.encode(toJsonMap(data));
-
-// /// Converts map of events to json map
-// Map<String, dynamic> toJsonMap(Map<String, Event> data) {
-//   return Map<String, dynamic>.fromEntries(
-//     data.entries.map((entry) => MapEntry(entry.key.toString(), entry.value.toJson())),
-//   );
-// }
 }
