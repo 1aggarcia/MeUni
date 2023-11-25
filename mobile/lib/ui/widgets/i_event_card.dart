@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/event.dart';
+import '../../models/i_event.dart';
 import '../common/app_colors.dart';
 
-class EventCard extends StatelessWidget {
+class IEventCard extends StatelessWidget {
   //* Public Properties
-  final Event event;
+  final IEvent iEvent;
 
   //* Constructors
-  const EventCard({super.key, required this.event});
+  const IEventCard({super.key, required this.iEvent});
 
-  //* Overriden Methods
+  //* Overridden Methods
   @override
   Widget build(BuildContext context) {
-    final startDate = DateFormat.MMMEd().format(event.startTime);
-    final startTime = DateFormat.jm().format(event.startTime);
-    final endTime = DateFormat.jm().format(event.endTime);
+    final startDate = DateFormat.MMMEd().format(iEvent.startTime);
+    final startTime = DateFormat.jm().format(iEvent.startTime);
+    final endTime = DateFormat.jm().format(iEvent.endTime);
 
     return Container(
       decoration: ShapeDecoration(
@@ -27,10 +27,10 @@ class EventCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _cardLabel(event.title),
-          _cardLabel(event.desc),
+          _cardLabel(iEvent.title),
+          _cardLabel(iEvent.desc),
           _cardLabel('$startDate @ $startTime - $endTime'),
-          _cardLabel(event.location),
+          _cardLabel(iEvent.location),
         ],
       ),
     );

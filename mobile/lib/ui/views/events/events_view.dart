@@ -3,7 +3,7 @@ import 'package:stacked/stacked.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
-import '../../widgets/event_card.dart';
+import '../../widgets/i_event_card.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/round_button.dart';
 import 'events_viewmodel.dart';
@@ -46,8 +46,8 @@ class EventsView extends StackedView<EventsViewModel> {
                   return GestureDetector(
                     onTap: () async =>
                         viewModel.goToEventDetailPageAsync(index),
-                    child: EventCard(
-                      event: viewModel.events[index],
+                    child: IEventCard(
+                      iEvent: viewModel.events[index],
                     ),
                   );
                 },
