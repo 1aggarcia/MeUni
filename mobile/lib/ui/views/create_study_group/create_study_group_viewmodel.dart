@@ -43,7 +43,7 @@ class CreateStudyGroupViewModel extends FormViewModel {
           endTime.hour,
           endTime.minute,
         ),
-        hostId: -1,
+        hostId: '-1',
         hostName: 'Ronals',
         attendees: [],
       );
