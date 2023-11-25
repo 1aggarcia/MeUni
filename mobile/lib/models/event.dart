@@ -1,13 +1,17 @@
 import 'i_event.dart';
 
 class Event extends IEvent {
+  //* Private Properties
+  final String _title;
+
   //* Public Properties
-  final String title;
+  @override
+  String get title => _title;
 
   //* Constructors
   Event({
     required super.id,
-    required this.title,
+    required String title,
     required super.desc,
     required super.location,
     required super.max,
@@ -16,17 +20,17 @@ class Event extends IEvent {
     required super.hostId,
     required super.hostName,
     required super.attendees,
-  });
+  }) : _title = title;
 
   Event.fromJson(super.json)
-      : title = json['title'],
+      : _title = json['title'],
         super.fromJson();
 
   //* Overridden Methods
   @override
   Map<String, dynamic> toJson() {
     var map = super.toJson();
-    map['title'] = title;
+    map['title'] = _title;
 
     return map;
   }

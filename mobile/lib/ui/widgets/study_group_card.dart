@@ -43,7 +43,7 @@ class StudyGroupCard extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
                   child: Text(
-                    'Course: ${studyGroup.course}',
+                    'Course: ${studyGroup.title}',
                     textAlign: TextAlign.center,
                     style: textStyle,
                   ),

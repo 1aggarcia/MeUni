@@ -14,6 +14,8 @@ abstract class IEvent {
   final String hostName;
   final List<String> attendees;
 
+  String get title;
+
   //* Constructors
   IEvent({
     required this.id,
