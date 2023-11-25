@@ -1,3 +1,38 @@
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
-class IEventsViewModel extends BaseViewModel {}
+import '../../../../app/app.locator.dart';
+import '../../../../app/app.router.dart';
+import '../../../../models/event.dart';
+import '../../../../models/i_event.dart';
+import '../../../../repository/i_events_repo.dart';
+
+class IEventsViewModel<T extends IEvent> extends BaseViewModel {
+  //* Private Properties
+  final _eventsRepo = locator<IEventsRepo<T>>();
+
+  final _navService = locator<NavigationService>();
+
+  //* Public Properties
+  List<IEvent> iEvents = [];
+
+  //* Public Methods
+  Future<void> getIEventsAsync() async {
+    iEvents = await runBusyFuture(
+      _eventsRepo.getIEventsAsync(),
+      busyObject: iEvents,
+    );
+  }
+
+  Future<void> goToCreateIEventPageAsync() async {
+    if (T == Event) {
+      await _navService.navigateToCreateEventView();
+    } else {
+      await _navService.navigateToCreateStudyGroupView();
+    }
+  }
+
+  Future<void> goToIEventDetailPageAsync(int index) async {
+    await _navService.navigateToEventDetailView(eventId: iEvents[index].id);
+  }
+}
