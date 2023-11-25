@@ -4,14 +4,23 @@ import 'package:stacked/stacked.dart';
 import 'study_group_detail_viewmodel.dart';
 
 class StudyGroupDetailView extends StackedView<StudyGroupDetailViewModel> {
-  const StudyGroupDetailView({Key? key}) : super(key: key);
+  //* Private Properties
+  final String studyGroupId;
+
+  //* Constructors
+  const StudyGroupDetailView({
+    super.key,
+    required this.studyGroupId,
+  });
+
+  //* Overridden Methods
+  @override
+  StudyGroupDetailViewModel viewModelBuilder(BuildContext context) =>
+      StudyGroupDetailViewModel();
 
   @override
-  Widget builder(
-    BuildContext context,
-    StudyGroupDetailViewModel viewModel,
-    Widget? child,
-  ) {
+  Widget builder(BuildContext context, StudyGroupDetailViewModel viewModel,
+      Widget? child) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Container(
@@ -19,10 +28,4 @@ class StudyGroupDetailView extends StackedView<StudyGroupDetailViewModel> {
       ),
     );
   }
-
-  @override
-  StudyGroupDetailViewModel viewModelBuilder(
-    BuildContext context,
-  ) =>
-      StudyGroupDetailViewModel();
 }

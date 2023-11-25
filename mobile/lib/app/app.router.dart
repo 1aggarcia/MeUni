@@ -177,8 +177,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i12.StudyGroupDetailView: (data) {
+      final args = data.getArgs<StudyGroupDetailViewArguments>(nullOk: false);
       return _i13.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i12.StudyGroupDetailView(),
+        builder: (context) => _i12.StudyGroupDetailView(
+            key: args.key, studyGroupId: args.studyGroupId),
         settings: data,
       );
     },
@@ -215,6 +217,33 @@ class EventDetailViewArguments {
   @override
   int get hashCode {
     return key.hashCode ^ eventId.hashCode;
+  }
+}
+
+class StudyGroupDetailViewArguments {
+  const StudyGroupDetailViewArguments({
+    this.key,
+    required this.studyGroupId,
+  });
+
+  final _i13.Key? key;
+
+  final String studyGroupId;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "studyGroupId": "$studyGroupId"}';
+  }
+
+  @override
+  bool operator ==(covariant StudyGroupDetailViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.studyGroupId == studyGroupId;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ studyGroupId.hashCode;
   }
 }
 
@@ -362,14 +391,18 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToStudyGroupDetailView([
+  Future<dynamic> navigateToStudyGroupDetailView({
+    _i13.Key? key,
+    required String studyGroupId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.studyGroupDetailView,
+        arguments:
+            StudyGroupDetailViewArguments(key: key, studyGroupId: studyGroupId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -519,14 +552,18 @@ extension NavigatorStateExtension on _i14.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithStudyGroupDetailView([
+  Future<dynamic> replaceWithStudyGroupDetailView({
+    _i13.Key? key,
+    required String studyGroupId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.studyGroupDetailView,
+        arguments:
+            StudyGroupDetailViewArguments(key: key, studyGroupId: studyGroupId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

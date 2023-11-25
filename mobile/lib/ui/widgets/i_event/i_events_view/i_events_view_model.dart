@@ -33,6 +33,12 @@ class IEventsViewModel<T extends IEvent> extends BaseViewModel {
   }
 
   Future<void> goToIEventDetailPageAsync(int index) async {
-    await _navService.navigateToEventDetailView(eventId: iEvents[index].id);
+    if (T == Event) {
+      await _navService.navigateToEventDetailView(eventId: iEvents[index].id);
+    } else {
+      await _navService.navigateToStudyGroupDetailView(
+        studyGroupId: iEvents[index].id,
+      );
+    }
   }
 }
