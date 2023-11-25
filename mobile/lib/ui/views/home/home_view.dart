@@ -8,7 +8,7 @@ import '../study_groups/study_groups_view.dart';
 import 'home_viewmodel.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
-  const HomeView({Key? key}) : super(key: key);
+  const HomeView({super.key});
 
   //* Overridden Methods
   @override

@@ -36,7 +36,7 @@ import 'create_event_viewmodel.dart';
 ])
 class CreateEventView extends StackedView<CreateEventViewModel>
     with $CreateEventView {
-  const CreateEventView({Key? key}) : super(key: key);
+  const CreateEventView({super.key});
 
   //* Overriden Methods
   @override

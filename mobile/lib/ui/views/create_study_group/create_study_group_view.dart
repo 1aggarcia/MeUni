@@ -35,7 +35,7 @@ import 'create_study_group_viewmodel.dart';
 ])
 class CreateStudyGroupView extends StackedView<CreateStudyGroupViewModel>
     with $CreateStudyGroupView {
-  const CreateStudyGroupView({Key? key}) : super(key: key);
+  const CreateStudyGroupView({super.key});
 
   @override
   Widget builder(BuildContext context, CreateStudyGroupViewModel viewModel,

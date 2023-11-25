@@ -9,7 +9,7 @@ import '../../widgets/round_button.dart';
 import 'events_viewmodel.dart';
 
 class EventsView extends StackedView<EventsViewModel> {
-  const EventsView({Key? key}) : super(key: key);
+  const EventsView({super.key});
 
   //* Overridden Methods
   @override

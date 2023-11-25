@@ -15,9 +15,9 @@ class EventDetailView extends StackedView<EventDetailViewModel> {
 
   //* Constructors
   const EventDetailView({
-    Key? key,
+    super.key,
     required this.eventId,
-  }) : super(key: key);
+  });
 
   //* Overridden Methods
   @override

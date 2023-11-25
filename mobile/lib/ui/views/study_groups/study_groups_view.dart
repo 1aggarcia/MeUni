@@ -7,7 +7,7 @@ import '../../widgets/study_group_card.dart';
 import 'study_groups_viewmodel.dart';
 
 class StudyGroupsView extends StackedView<StudyGroupsViewModel> {
-  const StudyGroupsView({Key? key}) : super(key: key);
+  const StudyGroupsView({super.key});
 
   @override
   Widget builder(

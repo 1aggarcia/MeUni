@@ -20,7 +20,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
   );
 
   //* Constructors
-  const ProfileView({Key? key}) : super(key: key);
+  const ProfileView({super.key});
 
   //* Overridden Methods
   @override

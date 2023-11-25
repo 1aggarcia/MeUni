@@ -20,7 +20,7 @@ import 'create_profile_viewmodel.dart';
 class CreateProfileView extends StackedView<CreateProfileViewModel>
     with $CreateProfileView {
   //* Constructors
-  const CreateProfileView({Key? key}) : super(key: key);
+  const CreateProfileView({super.key});
 
   //* Overridden Methods
   @override
