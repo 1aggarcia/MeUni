@@ -6,13 +6,15 @@ defaults:
 
 on:
   push:
-    branches:
-      - main
-      - 'mobile**'
+    paths:
+      - 'mobile/**'
+      - '.github/workflows/flutter.yml'
+
   pull_request:
+    paths:
+      - 'mobile/**'
     branches:
-      - main
-      - 'mobile**'
+        - main
 
 jobs:
   android:

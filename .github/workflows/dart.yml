@@ -19,14 +19,15 @@ env:
 
 on:
   push:
-    branches:
-        - main
-        - 'api**'
+    paths:
+      - 'api/**'
+      - '.github/workflows/dart.yml'
 
   pull_request:
+    paths:
+      - 'api/**'
     branches:
         - main
-        - 'api**'
 
 jobs:
   build:
