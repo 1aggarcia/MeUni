@@ -1,3 +1,5 @@
+import 'package:string_similarity/string_similarity.dart';
+
 import '../../models/event.dart';
 import '../events_repo.dart';
 
@@ -92,18 +94,22 @@ class MockEventsRepo extends EventsRepo {
   }
 
   @override
-  Future<List<Event>> searchEventsAsync(String query) async {
-    final String lowerQuery = query.toLowerCase();
+  // Copy & paste from events_repo.dart
+  Future<List<Event>> rankEventsAsync(String query) async {
     final List<Event> all = await getEventsAsync();
     final List<Event> result = [];
 
     String eventText;
     for (Event event in all) {
-      eventText = (event.title + event.desc).toLowerCase();
-      if (eventText.contains(lowerQuery)) {
+      eventText = event.title + event.desc;
+      // Events scored n times
+      if (eventText.similarityTo(query.toLowerCase()) > 0) {
         result.add(event);
       }
     }
+    // Events re-scored n*log(n) times
+    result.sort((a, b) => eventCompare(a, b, query));
+
     return result;
   }
 
@@ -130,5 +136,18 @@ class MockEventsRepo extends EventsRepo {
       event.attendees.remove(userId);
       return event.attendees;
     }
+  }
+
+  // Copy & paste from events_repo.dart
+  int eventCompare(Event a, Event b, String query) {
+    final String lowerQuery = query.toLowerCase();
+
+    double scoreA = a.title.toLowerCase().similarityTo(lowerQuery) *titleSearchWeight;
+    scoreA += a.desc.toLowerCase().similarityTo(lowerQuery) *descSearchWeight;
+
+    double scoreB = b.title.toLowerCase().similarityTo(lowerQuery) *titleSearchWeight;
+    scoreB += b.desc.toLowerCase().similarityTo(lowerQuery) *descSearchWeight;
+
+    return scoreB.compareTo(scoreA);
   }
 }

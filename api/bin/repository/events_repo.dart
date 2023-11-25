@@ -1,10 +1,14 @@
 import 'dart:convert';
 
 import 'package:firebase_dart/database.dart' as db;
+import 'package:string_similarity/string_similarity.dart';
 
 import '../locator.dart';
 import '../models/event.dart';
 import '../models/user_data.dart';
+
+final double titleSearchWeight = 1;
+final double descSearchWeight = 2/3;
 
 abstract class EventsRepo {
   //* Public Methods
@@ -20,7 +24,7 @@ abstract class EventsRepo {
   Future<List<Event>> getEventsAsync();
 
   /// @returns list of events ranked in order of relevance between query and title/desc
-  Future<List<Event>> searchEventsAsync(String query);
+  Future<List<Event>> rankEventsAsync(String query);
 
   /// @returns the Event if found, null otherwise
   Future<Event?> getEventAsync(String id);
@@ -59,7 +63,6 @@ class EventsRepoImpl extends EventsRepo {
     final Map<String, dynamic> eventJson = event.toJson();
 
     eventJson.remove('hostName');
-    eventJson.remove('attendeeNames');
     await newRef.set(eventJson);
 
     return newRef.key as String;
@@ -91,20 +94,22 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   @override
-  // Very basic verion as proof of concept
-  // TODO: implement a ranking system by string similarity
-  Future<List<Event>> searchEventsAsync(String query) async {
-    final String lowerQuery = query.toLowerCase();
+  // Can be optimized to do n query scorings instead of n*log(n)
+  Future<List<Event>> rankEventsAsync(String query) async {
     final List<Event> all = await getEventsAsync();
     final List<Event> result = [];
 
     String eventText;
     for (Event event in all) {
-      eventText = (event.title + event.desc).toLowerCase();
-      if (eventText.contains(lowerQuery)) {
+      eventText = event.title + event.desc;
+      // Events scored n times
+      if (eventText.similarityTo(query.toLowerCase()) > 0) {
         result.add(event);
       }
     }
+    // Events re-scored n*log(n) times
+    result.sort((a, b) => eventCompare(a, b, query));
+
     return result;
   }
 
@@ -148,5 +153,17 @@ class EventsRepoImpl extends EventsRepo {
     return (event != null &&
         !event.attendees.contains(userId) &&
         event.attendees.length < event.max);
+  }
+
+  int eventCompare(Event a, Event b, String query) {
+    final String lowerQuery = query.toLowerCase();
+
+    double scoreA = a.title.toLowerCase().similarityTo(lowerQuery) *titleSearchWeight;
+    scoreA += a.desc.toLowerCase().similarityTo(lowerQuery) *descSearchWeight;
+
+    double scoreB = b.title.toLowerCase().similarityTo(lowerQuery) *titleSearchWeight;
+    scoreB += b.desc.toLowerCase().similarityTo(lowerQuery) *descSearchWeight;
+
+    return scoreB.compareTo(scoreA);
   }
 }

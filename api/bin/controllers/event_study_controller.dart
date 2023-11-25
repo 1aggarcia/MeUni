@@ -37,15 +37,15 @@ class EventStudyController extends Controller {
     Map<String, dynamic> params = request.url.queryParameters;
 
     if (params.containsKey('id') && params['id'] is String) {
-      return getSingleEvent(params['id']);
+      return getEventHandler(params['id']);
     } else if (params.containsKey('query') && params['query'] is String) {
-      return searchEvents(params['query']);
+      return searchEventsHandler(params['query']);
     } else {
-      return getAllEvents();
+      return getEventsHandler();
     }
   }
 
-  Future<Response> getSingleEvent(String id) async {
+  Future<Response> getEventHandler(String id) async {
     try {
       Event? event = await _eventsRepo.getEventAsync(id);
 
@@ -59,12 +59,12 @@ class EventStudyController extends Controller {
     }
   }
 
-  Future<Response> searchEvents(String query) async {
-    List<Event> events = await _eventsRepo.searchEventsAsync(query);
+  Future<Response> searchEventsHandler(String query) async {
+    List<Event> events = await _eventsRepo.rankEventsAsync(query);
     return Response.ok(eventsToJson(events));
   }
 
-  Future<Response> getAllEvents() async {
+  Future<Response> getEventsHandler() async {
     List<Event> events = await _eventsRepo.getEventsAsync();
     return Response.ok(eventsToJson(events));
   }
