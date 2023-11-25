@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/i_event.dart';
-import '../common/app_colors.dart';
+import '../../../models/i_event.dart';
+import '../../common/app_colors.dart';
 
 class IEventCard extends StatelessWidget {
   //* Public Properties

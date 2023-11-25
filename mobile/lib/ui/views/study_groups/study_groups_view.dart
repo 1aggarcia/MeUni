@@ -3,7 +3,7 @@ import 'package:stacked/stacked.dart';
 
 import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
-import '../../widgets/i_event_card.dart';
+import '../../widgets/i_event/i_event_card.dart';
 import 'study_groups_viewmodel.dart';
 
 class StudyGroupsView extends StackedView<StudyGroupsViewModel> {
