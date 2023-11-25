@@ -3,7 +3,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
 import '../../../models/event.dart';
-import '../../../repository/events_repo.dart';
+import '../../../repository/i_events_repo.dart';
 import '../../../services/auth_service.dart';
 
 class EventDetailViewModel extends BaseViewModel {
@@ -12,7 +12,7 @@ class EventDetailViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
   final _navService = locator<NavigationService>();
 
-  final _eventsRepo = locator<EventsRepo>();
+  final _eventsRepo = locator<IEventsRepo<Event>>();
 
   //* Public Properties
   final String eventId;
@@ -31,7 +31,7 @@ class EventDetailViewModel extends BaseViewModel {
   void goBack() => _navService.back();
 
   Future<void> getEventAsync() async {
-    var result = await _eventsRepo.getEventAsync(eventId);
+    var result = await _eventsRepo.getIEventAsync(eventId);
     if (result == null) {
       await _dialogService.showDialog(
         title: 'Error!',
@@ -40,15 +40,15 @@ class EventDetailViewModel extends BaseViewModel {
 
       goBack();
     } else {
-      event = result;
+      event = result as Event;
 
       setBusy(false);
     }
   }
 
   Future<void> joinEventAsync() async =>
-      await _eventsRepo.joinEventAsync(eventId);
+      await _eventsRepo.joinIEventAsync(eventId);
 
   Future<void> unJoinEventAsync() async =>
-      await _eventsRepo.unJoinEventAsync(eventId);
+      await _eventsRepo.unJoinIEventAsync(eventId);
 }

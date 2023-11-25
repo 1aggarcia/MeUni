@@ -1,16 +1,15 @@
-// ignore_for_file: directives_ordering
-
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import './create_event_view.form.dart';
 import '../../../app/app.locator.dart';
-import '../../../repository/events_repo.dart';
+import '../../../models/event.dart';
+import '../../../repository/i_events_repo.dart';
+import './create_event_view.form.dart';
 
 class CreateEventViewModel extends FormViewModel {
   //* Private Properties
-  final _eventsRepo = locator<EventsRepo>();
+  final _eventsRepo = locator<IEventsRepo<Event>>();
 
   final _navService = locator<NavigationService>();
 
@@ -22,7 +21,7 @@ class CreateEventViewModel extends FormViewModel {
       TimeOfDay endTime = _timeFromString(eventEndTimeValue!);
 
       await runBusyFuture(
-        _eventsRepo.addEventAsync(
+        _eventsRepo.addIEventAsync(
           title: eventNameValue!,
           desc: eventDescriptionValue!,
           location: eventLocationValue!,

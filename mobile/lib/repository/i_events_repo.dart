@@ -36,7 +36,7 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
   @override
   Future<IEvent?> getIEventAsync(String id) async {
     var response = await _apiService.getAsync(
-      T is Event ? Endpoints.getEvents : Endpoints.getStudyGroups,
+      T == Event ? Endpoints.getEvents : Endpoints.getStudyGroups,
       params: {'id': id},
     );
 
@@ -50,7 +50,7 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
   @override
   Future<List<IEvent>> getIEventsAsync({String? searchQuery}) async {
     Response response = await _apiService.getAsync(
-      T is Event ? Endpoints.getEvents : Endpoints.getStudyGroups,
+      T == Event ? Endpoints.getEvents : Endpoints.getStudyGroups,
     );
 
     if (!responseOk(response)) {
@@ -71,7 +71,7 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
   }) async {
     // Create the IEvent
     IEvent iEvent;
-    if (T is Event) {
+    if (T == Event) {
       iEvent = Event(
         id: '-1', // API creates an ID for us
         title: title,
@@ -100,7 +100,7 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
     }
 
     var response = await _apiService.postAsync(
-      T is Event ? Endpoints.createEvent : Endpoints.createStudyGroup,
+      T == Event ? Endpoints.createEvent : Endpoints.createStudyGroup,
       body: _iEventToJson(iEvent),
     );
 
@@ -110,7 +110,7 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
   @override
   Future<bool> joinIEventAsync(String id) async {
     var response = await _apiService.postAsync(
-      T is Event ? Endpoints.joinEvent : Endpoints.joinStudyGroup,
+      T == Event ? Endpoints.joinEvent : Endpoints.joinStudyGroup,
       body: jsonEncode({
         'eventId': id,
         'userId': _authService.currUser.id,
@@ -123,7 +123,7 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
   @override
   Future<bool> unJoinIEventAsync(String id) async {
     var response = await _apiService.postAsync(
-      T is Event ? Endpoints.unJoinEvent : Endpoints.unJoinStudyGroup,
+      T == Event ? Endpoints.unJoinEvent : Endpoints.unJoinStudyGroup,
       body: jsonEncode({
         'eventId': id,
         'userId': _authService.currUser.id,
@@ -137,7 +137,7 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
   String _iEventToJson(IEvent iEvent) => jsonEncode(iEvent.toJson());
 
   IEvent _iEventFromJson(String json) {
-    if (T is Event) {
+    if (T == Event) {
       return Event.fromJson(jsonDecode(json));
     } else {
       return StudyGroup.fromJson(jsonDecode(json));
@@ -146,7 +146,7 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
 
   List<IEvent> _iEventsFromJson(String json) {
     var result = jsonDecode(json).map((x) {
-      if (T is Event) {
+      if (T == Event) {
         return Event.fromJson(x);
       } else {
         return StudyGroup.fromJson(x);

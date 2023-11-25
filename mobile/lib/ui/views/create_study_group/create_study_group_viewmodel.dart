@@ -4,12 +4,12 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
 import '../../../models/study_group.dart';
-import '../../../repository/study_groups_repo.dart';
+import '../../../repository/i_events_repo.dart';
 import 'create_study_group_view.form.dart';
 
 class CreateStudyGroupViewModel extends FormViewModel {
   //* Private Properties
-  final _studyGroupsRepo = locator<StudyGroupsRepo>();
+  final _studyGroupsRepo = locator<IEventsRepo<StudyGroup>>();
 
   final _navService = locator<NavigationService>();
 
@@ -23,12 +23,14 @@ class CreateStudyGroupViewModel extends FormViewModel {
       TimeOfDay startTime = _fromString(studyGroupStartTimeValue!);
       TimeOfDay endTime = _fromString(studyGroupEndTimeValue!);
 
-      StudyGroup studyGroup = StudyGroup(
-        id: '-1',
-        course: studyGroupCourseValue!,
+      isLoading = true;
+      rebuildUi();
+
+      await _studyGroupsRepo.addIEventAsync(
+        title: studyGroupCourseValue!,
         desc: studyGroupDescriptionValue!,
         location: studyGroupLocationValue!,
-        max: -1,
+        max: 15,
         startTime: DateTime(
           dateTime.year,
           dateTime.month,
@@ -43,15 +45,7 @@ class CreateStudyGroupViewModel extends FormViewModel {
           endTime.hour,
           endTime.minute,
         ),
-        hostId: '-1',
-        hostName: 'Ronals',
-        attendees: [],
       );
-
-      isLoading = true;
-      rebuildUi();
-
-      await _studyGroupsRepo.addStudyGroupAsync(studyGroup);
 
       isLoading = false;
       goToPrevPage();

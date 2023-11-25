@@ -15,7 +15,7 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
 
   //* Constructors
   MockIEventsRepo() {
-    _iEvents = T is Event ? _getMockEvents() : _getMockStudyGroups();
+    _iEvents = T == Event ? _getMockEvents() : _getMockStudyGroups();
   }
 
   //* Overridden Methods
@@ -54,7 +54,7 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
     await Future.delayed(App.demoDuration);
 
     IEvent iEvent;
-    if (T is Event) {
+    if (T == Event) {
       iEvent = Event(
         id: '${_nextId++}',
         title: title,

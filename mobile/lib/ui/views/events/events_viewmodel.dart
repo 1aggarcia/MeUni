@@ -4,11 +4,11 @@ import 'package:stacked_services/stacked_services.dart';
 import '../../../app/app.locator.dart';
 import '../../../app/app.router.dart';
 import '../../../models/event.dart';
-import '../../../repository/events_repo.dart';
+import '../../../repository/i_events_repo.dart';
 
 class EventsViewModel extends BaseViewModel {
   //* Private Properties
-  final _eventsRepo = locator<EventsRepo>();
+  final _eventsRepo = locator<IEventsRepo<Event>>();
 
   final _navService = locator<NavigationService>();
 
@@ -18,9 +18,9 @@ class EventsViewModel extends BaseViewModel {
   //* Public Methods
   Future<void> getEventsAsync() async {
     events = await runBusyFuture(
-      _eventsRepo.getEventsAsync(),
+      _eventsRepo.getIEventsAsync(),
       busyObject: events,
-    );
+    ) as List<Event>;
   }
 
   Future<void> goToCreateEventPageAsync() async =>

@@ -3,11 +3,11 @@
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import '../repository/events_repo.dart';
-import '../repository/mock/mock_events_repo.dart';
-import '../repository/mock/mock_study_groups_repo.dart';
+import '../models/event.dart';
+import '../models/study_group.dart';
+import '../repository/i_events_repo.dart';
+import '../repository/mock/mock_i_events_repo.dart';
 import '../repository/mock/mock_users_repo.dart';
-import '../repository/study_groups_repo.dart';
 import '../repository/users_repo.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
@@ -44,9 +44,14 @@ import '../ui/views/study_groups/study_groups_view.dart';
     LazySingleton(classType: AuthService),
     LazySingleton(classType: BottomSheetService),
     LazySingleton(classType: DialogService),
-    // LazySingleton(classType: EventsRepoImpl, asType: EventsRepo),
-    LazySingleton(classType: MockEventsRepo, asType: EventsRepo),
-    LazySingleton(classType: MockStudyGroupsRepo, asType: StudyGroupsRepo),
+    LazySingleton(
+      classType: MockIEventsRepo<Event>,
+      asType: IEventsRepo<Event>,
+    ),
+    LazySingleton(
+      classType: MockIEventsRepo<StudyGroup>,
+      asType: IEventsRepo<StudyGroup>,
+    ),
     LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
     LazySingleton(classType: NavigationService),
 // @stacked-service
