@@ -44,9 +44,25 @@ class IEventDetailViewModel<T extends IEvent> extends BaseViewModel {
     }
   }
 
-  Future<void> joinIEventAsync() async =>
-      await _iEventsRepo.joinIEventAsync(iEventId);
+  Future<void> joinIEventAsync() async {
+    await runBusyFuture(_iEventsRepo.joinIEventAsync(iEventId));
 
-  Future<void> unJoinIEventAsync() async =>
-      await _iEventsRepo.unJoinIEventAsync(iEventId);
+    await _dialogService.showDialog(
+      title: 'Success!',
+      description: 'Successfully joined.',
+    );
+
+    _navService.back();
+  }
+
+  Future<void> unJoinIEventAsync() async {
+    await runBusyFuture(_iEventsRepo.unJoinIEventAsync(iEventId));
+
+    await _dialogService.showDialog(
+      title: 'Success!',
+      description: 'Successfully left.',
+    );
+
+    _navService.back();
+  }
 }
