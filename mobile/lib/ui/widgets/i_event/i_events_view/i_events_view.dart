@@ -35,12 +35,6 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
       syncFormWithViewModel(viewModel);
 
   @override
-  void onDispose(IEventsViewModel<IEvent> viewModel) {
-    super.onDispose(viewModel);
-    // disposeForm();
-  }
-
-  @override
   Widget builder(
       BuildContext context, IEventsViewModel viewModel, Widget? child) {
     return Container(
