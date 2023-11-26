@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../models/study_group.dart';
+import '../../widgets/i_event/i_event_detail_view/i_event_detail_view.dart';
 import 'study_group_detail_viewmodel.dart';
 
 class StudyGroupDetailView extends StackedView<StudyGroupDetailViewModel> {
@@ -21,11 +23,6 @@ class StudyGroupDetailView extends StackedView<StudyGroupDetailViewModel> {
   @override
   Widget builder(BuildContext context, StudyGroupDetailViewModel viewModel,
       Widget? child) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Container(
-        padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-      ),
-    );
+    return IEventDetailView<StudyGroup>(iEventId: studyGroupId);
   }
 }
