@@ -36,10 +36,15 @@ class EventStudyController extends Controller {
   Future<Response> getHandler(Request request) async {
     Map<String, dynamic> params = request.url.queryParameters;
 
-    if (params.containsKey('id') && params['id'] is String) {
+    if (params.containsKey('id') && params.containsKey('query')) {
+      return Response(400);
+
+    } else if (params.containsKey('id') && params['id'] is String) {
       return getEventHandler(params['id']);
+
     } else if (params.containsKey('query') && params['query'] is String) {
       return searchEventsHandler(params['query']);
+      
     } else {
       return getEventsHandler();
     }

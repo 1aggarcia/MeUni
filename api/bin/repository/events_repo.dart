@@ -62,6 +62,7 @@ class EventsRepoImpl extends EventsRepo {
     final db.DatabaseReference newRef = _eventsRef.push();
     final Map<String, dynamic> eventJson = event.toJson();
 
+    eventJson.remove('id');
     eventJson.remove('hostName');
     await newRef.set(eventJson);
 
