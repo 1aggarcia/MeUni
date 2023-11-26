@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked/stacked_annotations.dart';
 
 import '../../../../models/event.dart';
 import '../../../../models/i_event.dart';
@@ -8,9 +9,15 @@ import '../../../common/ui_helpers.dart';
 import '../../loading_indicator.dart';
 import '../../round_button.dart';
 import '../i_event_card.dart';
+import 'i_events_view.form.dart';
 import 'i_events_view_model.dart';
 
-class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel> {
+@FormView(fields: [
+  FormTextField(name: 'searchEvent'),
+  FormTextField(name: 'searchStudyGroup'),
+])
+class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
+    with $IEventsView {
   //* Private Properties
   final String _label = T == Event ? 'Event' : 'Study Group';
   final String _article = T == Event ? 'an' : 'a';
@@ -24,17 +31,59 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel> {
       IEventsViewModel<T>();
 
   @override
+  void onViewModelReady(IEventsViewModel<IEvent> viewModel) =>
+      syncFormWithViewModel(viewModel);
+
+  @override
+  void onDispose(IEventsViewModel<IEvent> viewModel) {
+    super.onDispose(viewModel);
+    // disposeForm();
+  }
+
+  @override
   Widget builder(
       BuildContext context, IEventsViewModel viewModel, Widget? child) {
     return Container(
       padding: const EdgeInsets.only(left: 25.0, right: 25.0),
       child: Column(
         children: [
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: TextFormField(
+              controller: T == Event
+                  ? searchEventController
+                  : searchStudyGroupController,
+              decoration: InputDecoration(
+                hintText: 'Search ${_label}s',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                  onPressed: T == Event
+                      ? searchEventController.clear
+                      : searchStudyGroupController.clear,
+                  icon: const Icon(Icons.clear),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                contentPadding: const EdgeInsets.all(0),
+              ),
+            ),
+          ),
+
           RoundButton(
             label: 'Get ${_label}s',
             onPressed: viewModel.busy(viewModel.iEvents)
                 ? null
-                : () async => await viewModel.getIEventsAsync(),
+                : () async {
+                    // Hide keyboard
+                    FocusScopeNode currentFocus = FocusScope.of(context);
+                    if (!currentFocus.hasPrimaryFocus) {
+                      currentFocus.unfocus();
+                    }
+
+                    await viewModel.getIEventsAsync();
+                  },
           ),
           verticalSpaceLarge,
 

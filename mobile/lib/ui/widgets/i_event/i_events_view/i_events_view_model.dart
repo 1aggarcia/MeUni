@@ -6,8 +6,9 @@ import '../../../../app/app.router.dart';
 import '../../../../models/event.dart';
 import '../../../../models/i_event.dart';
 import '../../../../repository/i_events_repo.dart';
+import 'i_events_view.form.dart';
 
-class IEventsViewModel<T extends IEvent> extends BaseViewModel {
+class IEventsViewModel<T extends IEvent> extends FormViewModel {
   //* Private Properties
   final _eventsRepo = locator<IEventsRepo<T>>();
 
@@ -19,7 +20,9 @@ class IEventsViewModel<T extends IEvent> extends BaseViewModel {
   //* Public Methods
   Future<void> getIEventsAsync() async {
     iEvents = await runBusyFuture(
-      _eventsRepo.getIEventsAsync(),
+      _eventsRepo.getIEventsAsync(
+        searchQuery: T == Event ? searchEventValue : searchStudyGroupValue,
+      ),
       busyObject: iEvents,
     );
   }
@@ -34,7 +37,9 @@ class IEventsViewModel<T extends IEvent> extends BaseViewModel {
 
   Future<void> goToIEventDetailPageAsync(int index) async {
     if (T == Event) {
-      await _navService.navigateToEventDetailView(eventId: iEvents[index].id);
+      await _navService.navigateToEventDetailView(
+        eventId: iEvents[index].id,
+      );
     } else {
       await _navService.navigateToStudyGroupDetailView(
         studyGroupId: iEvents[index].id,
