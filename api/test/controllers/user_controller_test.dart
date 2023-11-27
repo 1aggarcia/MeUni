@@ -13,9 +13,9 @@ UserController _controller = UserController();
 void main() {
   group('Users Controller -', () {
     setUp(() async {
-      locator.reset();
+      await locator.reset();
 
-      locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
+      locator.registerLazySingleton<UsersRepo>(MockUsersRepo.new);
 
       _controller = UserController();
     });

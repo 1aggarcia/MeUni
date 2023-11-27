@@ -1,3 +1,5 @@
+import 'package:string_similarity/string_similarity.dart';
+
 import '../../models/event.dart';
 import '../events_repo.dart';
 
@@ -20,8 +22,8 @@ class MockEventsRepo extends EventsRepo {
   void resetEvents() {
     _nextId = 0;
     _events = {
-      "-3":Event(
-        id: "-3",
+      '-3': Event(
+        id: '-3',
         title: 'Pizza',
         desc: 'need ppl to chip in for pizza',
         location: 'The crib',
@@ -29,34 +31,34 @@ class MockEventsRepo extends EventsRepo {
         startTime: DateTime.parse('2023-11-04 03:04:15.537017Z'),
         endTime: DateTime.parse('2023-11-04 03:24:15.537017Z'),
         hostName: 'Fei',
-        hostId: "1",
-        attendees: ["2", "3"],
+        hostId: '1',
+        attendees: ['2', '3'],
         attendeeNames: ['John', 'Hannah'],
       ),
-      "-2":Event(
-        id: "-2",
+      '-2': Event(
+        id: '-2',
         title: 'Event 1',
         desc: 'This is a sample description for this event',
         location: 'UW CSE2 G21',
         max: 3,
         startTime: DateTime.parse('2023-11-04 02:24:25.537017Z'),
         endTime: DateTime.parse('2023-11-07 03:24:15.537017Z'),
-        hostId: "2",
+        hostId: '2',
         hostName: 'John',
-        attendees: ["1", "3"],
+        attendees: ['1', '3'],
         attendeeNames: ['Fei', 'Hannah'],
       ),
-      "-1":Event(
-        id: "-1",
+      '-1': Event(
+        id: '-1',
         title: 'Another event',
         desc: 'This time i really need people',
         location: '[Redacted]',
         max: 2,
         startTime: DateTime.parse('2023-11-05 03:04:15.537017Z'),
         endTime: DateTime.parse('2023-11-05 03:24:15.537017Z'),
-        hostId: "3",
+        hostId: '3',
         hostName: 'Hannah',
-        attendees: ["1"],
+        attendees: ['1'],
         attendeeNames: ['Fei'],
       ),
     };
@@ -65,9 +67,9 @@ class MockEventsRepo extends EventsRepo {
   //* Overriden Methods
   @override
   Future<String> addEventAsync(Event event) async {
-    _events["$_nextId"] = event;
+    _events['$_nextId'] = event;
     _nextId++;
-    return "${_nextId - 1}";
+    return '${_nextId - 1}';
   }
 
   @override
@@ -85,18 +87,38 @@ class MockEventsRepo extends EventsRepo {
   Future<List<Event>> getEventsAsync() async {
     List<Event> list = [];
     _events.forEach((k, v) {
-      v.setId(k);
+      v.id = k;
       list.add(v);
     });
     return list;
   }
 
   @override
+  // Copy & paste from events_repo.dart
+  Future<List<Event>> rankEventsAsync(String query) async {
+    final List<Event> all = await getEventsAsync();
+    final List<Event> result = [];
+
+    String eventText;
+    for (Event event in all) {
+      eventText = event.title + event.desc;
+      // Events scored n times
+      if (eventText.similarityTo(query.toLowerCase()) > 0) {
+        result.add(event);
+      }
+    }
+    // Events re-scored n*log(n) times
+    result.sort((a, b) => eventCompare(a, b, query));
+
+    return result;
+  }
+
+  @override
   Future<List<String>?> joinEventAsync(String userId, String eventId) async {
     Event? event = _events[eventId];
     if (event == null ||
-          event.attendees.contains(userId) ||
-          event.attendees.length >= event.max) {
+        event.attendees.contains(userId) ||
+        event.attendees.length >= event.max) {
       return null;
     } else {
       event.attendees.add(userId);
@@ -114,5 +136,18 @@ class MockEventsRepo extends EventsRepo {
       event.attendees.remove(userId);
       return event.attendees;
     }
+  }
+
+  // Copy & paste from events_repo.dart
+  int eventCompare(Event a, Event b, String query) {
+    final String lowerQuery = query.toLowerCase();
+
+    double scoreA = a.title.toLowerCase().similarityTo(lowerQuery) *titleSearchWeight;
+    scoreA += a.desc.toLowerCase().similarityTo(lowerQuery) *descSearchWeight;
+
+    double scoreB = b.title.toLowerCase().similarityTo(lowerQuery) *titleSearchWeight;
+    scoreB += b.desc.toLowerCase().similarityTo(lowerQuery) *descSearchWeight;
+
+    return scoreB.compareTo(scoreA);
   }
 }
