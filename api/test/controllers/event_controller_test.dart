@@ -44,7 +44,7 @@ Event tennisEvent = Event(
 Event dingDongEvent = Event(
   id: '2',
   title: 'Ding Dong Ditching',
-  desc: 'Lets go make my neighbors mad!',
+  desc: 'Hey, lets go make my neighbors mad!',
   location: 'Community Center',
   max: 5,
   startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
@@ -58,6 +58,64 @@ Event dingDongEvent = Event(
 String eventJson = jsonEncode(event.toJsonFull());
 String tennisJson = jsonEncode(tennisEvent.toJsonFull());
 String dingDongJson = jsonEncode(dingDongEvent.toJsonFull());
+
+Event searchLocEvent = Event(
+  id: '0',
+  title: '!',
+  desc: '!',
+  location: 'kEyWoRd',
+  max: 5,
+  startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
+  endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
+  hostId: '3b',
+  hostName: '[unknown user]',
+  attendees: [],
+  attendeeNames: [],
+);
+Event searchTitleEvent = Event(
+  id: '1',
+  title: 'KeYwOrD',
+  desc: '!',
+  location: '!',
+  max: 5,
+  startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
+  endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
+  hostId: '3b',
+  hostName: '[unknown user]',
+  attendees: [],
+  attendeeNames: [],
+);
+Event searchDescEvent = Event(
+  id: '2',
+  title: '!',
+  desc: 'KEywORd',
+  location: '!',
+  max: 5,
+  startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
+  endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
+  hostId: '3b',
+  hostName: '[unknown user]',
+  attendees: [],
+  attendeeNames: [],
+);
+Event searchMisspelledEvent = Event(
+  id: '1',
+  title: 'keywrod',
+  desc: '!',
+  location: '!',
+  max: 5,
+  startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
+  endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
+  hostId: '3b',
+  hostName: '[unknown user]',
+  attendees: [],
+  attendeeNames: [],
+);
+
+String searchLocJson = jsonEncode(searchLocEvent.toJsonFull());
+String searchTitleJson = jsonEncode(searchTitleEvent.toJsonFull());
+String searchDescJson = jsonEncode(searchDescEvent.toJsonFull());
+String searchMisspelledJson = jsonEncode(searchMisspelledEvent.toJsonFull());
 
 void main() {
   group('Event Study Controller -', () {
@@ -174,6 +232,60 @@ void main() {
 
         response = await sendGetRequest('?query=asd&id=0');
         expect(response.statusCode, 400);
+      });
+
+      test('search weighting', () async {
+        // Create events
+        Response response = await sendCreateRequest(searchLocJson);
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(searchTitleJson);
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(searchDescJson);
+        expect(response.statusCode, 200);
+
+        // Search
+        response = await sendGetRequest('?query=keywrd');
+        expect(response.statusCode, 200);
+        expect(
+          await response.readAsString(),
+          eventsToJson([searchTitleEvent, searchDescEvent, searchLocEvent]),
+        );
+      });
+
+      test('search excludes irrelevant events', () async {
+        // Create events
+        Response response = await sendCreateRequest(eventJson);
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(searchTitleJson);
+        expect(response.statusCode, 200);
+
+        // Search
+        response = await sendGetRequest('?query=pizza');
+        expect(response.statusCode, 200);
+        expect(
+          await response.readAsString(),
+          eventsToJson([event]),
+        );
+      });
+
+      test('search ranks exact matches highest', () async {
+        // Create events
+        Response response = await sendCreateRequest(searchLocJson);
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(searchMisspelledJson);
+        expect(response.statusCode, 200);
+
+        // Search
+        response = await sendGetRequest('?query=keyword');
+        expect(response.statusCode, 200);
+        expect(
+          await response.readAsString(),
+          eventsToJson([searchLocEvent, searchMisspelledEvent]),
+        );
       });
     });
 

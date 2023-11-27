@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class User {
-  String? id;
+  final String id;
   final String firstName;
   final String lastName;
   final int year;
@@ -9,7 +9,7 @@ class User {
   final bool admin;
 
   User(
-      {this.id,
+      {required this.id,
       required this.firstName,
       required this.lastName,
       required this.year,
@@ -20,14 +20,15 @@ class User {
     if (json['id'] is! String ||
         json['firstName'] is! String ||
         json['lastName'] is! String ||
-        json['year'] is! String ||
+        json['year'] is! int ||
         json['pronouns'] is! String ||
-        json['admin'] is! String) {
+        json['admin'] is! bool) {
       throw Exception(
-          "json map passed in with incorrect or missing params for User:\n$json");
+          'json map passed in with incorrect or missing params for User:\n$json');
     }
 
     return User(
+        id: json['id'],
         firstName: json['firstName'],
         lastName: json['lastName'],
         year: json['year'],
@@ -50,12 +51,14 @@ User? userFromJson(String str) {
   try {
     return userFromMap(json.decode(str));
   } catch (e) {
-    print("ERROR: userFromJson() $e");
+    print('ERROR: userFromJson() $e');
     return null;
   }
 }
 
-User? userFromMap(Map<String, dynamic> data) {}
+User? userFromMap(Map<String, dynamic> data) {
+  throw UnimplementedError();
+}
 
 String userToJson(User data) => json.encode(data.toJson());
 

@@ -159,13 +159,9 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   /// Assign the given event a score of relevance to the given query (case insensitive)
-  /// * if query has less than 2 characters, score = 0
   /// * if query has an exact match in event text, score = 1
   /// * otherwise, score = string similarity based on Dice's Coefficient, between 0-1
   double scoreEvent(Event event, String query) {
-    if (query.length < 2) {
-      return 0;
-    }
     final String lowerQuery = query.toLowerCase();
     final String lowerTitle = event.title.toLowerCase();
     final String lowerDesc = event.desc.toLowerCase();

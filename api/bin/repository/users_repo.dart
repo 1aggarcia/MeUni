@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:firebase_dart/database.dart' as db;
+
 import '../models/user.dart';
 
-import 'package:firebase_dart/database.dart' as db;
 
 abstract class UsersRepo {
   //* Public Methods

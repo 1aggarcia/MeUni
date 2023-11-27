@@ -99,17 +99,13 @@ class MockEventsRepo extends EventsRepo {
     final List<Event> all = await getEventsAsync();
     final List<Event> result = [];
 
-    String eventText;
     for (Event event in all) {
-      eventText = event.title + event.desc;
-      // Events scored n times
-      if (eventText.similarityTo(query.toLowerCase()) > 0) {
+      if (scoreEvent(event, query) > 0) {
         result.add(event);
       }
     }
-    // Events re-scored n*log(n) times
-    result.sort((a, b) => eventCompare(a, b, query));
 
+    result.sort((a, b) => compareScore(a, b, query));
     return result;
   }
 
@@ -138,16 +134,31 @@ class MockEventsRepo extends EventsRepo {
     }
   }
 
-  // Copy & paste from events_repo.dart
-  int eventCompare(Event a, Event b, String query) {
+  /// Comparator function to sort a list of events by score of relevance to given query
+  int compareScore(Event a, Event b, String query) {
+    return scoreEvent(b, query).compareTo(scoreEvent(a, query));
+  }
+
+  /// Assign the given event a score of relevance to the given query (case insensitive)
+  /// * if query has less than 2 characters, score = 0
+  /// * if query has an exact match in event text, score = 1
+  /// * otherwise, score = string similarity based on Dice's Coefficient, between 0-1
+  double scoreEvent(Event event, String query) {
+    if (query.length < 2) {
+      return 0;
+    }
     final String lowerQuery = query.toLowerCase();
+    final String lowerTitle = event.title.toLowerCase();
+    final String lowerDesc = event.desc.toLowerCase();
+    final String lowerLoc = event.location.toLowerCase();
 
-    double scoreA = a.title.toLowerCase().similarityTo(lowerQuery) *titleSearchWeight;
-    scoreA += a.desc.toLowerCase().similarityTo(lowerQuery) *descSearchWeight;
-
-    double scoreB = b.title.toLowerCase().similarityTo(lowerQuery) *titleSearchWeight;
-    scoreB += b.desc.toLowerCase().similarityTo(lowerQuery) *descSearchWeight;
-
-    return scoreB.compareTo(scoreA);
+    if ((lowerTitle + lowerDesc + lowerLoc).contains(lowerQuery)) {
+      return 1;
+    } else {
+      final double titleScore = lowerTitle.similarityTo(lowerQuery) *titleSearchWeight;
+      final double descScore = lowerDesc.similarityTo(lowerQuery) *descSearchWeight;
+      final double locScore = lowerLoc.similarityTo(lowerQuery) *locSearchWeight;
+      return (titleScore + descScore + locScore) / 3;
+    }
   }
 }
