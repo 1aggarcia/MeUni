@@ -10,6 +10,7 @@ import 'package:shelf_router/shelf_router.dart';
 
 import 'controllers/event_controller.dart';
 import 'controllers/study_group_controller.dart';
+import 'controllers/uniing_controller.dart';
 import 'controllers/user_controller.dart';
 import 'locator.dart';
 
@@ -35,6 +36,7 @@ void main(List<String> args) async {
   router = UserController().setUpRoutes(router, '/users');
   router = EventController().setUpRoutes(router, '/events');
   router = StudyGroupController().setUpRoutes(router, '/study_groups');
+  router = UniingController().setUpRoutes(router, '/uniing');
 
   // Use any available host or container IP (usually `0.0.0.0`).
   final ip = io.InternetAddress.anyIPv4;
