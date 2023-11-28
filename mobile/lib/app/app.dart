@@ -24,6 +24,7 @@ import '../ui/views/profile/profile_view.dart';
 import '../ui/views/startup/startup_view.dart';
 import '../ui/views/study_group_detail/study_group_detail_view.dart';
 import '../ui/views/study_groups/study_groups_view.dart';
+import 'package:meuni_mobile/ui/views/classes/classes_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -39,6 +40,7 @@ import '../ui/views/study_groups/study_groups_view.dart';
     MaterialRoute(page: StudyGroupsView),
     MaterialRoute(page: EventDetailView),
     MaterialRoute(page: StudyGroupDetailView),
+    MaterialRoute(page: ClassesView),
 // @stacked-route
   ],
   dependencies: [

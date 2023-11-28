@@ -5,8 +5,9 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i13;
+import 'package:flutter/material.dart' as _i14;
 import 'package:flutter/material.dart';
+import 'package:meuni_mobile/ui/views/classes/classes_view.dart' as _i13;
 import 'package:meuni_mobile/ui/views/create_event/create_event_view.dart'
     as _i2;
 import 'package:meuni_mobile/ui/views/create_profile/create_profile_view.dart'
@@ -25,7 +26,7 @@ import 'package:meuni_mobile/ui/views/study_group_detail/study_group_detail_view
 import 'package:meuni_mobile/ui/views/study_groups/study_groups_view.dart'
     as _i10;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i14;
+import 'package:stacked_services/stacked_services.dart' as _i15;
 
 class Routes {
   static const createEventView = '/create-event-view';
@@ -50,6 +51,8 @@ class Routes {
 
   static const studyGroupDetailView = '/study-group-detail-view';
 
+  static const classesView = '/classes-view';
+
   static const all = <String>{
     createEventView,
     createProfileView,
@@ -62,6 +65,7 @@ class Routes {
     studyGroupsView,
     eventDetailView,
     studyGroupDetailView,
+    classesView,
   };
 }
 
@@ -111,66 +115,70 @@ class StackedRouter extends _i1.RouterBase {
       Routes.studyGroupDetailView,
       page: _i12.StudyGroupDetailView,
     ),
+    _i1.RouteDef(
+      Routes.classesView,
+      page: _i13.ClassesView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.CreateEventView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.CreateEventView(),
         settings: data,
       );
     },
     _i3.CreateProfileView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.CreateProfileView(),
         settings: data,
       );
     },
     _i4.CreateStudyGroupView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.CreateStudyGroupView(),
         settings: data,
       );
     },
     _i5.EventsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.EventsView(),
         settings: data,
       );
     },
     _i6.HomeView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.HomeView(),
         settings: data,
       );
     },
     _i7.LoginView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.LoginView(),
         settings: data,
       );
     },
     _i8.ProfileView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i8.ProfileView(),
         settings: data,
       );
     },
     _i9.StartupView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i9.StartupView(),
         settings: data,
       );
     },
     _i10.StudyGroupsView: (data) {
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i10.StudyGroupsView(),
         settings: data,
       );
     },
     _i11.EventDetailView: (data) {
       final args = data.getArgs<EventDetailViewArguments>(nullOk: false);
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i11.EventDetailView(key: args.key, eventId: args.eventId),
         settings: data,
@@ -178,9 +186,15 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i12.StudyGroupDetailView: (data) {
       final args = data.getArgs<StudyGroupDetailViewArguments>(nullOk: false);
-      return _i13.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => _i12.StudyGroupDetailView(
             key: args.key, studyGroupId: args.studyGroupId),
+        settings: data,
+      );
+    },
+    _i13.ClassesView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i13.ClassesView(),
         settings: data,
       );
     },
@@ -199,7 +213,7 @@ class EventDetailViewArguments {
     required this.eventId,
   });
 
-  final _i13.Key? key;
+  final _i14.Key? key;
 
   final String eventId;
 
@@ -226,7 +240,7 @@ class StudyGroupDetailViewArguments {
     required this.studyGroupId,
   });
 
-  final _i13.Key? key;
+  final _i14.Key? key;
 
   final String studyGroupId;
 
@@ -247,7 +261,7 @@ class StudyGroupDetailViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i14.NavigationService {
+extension NavigatorStateExtension on _i15.NavigationService {
   Future<dynamic> navigateToCreateEventView([
     int? routerId,
     bool preventDuplicates = true,
@@ -375,7 +389,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> navigateToEventDetailView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String eventId,
     int? routerId,
     bool preventDuplicates = true,
@@ -392,7 +406,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> navigateToStudyGroupDetailView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String studyGroupId,
     int? routerId,
     bool preventDuplicates = true,
@@ -403,6 +417,20 @@ extension NavigatorStateExtension on _i14.NavigationService {
     return navigateTo<dynamic>(Routes.studyGroupDetailView,
         arguments:
             StudyGroupDetailViewArguments(key: key, studyGroupId: studyGroupId),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToClassesView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.classesView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -536,7 +564,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> replaceWithEventDetailView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String eventId,
     int? routerId,
     bool preventDuplicates = true,
@@ -553,7 +581,7 @@ extension NavigatorStateExtension on _i14.NavigationService {
   }
 
   Future<dynamic> replaceWithStudyGroupDetailView({
-    _i13.Key? key,
+    _i14.Key? key,
     required String studyGroupId,
     int? routerId,
     bool preventDuplicates = true,
@@ -564,6 +592,20 @@ extension NavigatorStateExtension on _i14.NavigationService {
     return replaceWith<dynamic>(Routes.studyGroupDetailView,
         arguments:
             StudyGroupDetailViewArguments(key: key, studyGroupId: studyGroupId),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithClassesView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.classesView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
