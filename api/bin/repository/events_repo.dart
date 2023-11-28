@@ -5,7 +5,9 @@ import 'package:string_similarity/string_similarity.dart';
 
 import '../locator.dart';
 import '../models/event.dart';
+//import '../models/user.dart';
 import '../models/user_data.dart';
+//import 'users_repo.dart';
 
 // Weight must be between 0-1
 final double titleSearchWeight = 1;
@@ -43,11 +45,13 @@ abstract class EventsRepo {
 
 class EventsRepoImpl extends EventsRepo {
   //* Private Properties
-  final String endpoint;
-  final String paramName;
-
+  //final UsersRepo _userRepo = locator<UsersRepo>();
   late db.DatabaseReference _eventsRef;
   late UserData _userEventsTable;
+
+  //* Public Properties
+  final String endpoint;
+  final String paramName;
 
   //* Constructors
   EventsRepoImpl(this.endpoint, this.paramName) {
@@ -83,7 +87,9 @@ class EventsRepoImpl extends EventsRepo {
   Future<List<Event>> getEventsAsync() async {
     final db.DataSnapshot snapshot = await _eventsRef.once();
     final json = jsonEncode(snapshot.value);
-    return eventsFromJson(json);
+    List<Event> events = eventsFromJson(json);
+
+    return injectNames(events);
   }
 
   @override
@@ -93,7 +99,11 @@ class EventsRepoImpl extends EventsRepo {
     if (event is Event) {
       event.id = id;
     }
-    return event;
+    if (event == null) {
+      return null;
+    } else {
+      return injectNames([event]).first;
+    }
   }
 
   @override
@@ -143,19 +153,29 @@ class EventsRepoImpl extends EventsRepo {
 
   //* Helper methods
 
-  /// Returns true iff userId and eventId passed in coorespond 
-  /// to an existing user and event in the database, and the event has space
-  Future<bool> userCanJoinAsync(String userId, String eventId) async{
-    // TODO: check for user validity
-    Event? event = await getEventAsync(eventId);
-    return (event != null &&
-        !event.attendees.contains(userId) &&
-        event.attendees.length < event.max);
-  }
-
   /// Comparator function to sort a list of events by score of relevance to given query
   int compareScore(Event a, Event b, String query) {
     return scoreEvent(b, query).compareTo(scoreEvent(a, query));
+  }
+
+  /// Find the host name and attendee Names for every event given and inject them into each event
+  /// @returns list of events passed in with names if avaliable in database, or [unknown] for unknown users
+  List<Event> injectNames(List<Event> events) {
+    //List<User> users = []; //_userRepo.getUsersAsync();
+    List<Event> result = [];
+
+    for (Event event in events) {
+      Event copy = event.clone();
+      // insert *magic* /
+      copy.hostName = '[unknown*]';
+      for (String a in copy.attendees) {
+        copy.attendeeNames.add('[$a]');
+      }
+      // end of *magic* /
+      result.add(copy);
+    }
+
+    return result;
   }
 
   /// Assign the given event a score of relevance to the given query (case insensitive)
@@ -175,5 +195,15 @@ class EventsRepoImpl extends EventsRepo {
       final double locScore = lowerLoc.similarityTo(lowerQuery) *locSearchWeight;
       return (titleScore + descScore + locScore) / 3;
     }
+  }
+
+  /// Returns true iff userId and eventId passed in coorespond 
+  /// to an existing user and event in the database, and the event has space
+  Future<bool> userCanJoinAsync(String userId, String eventId) async{
+    // TODO: check for user validity
+    Event? event = await getEventAsync(eventId);
+    return (event != null &&
+        !event.attendees.contains(userId) &&
+        event.attendees.length < event.max);
   }
 }

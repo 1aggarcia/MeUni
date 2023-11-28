@@ -105,6 +105,23 @@ class Event {
     'attendeeNames': attendeeNames
   };
 
+  /// Returns a copy of the instance event
+  Event clone() {
+    return Event(
+      id: id,
+      title: title,
+      desc: desc,
+      location: location,
+      max: max,
+      startTime: startTime,
+      endTime: endTime,
+      hostId: hostId,
+      hostName: hostName,
+      attendees: attendees,
+      attendeeNames: attendeeNames,      
+    );
+  }
+
   /// Does not check equality of attendees, attendeeNames, or id
   bool equals(Event other) {
     return title == other.title &&

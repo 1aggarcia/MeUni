@@ -83,6 +83,21 @@ void main() {
       expect(evtB.equals(evt), false);
     });
 
+    test('clone', () {
+      Event copy = evt.clone();
+      expect(copy.id, evt.id);
+      expect(copy.title, evt.title);
+      expect(copy.desc, evt.desc);
+      expect(copy.location, evt.location);
+      expect(copy.max, evt.max);
+      expect(copy.startTime, evt.startTime);
+      expect(copy.endTime, evt.endTime);
+      expect(copy.hostId, evt.hostId);
+      expect(copy.hostName, evt.hostName);
+      expect(copy.attendees, evt.attendees);
+      expect(copy.attendeeNames, evt.attendeeNames);
+    });
+
     test('Event.toJson', () {
       expect(evt.toJson(), evtJsonMap);
     });
