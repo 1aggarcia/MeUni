@@ -13,10 +13,10 @@ class Event {
   final DateTime endTime;
 
   final String hostId;
-  final String hostName;
+  String hostName;
 
   final List<String> attendees;
-  final List<String> attendeeNames;
+  List<String> attendeeNames;
 
   Event({
     this.id,
@@ -57,15 +57,9 @@ class Event {
           "param 'max' must be within range 1-$maxCapacity:\n$json");
     }
     List<String> attendees = [];
-    List<String> attendeeNames = [];
 
-    String hostName = userNamefromId(json['hostId']);
     if (json['attendees'] is List<dynamic>) {
       attendees = List<String>.from(json['attendees']);
-      attendeeNames = [];
-      for (String id in attendees) {
-        attendeeNames.add(userNamefromId(id));
-      }
     } else if (json['attendees'] != null) {
       throw Exception(
           "Optional param 'attendees' must be of type List<String> if included:\n$json");
@@ -79,9 +73,9 @@ class Event {
       startTime: DateTime.parse(json['startTime']),
       endTime: DateTime.parse(json['endTime']),
       hostId: json['hostId'],
-      hostName: hostName,
+      hostName: '[unknown]',
       attendees: attendees,
-      attendeeNames: attendeeNames);
+      attendeeNames: []);
   }
 
   /// Returns a json map of Event instance
@@ -164,9 +158,4 @@ List<Event> eventsFromMap(Map<String, dynamic> data) {
     }
   });
   return events;
-}
-
-/// Does not work
-String userNamefromId(String userId) {
-    return '[unknown user]';
 }

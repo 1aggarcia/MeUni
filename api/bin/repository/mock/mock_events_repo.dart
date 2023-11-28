@@ -118,7 +118,6 @@ class MockEventsRepo extends EventsRepo {
       return null;
     } else {
       event.attendees.add(userId);
-      event.attendeeNames.add(userNamefromId(userId));
       return event.attendees;
     }
   }

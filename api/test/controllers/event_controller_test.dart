@@ -24,7 +24,7 @@ Event event = Event(
   startTime: DateTime.parse('2023-11-04T03:04:15.537017Z'),
   endTime: DateTime.parse('2023-11-04T03:24:15.537017Z'),
   hostId: '1a',
-  hostName: '[unknown user]',
+  hostName: '[unknown]',
   attendees: [],
   attendeeNames: [],
 );
@@ -37,7 +37,7 @@ Event tennisEvent = Event(
   startTime: DateTime.parse('2024-01-04T15:14:15.537017Z'),
   endTime: DateTime.parse('2023-11-04T16:14:15.567017Z'),
   hostId: '2b',
-  hostName: '[unknown user]',
+  hostName: '[unknown]',
   attendees: [],
   attendeeNames: [],
 );
@@ -50,7 +50,7 @@ Event dingDongEvent = Event(
   startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
   endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
   hostId: '3b',
-  hostName: '[unknown user]',
+  hostName: '[unknown]',
   attendees: [],
   attendeeNames: [],
 );
@@ -68,7 +68,7 @@ Event searchLocEvent = Event(
   startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
   endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
   hostId: '3b',
-  hostName: '[unknown user]',
+  hostName: '[unknown]',
   attendees: [],
   attendeeNames: [],
 );
@@ -81,7 +81,7 @@ Event searchTitleEvent = Event(
   startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
   endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
   hostId: '3b',
-  hostName: '[unknown user]',
+  hostName: '[unknown]',
   attendees: [],
   attendeeNames: [],
 );
@@ -94,7 +94,7 @@ Event searchDescEvent = Event(
   startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
   endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
   hostId: '3b',
-  hostName: '[unknown user]',
+  hostName: '[unknown]',
   attendees: [],
   attendeeNames: [],
 );
@@ -107,7 +107,7 @@ Event searchMisspelledEvent = Event(
   startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
   endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
   hostId: '3b',
-  hostName: '[unknown user]',
+  hostName: '[unknown]',
   attendees: [],
   attendeeNames: [],
 );
@@ -207,7 +207,7 @@ void main() {
           startTime: DateTime.parse('2024-01-04T15:14:15.537017Z'),
           endTime: DateTime.parse('2023-11-04T16:14:15.567017Z'),
           hostId: '2b',
-          hostName: '[unknown user]',
+          hostName: '[unknown]',
           attendees: [],
           attendeeNames: [],
         );
