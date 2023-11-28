@@ -1,28 +1,6 @@
 import 'dart:convert';
 
-User userFromJson(String str, int userId) {
-  var decode = json.decode(str);
-  return User.fromJson(decode, userId);
-}
-
-String userToJson(User data) => json.encode(data.toJson());
-
-List<User> usersFromJson(String str) =>
-    List<User>.from(json.decode(str).map((x) => User.fromJson(x, -1)));
-
-String usersToJson(List<User> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 class User {
-  User({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.year,
-    required this.pronouns,
-    required this.admin
-  });
-
   final String id;
   final String firstName;
   final String lastName;
@@ -30,21 +8,59 @@ class User {
   final String pronouns;
   final bool admin;
 
-  factory User.fromJson(Map<String, dynamic> json, int userId) => User(
+  User(
+      {required this.id,
+      required this.firstName,
+      required this.lastName,
+      required this.year,
+      required this.pronouns,
+      required this.admin});
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    if (json['id'] is! String ||
+        json['firstName'] is! String ||
+        json['lastName'] is! String ||
+        json['year'] is! int ||
+        json['pronouns'] is! String ||
+        json['admin'] is! bool) {
+      throw Exception(
+          'json map passed in with incorrect or missing params for User:\n$json');
+    }
+
+    return User(
         id: json['id'],
         firstName: json['firstName'],
         lastName: json['lastName'],
         year: json['year'],
         pronouns: json['pronouns'],
-        admin: json['admin'],
-      );
+        admin: json['admin']);
+  }
 
+  /// Returns a json map of User instance
   Map<String, dynamic> toJson() => {
-        'id' : id,
-        'firstName' : firstName,
+        'id': id,
+        'firstName': firstName,
         'lastName': lastName,
         'year': year,
-        'pronouns' : pronouns,
-        'admin' : admin,
+        'pronouns': pronouns,
+        'admin': admin,
       };
 }
+
+User? userFromJson(String str) {
+  try {
+    return userFromMap(json.decode(str));
+  } catch (e) {
+    print('ERROR: userFromJson() $e');
+    return null;
+  }
+}
+
+User? userFromMap(Map<String, dynamic> data) {
+  throw UnimplementedError();
+}
+
+String userToJson(User data) => json.encode(data.toJson());
+
+String usersToJson(List<User> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

@@ -5,13 +5,13 @@ import 'controller.dart';
 import 'event_study_controller.dart';
 
 // may want to consider a generic name for this param
-final paramName = 'eventId';
-final _eventsRepo = EventsRepoImpl('events', paramName);
+final paramName = 'studyGroupId';
+final _studyGroupsRepo = EventsRepoImpl('study_groups', paramName);
 
-class EventController extends Controller {
+class StudyGroupController extends Controller {
   //* Private Properties
-  final EventStudyController _controller =
-      EventStudyController(_eventsRepo, paramName);
+  final EventStudyController _controller = 
+      EventStudyController(_studyGroupsRepo, paramName);
 
   //* Overriden Methods
   @override

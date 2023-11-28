@@ -4,11 +4,12 @@ import 'package:dotenv/dotenv.dart';
 import 'package:firebase_dart/core.dart';
 import 'package:firebase_dart/database.dart';
 import 'package:firebase_dart/implementation/pure_dart.dart';
-import 'package:shelf_router/shelf_router.dart';
-import 'package:shelf/shelf_io.dart';
 import 'package:shelf/shelf.dart';
+import 'package:shelf/shelf_io.dart';
+import 'package:shelf_router/shelf_router.dart';
 
 import 'controllers/event_controller.dart';
+import 'controllers/study_group_controller.dart';
 import 'controllers/user_controller.dart';
 import 'locator.dart';
 
@@ -31,8 +32,9 @@ void main(List<String> args) async {
 
   // Configure routes.
   var router = Router();
-  router = EventController().setUpRoutes(router, '/events');
   router = UserController().setUpRoutes(router, '/users');
+  router = EventController().setUpRoutes(router, '/events');
+  router = StudyGroupController().setUpRoutes(router, '/study_groups');
 
   // Use any available host or container IP (usually `0.0.0.0`).
   final ip = io.InternetAddress.anyIPv4;

@@ -8,7 +8,7 @@ StudyGroup studygroupFromJson(String str) {
 String studygroupToJson(StudyGroup data) => json.encode(data.toJson());
 
 List<StudyGroup> studygroupsFromJson(String str) =>
-    List<StudyGroup>.from(json.decode(str).map((x) => StudyGroup.fromJson(x)));
+    List<StudyGroup>.from(json.decode(str).map(StudyGroup.fromJson));
 
 String studygroupsToJson(List<StudyGroup> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -31,14 +31,14 @@ class StudyGroup {
   //* Constructors
   StudyGroup(
       {required this.course,
-        required this.desc,
-        required this.location,
-        required this.max,
-        required this.startTime,
-        required this.endTime,
-        required this.hostId,
-        required this.hostName,
-        required this.attendees});
+      required this.desc,
+      required this.location,
+      required this.max,
+      required this.startTime,
+      required this.endTime,
+      required this.hostId,
+      required this.hostName,
+      required this.attendees});
 
   factory StudyGroup.fromJson(Map<String, dynamic> json) {
     List<int> attendees = List<int>.from(json['attendees']);
@@ -57,14 +57,14 @@ class StudyGroup {
   }
 
   Map<String, dynamic> toJson() => {
-    'course': course,
-    'desc': desc,
-    'location': location,
-    'max': max,
-    'startTime': startTime.toIso8601String(),
-    'endTime': endTime.toIso8601String(),
-    'hostId': hostId,
-    'hostName': hostName,
-    'attendees': attendees,
-  };
+        'course': course,
+        'desc': desc,
+        'location': location,
+        'max': max,
+        'startTime': startTime.toIso8601String(),
+        'endTime': endTime.toIso8601String(),
+        'hostId': hostId,
+        'hostName': hostName,
+        'attendees': attendees,
+      };
 }

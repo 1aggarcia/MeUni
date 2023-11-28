@@ -1,9 +1,5 @@
 import 'dart:convert';
 
-import 'user.dart';
-import '../controllers/mock_users.dart';
-
-final List<User> mockUsers = MockUsersRepo().getMockUsers();
 final int maxCapacity = 15;
 
 class Event {
@@ -37,26 +33,28 @@ class Event {
   });
 
   /// Creates an instance event from a json map.
-  /// @requires json['title'] is String,
-  /// @requires json['desc'] is String,
-  /// @requires json['location'] is String,
-  /// @requires json['max'] is int,
-  /// @requires json['startTime'] is String formatted as ISO timestamp,
-  /// @requires json['endTime'] is String formatted as ISO timestamp,
-  /// @requires json['hostId'] is String,
-  /// @requires json['attendees'] is List<String> if included
+  /// * requires json['title'] is String
+  /// * requires json['desc'] is String
+  /// * requires json['location'] is String
+  /// * requires json['max'] is int
+  /// * requires json['startTime'] is String formatted as ISO timestamp
+  /// * requires json['endTime'] is String formatted as ISO timestamp
+  /// * requires json['hostId'] is String
+  /// * requires json['attendees'] is List<String> or null
   factory Event.fromJson(Map<String, dynamic> json) {
     if (json['title'] is! String ||
-          json['desc'] is! String ||
-          json['location'] is! String ||
-          json['max'] is! int ||
-          json['startTime'] is! String ||
-          json['endTime'] is! String ||
-          json['hostId'] is! String) {
-      throw Exception("json map passed in with incorrect or missing params for Event:\n$json");
+        json['desc'] is! String ||
+        json['location'] is! String ||
+        json['max'] is! int ||
+        json['startTime'] is! String ||
+        json['endTime'] is! String ||
+        json['hostId'] is! String) {
+      throw Exception(
+          'json map passed in with incorrect or missing params for Event:\n$json');
     }
     if (1 > json['max'] || json['max'] > maxCapacity) {
-      throw Exception("param 'max' must be within range 1-$maxCapacity:\n$json");
+      throw Exception(
+          "param 'max' must be within range 1-$maxCapacity:\n$json");
     }
     List<String> attendees = [];
     List<String> attendeeNames = [];
@@ -69,7 +67,8 @@ class Event {
         attendeeNames.add(userNamefromId(id));
       }
     } else if (json['attendees'] != null) {
-      throw Exception("Optional param 'attendees' must be of type List<String> if included:\n$json");
+      throw Exception(
+          "Optional param 'attendees' must be of type List<String> if included:\n$json");
     }
 
     return Event(
@@ -82,21 +81,24 @@ class Event {
       hostId: json['hostId'],
       hostName: hostName,
       attendees: attendees,
-      attendeeNames: attendeeNames
-    );
+      attendeeNames: attendeeNames);
   }
-
-  // Sets event id to given id
-  bool setId(String id) {
-    this.id = id;
-    return true;
-  }
-
-  // TODO: create 2nd toJson for database, leave this for clients
 
   /// Returns a json map of Event instance
   Map<String, dynamic> toJson() => {
     'id': id,
+    'title': title,
+    'desc': desc,
+    'location': location,
+    'max': max,
+    'startTime': startTime.toIso8601String(),
+    'endTime': endTime.toIso8601String(),
+    'hostId': hostId,
+    'hostName': hostName,
+  };
+
+  /// Returns a json map of Event instance with all details except id
+  Map<String, dynamic> toJsonFull() => {
     'title': title,
     'desc': desc,
     'location': location,
@@ -111,8 +113,7 @@ class Event {
 
   /// Does not check equality of attendees, attendeeNames, or id
   bool equals(Event other) {
-    return 
-        title == other.title &&
+    return title == other.title &&
         desc == other.desc &&
         location == other.location &&
         max == other.max &&
@@ -124,20 +125,20 @@ class Event {
 }
 
 /// Given json string representing event, returns Event or null if improperly formatted
-Event? eventFromJson(String str){
+Event? eventFromJson(String str) {
   try {
     return Event.fromJson(json.decode(str));
-  } catch(e) {
-    print("ERROR: eventFromJson() $e");
-    return null; 
+  } catch (e) {
+    print('ERROR: eventFromJson() $e');
+    return null;
   }
 }
 
 /// Returns json string representing passed in Event
-String eventToJson(Event data) => json.encode(data.toJson());
+String eventToJson(Event data) => json.encode(data.toJsonFull());
 
 /// Returns json string representing passed in Event list
-String eventsToJson(List<Event> data) => 
+String eventsToJson(List<Event> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 /// Converts json string to event list, improperly formatted entires ignored
@@ -145,7 +146,7 @@ List<Event> eventsFromJson(String str) {
   try {
     return eventsFromMap(json.decode(str));
   } catch (e) {
-    print("ERROR: eventsFromJson() $e");
+    print('ERROR: eventsFromJson() $e');
     return [];
   }
 }
@@ -156,41 +157,16 @@ List<Event> eventsFromMap(Map<String, dynamic> data) {
   data.forEach((k, v) {
     try {
       Event e = Event.fromJson(v);
-      e.setId(k);
+      e.id = k;
       events.add(e);
     } catch (e) {
-      print("ERROR: eventsFromMap() $e");
+      print('ERROR: eventsFromMap() $e');
     }
   });
   return events;
 }
 
-/// Given id, returns first name of given user, if it exists
-/// @param userId - of desired user
-/// @returns first name of user with userId, or "[unknown user]" if unavaliable
+/// Does not work
 String userNamefromId(String userId) {
-  int i = 0;
-  User u = mockUsers[i];
-  // mockUsers will be exausted or desired user found
-  while (i < mockUsers.length && u.id != userId) {
-    u = mockUsers[i];
-    i++;
-  }
-
-  if (u.id == userId) {
-    return u.firstName;
-  } else {
-    return "[unknown user]";
-  }
-
-// /// Returns json as string representing passed in Map of events
-// String eventsToJson(Map<String, Event> data) => json.encode(toJsonMap(data));
-
-// /// Converts map of events to json map
-// Map<String, dynamic> toJsonMap(Map<String, Event> data) {
-//   return Map<String, dynamic>.fromEntries(
-//     data.entries.map((entry) => MapEntry(entry.key.toString(), entry.value.toJson())),
-//   );
-// }
+    return '[unknown user]';
 }
-

@@ -1,358 +1,394 @@
+import 'dart:convert';
+
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 
-import '../../bin/controllers/event_controller.dart';
+import '../../bin/controllers/event_study_controller.dart';
 import '../../bin/locator.dart';
 import '../../bin/models/event.dart';
 import '../../bin/repository/events_repo.dart';
 import '../../bin/repository/mock/mock_events_repo.dart';
 
 final String _rndUrl = 'https://example.com';
+final paramName = 'eventId';
+final _eventsRepo = EventsRepoImpl('events', paramName);
 
-EventController _controller = EventController();
+EventStudyController _controller = EventStudyController(_eventsRepo, paramName);
+
+Event event = Event(
+  id: '0',
+  title: 'Pizza',
+  desc: 'need ppl to chip in for pizza',
+  location: 'The crib',
+  max: 4,
+  startTime: DateTime.parse('2023-11-04T03:04:15.537017Z'),
+  endTime: DateTime.parse('2023-11-04T03:24:15.537017Z'),
+  hostId: '1a',
+  hostName: '[unknown user]',
+  attendees: [],
+  attendeeNames: [],
+);
+Event tennisEvent = Event(
+  id: '1',
+  title: 'Tennis',
+  desc: 'At the IMA tennis court! Hang out with me!',
+  location: 'IMA tennis court',
+  max: 3,
+  startTime: DateTime.parse('2024-01-04T15:14:15.537017Z'),
+  endTime: DateTime.parse('2023-11-04T16:14:15.567017Z'),
+  hostId: '2b',
+  hostName: '[unknown user]',
+  attendees: [],
+  attendeeNames: [],
+);
+Event dingDongEvent = Event(
+  id: '2',
+  title: 'Ding Dong Ditching',
+  desc: 'Hey, lets go make my neighbors mad!',
+  location: 'Community Center',
+  max: 5,
+  startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
+  endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
+  hostId: '3b',
+  hostName: '[unknown user]',
+  attendees: [],
+  attendeeNames: [],
+);
+
+String eventJson = jsonEncode(event.toJsonFull());
+String tennisJson = jsonEncode(tennisEvent.toJsonFull());
+String dingDongJson = jsonEncode(dingDongEvent.toJsonFull());
+
+Event searchLocEvent = Event(
+  id: '0',
+  title: '!',
+  desc: '!',
+  location: 'kEyWoRd',
+  max: 5,
+  startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
+  endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
+  hostId: '3b',
+  hostName: '[unknown user]',
+  attendees: [],
+  attendeeNames: [],
+);
+Event searchTitleEvent = Event(
+  id: '1',
+  title: 'KeYwOrD',
+  desc: '!',
+  location: '!',
+  max: 5,
+  startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
+  endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
+  hostId: '3b',
+  hostName: '[unknown user]',
+  attendees: [],
+  attendeeNames: [],
+);
+Event searchDescEvent = Event(
+  id: '2',
+  title: '!',
+  desc: 'KEywORd',
+  location: '!',
+  max: 5,
+  startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
+  endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
+  hostId: '3b',
+  hostName: '[unknown user]',
+  attendees: [],
+  attendeeNames: [],
+);
+Event searchMisspelledEvent = Event(
+  id: '1',
+  title: 'keywrod',
+  desc: '!',
+  location: '!',
+  max: 5,
+  startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
+  endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
+  hostId: '3b',
+  hostName: '[unknown user]',
+  attendees: [],
+  attendeeNames: [],
+);
+
+String searchLocJson = jsonEncode(searchLocEvent.toJsonFull());
+String searchTitleJson = jsonEncode(searchTitleEvent.toJsonFull());
+String searchDescJson = jsonEncode(searchDescEvent.toJsonFull());
+String searchMisspelledJson = jsonEncode(searchMisspelledEvent.toJsonFull());
 
 void main() {
-  group('Events Controller -', () {
+  group('Event Study Controller -', () {
     setUp(() async {
-      locator.reset();
+      await locator.reset();
 
-      locator.registerLazySingleton<EventsRepo>(() => MockEventsRepo());
+      locator.registerLazySingleton<EventsRepo>(MockEventsRepo.new);
 
       MockEventsRepo mockEventsRepo = locator<EventsRepo>() as MockEventsRepo;
       mockEventsRepo.clearEvents();
 
-      _controller = EventController();
+      _controller = EventStudyController(mockEventsRepo, paramName);
     });
 
-    Event event = Event(
-      id:"0",
-      title: 'Pizza',
-      desc: 'need ppl to chip in for pizza',
-      location: 'The crib',
-      max: 4,
-      startTime: DateTime.parse('2023-11-04T03:04:15.537017Z'),
-      endTime: DateTime.parse('2023-11-04T03:24:15.537017Z'),
-      hostId: "1a",
-      hostName: '[unknown user]',
-      attendees: [],
-      attendeeNames: [],
-    );
-    Event tennisEvent = Event(
-      id:"1",
-      title: 'Tennis',
-      desc: 'At the IMA tennis court! Hang out with me!',
-      location: 'IMA tennis court',
-      max: 3,
-      startTime: DateTime.parse('2024-01-04T15:14:15.537017Z'),
-      endTime: DateTime.parse('2023-11-04T16:14:15.567017Z'),
-      hostId: "2b",
-      hostName: '[unknown user]',
-      attendees: [],
-      attendeeNames: [],
-    );
-    Event dingDongEvent = Event(
-      id:"2",
-      title: 'Ding Dong Ditching',
-      desc: 'Lets go make my neighbors mad!',
-      location: 'Community Center',
-      max: 5,
-      startTime: DateTime.parse('2024-08-04T15:14:15.537017Z'),
-      endTime: DateTime.parse('2024-08-04T16:14:59.567017Z'),
-      hostId: "3b",
-      hostName: '[unknown user]',
-      attendees: [],
-      attendeeNames: [],
-    );
-
-    String eventJson = eventToJson(event);
-    String tennisJson = eventToJson(tennisEvent);
-    String dingDongJson = eventToJson(dingDongEvent);
-
-    test('events/create', () async {
+    Future<Response> sendPostRequest(String route, String body, Function handler) async {
       Request req = Request(
         'POST',
-        Uri.parse('$_rndUrl/events/create'),
-        body: eventJson,
+        Uri.parse('$_rndUrl/$route'),
+        body: body,
       );
-      Response response = await _controller.postEventsHandler(req);
-      expect(response.statusCode, 200);
+      return await handler(req);         
+    }
 
-      expect(await response.readAsString(),"0");
+    Future<Response> sendCreateRequest(String body) async {
+      return await sendPostRequest('events/create', body, _controller.createHandler); 
+    }
+
+    group('create:', () {
+
+      test('good input', () async {
+        Response response = await sendCreateRequest(eventJson);
+        expect(response.statusCode, 200);
+        expect(await response.readAsString(), '0');
+      });
+
+      test('no body', () async {
+        Response response = await sendCreateRequest('');
+        expect(response.statusCode, 400);
+      });
+
+      test('wrong types', () async {
+        String badJson = '{"title":0,'
+            '"desc":"need ppl to chip in for pizza",'
+            '"location":"The crib",'
+            '"max":"",'
+            '"startTime":"12/25/23",'
+            '"endTime":"2023-11-04T03:24:15.537017Z",'
+            '"hostId":"1a",'
+            '"attendees":25}';
+
+        Response response = await sendCreateRequest(badJson);
+        expect(response.statusCode, 400);
+      });
     });
 
-    test('events/create with no body', () async {
-      Request req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/create'),
-      );
-      Response response = await _controller.postEventsHandler(req);
+    Future<Response> sendGetRequest(String args) async {
+        Request req = Request(
+          'GET',
+          Uri.parse('$_rndUrl/events/get$args'),
+        );
+        return await _controller.getHandler(req);
+    }
 
-      expect(response.statusCode, 400);
+    group('get:', () {
+      test('no params', () async {
+        Response response = await sendCreateRequest(eventJson);
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(tennisJson);
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(dingDongJson);
+        expect(response.statusCode, 200);
+
+        response = await sendGetRequest('');
+        expect(response.statusCode, 200);
+        expect(
+          await response.readAsString(),
+          eventsToJson([event, tennisEvent, dingDongEvent]),
+        );
+      });
+
+      test('id param', () async {
+        Event event = Event(
+          title: 'Tennis',
+          desc: 'At the IMA tennis court! Hang out with me!',
+          location: 'IMA tennis court',
+          max: 3,
+          startTime: DateTime.parse('2024-01-04T15:14:15.537017Z'),
+          endTime: DateTime.parse('2023-11-04T16:14:15.567017Z'),
+          hostId: '2b',
+          hostName: '[unknown user]',
+          attendees: [],
+          attendeeNames: [],
+        );
+        String eventJson = eventToJson(event);
+
+        Response response = await sendCreateRequest(eventJson);
+        expect(response.statusCode, 200);
+
+        response = await sendGetRequest('?id=0');
+        expect(response.statusCode, 200);
+        expect(eventJson, await response.readAsString());
+      });
+
+      test('bad id', () async {
+        Response response = await sendGetRequest('?id=999');
+        expect(response.statusCode, 404);
+      });
+
+      test('id and query param', () async {
+        Response response = await sendGetRequest('?id=0&query=kl');
+        expect(response.statusCode, 400);
+
+        response = await sendGetRequest('?query=asd&id=0');
+        expect(response.statusCode, 400);
+      });
+
+      test('search weighting', () async {
+        // Create events
+        Response response = await sendCreateRequest(searchLocJson);
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(searchTitleJson);
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(searchDescJson);
+        expect(response.statusCode, 200);
+
+        // Search
+        response = await sendGetRequest('?query=keywrd');
+        expect(response.statusCode, 200);
+        expect(
+          await response.readAsString(),
+          eventsToJson([searchTitleEvent, searchDescEvent, searchLocEvent]),
+        );
+      });
+
+      test('search excludes irrelevant events', () async {
+        // Create events
+        Response response = await sendCreateRequest(eventJson);
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(searchTitleJson);
+        expect(response.statusCode, 200);
+
+        // Search
+        response = await sendGetRequest('?query=pizza');
+        expect(response.statusCode, 200);
+        expect(
+          await response.readAsString(),
+          eventsToJson([event]),
+        );
+      });
+
+      test('search ranks exact matches highest', () async {
+        // Create events
+        Response response = await sendCreateRequest(searchLocJson);
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(searchMisspelledJson);
+        expect(response.statusCode, 200);
+
+        // Search
+        response = await sendGetRequest('?query=keyword');
+        expect(response.statusCode, 200);
+        expect(
+          await response.readAsString(),
+          eventsToJson([searchLocEvent, searchMisspelledEvent]),
+        );
+      });
     });
 
-    test('events/create with wrong types', () async {
-      String eventJson = 
-          '{"title":0,'
-          '"desc":"need ppl to chip in for pizza",'
-          '"location":"The crib",'
-          '"max":"",'
-          '"startTime":"12/25/23",'
-          '"endTime":"2023-11-04T03:24:15.537017Z",'
-          '"hostId":"1a",'
-          '"attendees":25}';
+    Future<Response> sendDeleteRequest(String body) async {
+      return await sendPostRequest('events/delete', body, _controller.deleteHandler);
+    }
 
-      Request req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/create'),
-        body: eventJson,
-      );
-      Response response = await _controller.postEventsHandler(req);
-
-      expect(response.statusCode, 400);
-    });
-
-    test('events/get full list', () async {
-      Request req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/create'),
-        body: eventJson,
-      );
-      Response response = await _controller.postEventsHandler(req);
-      expect(response.statusCode, 200);
-
-      req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/create'),
-        body: tennisJson,
-      );
-      response = await _controller.postEventsHandler(req);
-      expect(response.statusCode, 200);
-
-      req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/create'),
-        body: dingDongJson,
-      );
-      response = await _controller.postEventsHandler(req);
-      expect(response.statusCode, 200);
-
-      req = Request(
-        'GET',
-        Uri.parse('$_rndUrl/events/get'),
-      );
-      response = await _controller.getEventsHandler(req);
-
-      expect(response.statusCode, 200);
-      expect(await response.readAsString(),
-        eventsToJson([
-          event,
-          tennisEvent,
-          dingDongEvent
-        ]),);
-    });
-
-    test('events/get with id param', () async {
-      Event event = Event(
-        title: 'Tennis',
-        desc: 'At the IMA tennis court! Hang out with me!',
-        location: 'IMA tennis court',
-        max: 3,
-        startTime: DateTime.parse('2024-01-04T15:14:15.537017Z'),
-        endTime: DateTime.parse('2023-11-04T16:14:15.567017Z'),
-        hostId: "2b",
-        hostName: '[unknown user]',
-        attendees: [],
-        attendeeNames: [],
-      );
-      String eventJson = eventToJson(event);
-
-      Request req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/create'),
-        body: eventJson,
-      );
-      Response response = await _controller.postEventsHandler(req);
-      expect(response.statusCode, 200);
-
-      req = Request(
-        'GET',
-        Uri.parse('$_rndUrl/events/get?id=0'),
-      );
-      response = await _controller.getEventsHandler(req);
-
-      expect(response.statusCode, 200);
-      expect(eventJson,
-          await response.readAsString());
-    });
-
-    test('events/get with bad id', () async {
-      Request req = Request(
-        'GET',
-        Uri.parse('$_rndUrl/events/get?id=999'),
-      );
-      Response response = await _controller.getEventsHandler(req);
-      expect(response.statusCode, 400);
-    });
-
-    test('events/delete', () async {
+    test('delete', () async {
       // Create event
-      Request req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/create'),
-        body: eventJson,
-      );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await sendCreateRequest(eventJson);
       expect(response.statusCode, 200);
+      expect(await response.readAsString(), '0');
 
       // Delete event
-      req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/delete'),
-        body: '{"id":"0"}',
-      );
-      response = await _controller.deleteEventsHandler(req);
+      response = await sendDeleteRequest('{"id":"0"}');
       expect(response.statusCode, 200);
-      expect(await response.readAsString(),"0");
+      expect(await response.readAsString(), '0');
 
       // Verify event no longer in dataase
-      req = Request(
-        'GET',
-        Uri.parse('$_rndUrl/events/get?id=0'),
-      );
-      response = await _controller.getEventsHandler(req);
-      expect(response.statusCode, 400);
+      response = await sendGetRequest('?id=0');
+      expect(response.statusCode, 404);
     });
 
-    test('events/join', () async {
+    Future<Response> sendJoinRequest(String body) async {
+      return await sendPostRequest('events/join', body, _controller.joinHandler);
+    }
+
+    group('join:', () {
+      test('good input', () async {
+        // Create event
+        Response response = await sendCreateRequest(eventJson);
+        expect(response.statusCode, 200);
+
+        // Join event
+        response = await sendJoinRequest('{"userId":"2c","eventId":"0"}');
+        expect(response.statusCode, 200);
+        expect(await response.readAsString(), '["2c"]');
+      });
+
+      test('user already in event', () async {
+        // Create event
+        Response response = await sendCreateRequest(eventJson);
+        expect(response.statusCode, 200);
+
+        // Join event twice
+        response = await sendJoinRequest('{"userId":"2c","eventId":"0"}');
+        expect(response.statusCode, 200);
+
+        response = await sendJoinRequest('{"userId":"2c","eventId":"0"}');
+        expect(response.statusCode, 400);
+      });
+
+      test('invalid event', () async {
+        Response response = await sendJoinRequest('{"userId":"2c","eventId":235}');
+        expect(response.statusCode, 400);
+      });
+
+      test('over capacity', () async {
+        // Create event
+        Event event = Event(
+          title: 'Pizza',
+          desc: 'need ppl to chip in for pizza',
+          location: 'The crib',
+          max: 1,
+          startTime: DateTime.parse('2023-11-04T03:04:15.537017Z'),
+          endTime: DateTime.parse('2023-11-04T03:24:15.537017Z'),
+          hostId: '1a',
+          hostName: 'Fei',
+          attendees: [],
+          attendeeNames: [],
+        );
+        String eventJson = eventToJson(event);
+
+        Response response = await sendCreateRequest(eventJson);
+        expect(response.statusCode, 200);
+
+        // Exceed capacity
+        response = await sendJoinRequest('{"userId":"ff","eventId":"0"}');
+        expect(response.statusCode, 200);
+
+        response = await sendJoinRequest('{"userId":"2c","eventId":"0"}');
+        expect(response.statusCode, 400);
+      });
+    });
+
+    Future<Response> sendUnjoinRequest(String body) async {
+      return await sendPostRequest('events/unjoin', body, _controller.unjoinHandler);
+    }
+
+    test('unjoin', () async {
       // Create event
-      Request req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/create'),
-        body: eventJson,
-      );
-      Response response = await _controller.postEventsHandler(req);
+      Response response = await sendCreateRequest(eventJson);
       expect(response.statusCode, 200);
 
       // Join event
-      req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/join'),
-        body: '{"userId":"2c","eventId":"0"}',
-      );
-      response = await _controller.joinEventsHandler(req, true);
+      response = await sendJoinRequest('{"userId":"2c","eventId":"0"}');
       expect(response.statusCode, 200);
-      expect(await response.readAsString(),'["2c"]');
-    });
-
-    test('events/join - user already in event', () async {
-      // Create event
-      Request req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/create'),
-        body: eventJson,
-      );
-      Response response = await _controller.postEventsHandler(req);
-      expect(response.statusCode, 200);
-
-      // Join event twice
-      req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/join'),
-        body: '{"userId":"2c","eventId":"0"}',
-      );
-      response = await _controller.joinEventsHandler(req, true);
-      expect(response.statusCode, 200);
-
-      req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/join'),
-        body: '{"userId":"2c","eventId":"0"}',
-      );
-      response = await _controller.joinEventsHandler(req, true);
-      expect(response.statusCode, 400);
-    });
-
-    test('events/join - invalid event', () async {
-      Request req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/join'),
-        body: '{"userId":"2c","eventId":235}',
-      );
-      Response response = await _controller.joinEventsHandler(req, true);
-      expect(response.statusCode, 400);
-    });
-
-    test('events/join - over capacity', () async {
-      // Create event
-      Event event = Event(
-        title: 'Pizza',
-        desc: 'need ppl to chip in for pizza',
-        location: 'The crib',
-        max: 1,
-        startTime: DateTime.parse('2023-11-04T03:04:15.537017Z'),
-        endTime: DateTime.parse('2023-11-04T03:24:15.537017Z'),
-        hostId: "1a",
-        hostName: 'Fei',
-        attendees: [],
-        attendeeNames: [],
-      );
-      String eventJson = eventToJson(event);
-
-      Request req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/create'),
-        body: eventJson,
-      );
-      Response response = await _controller.postEventsHandler(req);
-      expect(response.statusCode, 200);
-
-      // Exceed capacity
-      req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/join'),
-        body: '{"userId":"ff","eventId":0}',
-      );
-      response = await _controller.joinEventsHandler(req, true);
-      expect(response.statusCode, 400);
-
-      req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/join'),
-        body: '{"userId":"2c","eventId":0}',
-      );
-      response = await _controller.joinEventsHandler(req, true);
-      expect(response.statusCode, 400);
-    });
-
-    test('events/unjoin', () async {
-      // Create event
-      Request req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/create'),
-        body: eventJson,
-      );
-      Response response = await _controller.postEventsHandler(req);
-      expect(response.statusCode, 200);
-
-      // Join event
-      req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/join'),
-        body: '{"userId":"2c","eventId":"0"}',
-      );
-      response = await _controller.joinEventsHandler(req, true);
-      expect(response.statusCode, 200);
-      expect(await response.readAsString(),'["2c"]');
+      expect(await response.readAsString(), '["2c"]');
 
       // Unoin event
-      req = Request(
-        'POST',
-        Uri.parse('$_rndUrl/events/unjoin'),
-        body: '{"userId":"2c","eventId":"0"}',
-      );
-      response = await _controller.joinEventsHandler(req, false);
+      response = await sendUnjoinRequest('{"userId":"2c","eventId":"0"}');
       expect(response.statusCode, 200);
-      expect(await response.readAsString(),'[]');
+      expect(await response.readAsString(), '[]');
     });
   });
 }
