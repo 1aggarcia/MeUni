@@ -1,6 +1,6 @@
 import 'dart:io' as io;
 
-import 'package:dotenv/dotenv.dart';
+import 'package:firebase_dart/auth.dart';
 import 'package:firebase_dart/core.dart';
 import 'package:firebase_dart/database.dart';
 import 'package:firebase_dart/implementation/pure_dart.dart';
@@ -8,28 +8,26 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+
 import 'controllers/event_controller.dart';
 import 'controllers/study_group_controller.dart';
 import 'controllers/uniing_controller.dart';
 import 'controllers/user_controller.dart';
 import 'locator.dart';
+import 'secrets.dart';
 
 void main(List<String> args) async {
   FirebaseDart.setup();
 
-  var env = DotEnv(includePlatformEnvironment: true)..load();
-  final options = FirebaseOptions(
-    appId: env['APP_ID'] as String,
-    apiKey: env['API_KEY'] as String,
-    projectId: env['PROJECT_ID'] as String,
-    messagingSenderId: env['SENDER_ID'] as String,
-    authDomain: env['AUTH_DOMAIN'] as String,
-    databaseURL: env['DATABASE_URL'] as String,
-  );
-  final app = await Firebase.initializeApp(options: options);
+  // Configure database app
+  final app = await Firebase.initializeApp(options: Secrets.options);
   final DatabaseReference database = FirebaseDatabase(app: app).reference();
-
   setupLocator(database);
+
+  // Authenticate with service account
+  var auth = FirebaseAuth.instanceFor(app: app);
+  await auth.signInWithEmailAndPassword(email: Secrets.serviceAccount, password: Secrets.serviceKey);
+  print('Authenticated: ${auth.currentUser?.uid}');
 
   // Configure routes.
   var router = Router();

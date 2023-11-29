@@ -159,7 +159,8 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   /// Find the host name and attendee Names for every event given and inject them into each event
-  /// @returns list of events passed in with names if avaliable in database, or [unknown] for unknown users
+  /// * @returns list of events passed in with names if avaliable in database, or [unknown] for unknown users
+  // TODO: implement username retreival based on data structure from getUsersAsync();
   List<Event> injectNames(List<Event> events) {
     //List<User> users = []; //_userRepo.getUsersAsync();
     List<Event> result = [];
