@@ -36,7 +36,7 @@ class Event {
   /// * requires json['title'] is String
   /// * requires json['desc'] is String
   /// * requires json['location'] is String
-  /// * requires json['max'] is int
+  /// * requires json['max'] is int within range 1-15
   /// * requires json['startTime'] is String formatted as ISO timestamp
   /// * requires json['endTime'] is String formatted as ISO timestamp
   /// * requires json['hostId'] is String
