@@ -14,9 +14,9 @@ void main() {
       startTime: DateTime.parse('2023-11-05 03:04:15.537017Z'),
       endTime: DateTime.parse('2023-11-05 03:24:15.537017Z'),
       hostId: '3',
-      hostName: '[unknown user]',
+      hostName: '[unknown]',
       attendees: ['1'],
-      attendeeNames: ['[unknown user]'],
+      attendeeNames: [],
     );
 
     // copy of evt
@@ -29,9 +29,9 @@ void main() {
       startTime: DateTime.parse('2023-11-05 03:04:15.537017Z'),
       endTime: DateTime.parse('2023-11-05 03:24:15.537017Z'),
       hostId: '3',
-      hostName: '[unknown user]',
+      hostName: '[unknown]',
       attendees: ['1'],
-      attendeeNames: ['[unknown user]'],
+      attendeeNames: [],
     );
 
     Event evtB = Event(
@@ -42,10 +42,10 @@ void main() {
       max: 4,
       startTime: DateTime.parse('2023-11-04 03:04:15.537017Z'),
       endTime: DateTime.parse('2023-11-04 03:24:15.537017Z'),
-      hostName: '[unknown user]',
+      hostName: '[unknown]',
       hostId: '1',
       attendees: ['2', '3'],
-      attendeeNames: ['[unknown user]', '[unknown user]'],
+      attendeeNames: [],
     );
 
     Map<String, dynamic> evtJsonMap = {
@@ -57,10 +57,11 @@ void main() {
       'startTime': '2023-11-05T03:04:15.537017Z',
       'endTime': '2023-11-05T03:24:15.537017Z',
       'hostId': '3',
-      'hostName': '[unknown user]',
+      'hostName': '[unknown]',
     };
 
     Map<String, dynamic> evtJsonMapFull = {
+      'id': '0',
       'title': 'Another event',
       'desc': 'This time i really need people',
       'location': '[Redacted]',
@@ -68,9 +69,9 @@ void main() {
       'startTime': '2023-11-05T03:04:15.537017Z',
       'endTime': '2023-11-05T03:24:15.537017Z',
       'hostId': '3',
-      'hostName': '[unknown user]',
+      'hostName': '[unknown]',
       'attendees': ['1'],
-      'attendeeNames': ['[unknown user]'],
+      'attendeeNames': [],
     };
 
     test('equals', () {
@@ -81,6 +82,21 @@ void main() {
       expect(evt.equals(evtB), false);
       expect(evtB.equals(evtA), false);
       expect(evtB.equals(evt), false);
+    });
+
+    test('clone', () {
+      Event copy = evt.clone();
+      expect(copy.id, evt.id);
+      expect(copy.title, evt.title);
+      expect(copy.desc, evt.desc);
+      expect(copy.location, evt.location);
+      expect(copy.max, evt.max);
+      expect(copy.startTime, evt.startTime);
+      expect(copy.endTime, evt.endTime);
+      expect(copy.hostId, evt.hostId);
+      expect(copy.hostName, evt.hostName);
+      expect(copy.attendees, evt.attendees);
+      expect(copy.attendeeNames, evt.attendeeNames);
     });
 
     test('Event.toJson', () {
@@ -226,25 +242,5 @@ void main() {
       String json = jsonEncode([1, 2, 3, 4]);
       expect(eventsFromJson(json), []);
     });
-
-    // test('eventsToJson', () {
-    //   Map<String, Event> data = {
-    //     "0":evt, "1":evtA, "2":evtB
-    //   };
-    //   String json = eventsToJson(data);
-    //   expect(json, jsonEncode(toJsonMap(data)));
-    // });
-
-    // test('toJsonMap', () {
-    //   Map<String, Event> data = {
-    //     "0":evt, "1":evtA,"2":evtB
-    //   };
-    //   Map<String, dynamic> json = toJsonMap(data);
-    //   expect(data.length, 3);
-    //   json.forEach((k, v) {
-    //     expect(data[k] is Event, true);
-    //     expect(jsonEncode(v) == eventToJson(data[k] as Event), true);
-    //   });
-    // });
   });
 }
