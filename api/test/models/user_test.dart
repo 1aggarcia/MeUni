@@ -24,14 +24,14 @@ void main() {
       pronouns: 'he/him',
       admin: true,
     );
-    User freshmanCopy = User(
-      id: '2',
-      firstName: 'Freshman',
-      lastName: 'H',
-      year: 1,
-      pronouns: 'She/her',
-      admin: false,
-    );
+    // User freshmanCopy = User(
+    //   id: '2',
+    //   firstName: 'Freshman',
+    //   lastName: 'H',
+    //   year: 1,
+    //   pronouns: 'She/her',
+    //   admin: false,
+    // );
 
     Map<String, dynamic> freshmanJsonMap = {
       'id': '0',
