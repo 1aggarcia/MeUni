@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:dotenv/dotenv.dart';
 import 'package:firebase_dart/auth.dart';
 import 'package:firebase_dart/core.dart';
 import 'package:firebase_dart/database.dart';
@@ -25,9 +26,9 @@ void main(List<String> args) async {
   setupLocator(database);
 
   // Authenticate with service account
-  var auth = FirebaseAuth.instanceFor(app: app);
-  await auth.signInWithEmailAndPassword(email: Secrets.serviceAccount, password: Secrets.serviceKey);
-  print('Authenticated: ${auth.currentUser?.uid}');
+  // var auth = FirebaseAuth.instanceFor(app: app);
+  // await auth.signInWithEmailAndPassword(email: Secrets.serviceAccount, password: Secrets.serviceKey);
+  // print('Authenticated: ${auth.currentUser?.uid}');
 
   // Configure routes.
   var router = Router();

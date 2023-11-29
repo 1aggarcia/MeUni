@@ -93,6 +93,7 @@ class Event {
 
   /// Returns a json map of Event instance with all details except id
   Map<String, dynamic> toJsonFull() => {
+    'id': id,
     'title': title,
     'desc': desc,
     'location': location,

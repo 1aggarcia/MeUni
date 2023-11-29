@@ -61,6 +61,7 @@ void main() {
     };
 
     Map<String, dynamic> evtJsonMapFull = {
+      'id': '0',
       'title': 'Another event',
       'desc': 'This time i really need people',
       'location': '[Redacted]',
