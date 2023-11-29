@@ -12,14 +12,15 @@
 - Progress on Frontend: Implement Google Authentication specific to UW domain, begin implementing UI-database processer connection for some pages 
 
 ### Issues
-- VSCode didn't work for 1 memeber, Dart extention was 
+- VSCode didn't work for 1 memeber, Dart extention was missing making debugging essentially impossible.
+- Issues with server deployment, Google Cloud requires billing to be set up, and there is another issue of unknown origin causing deployment to fail.
+- Main branch lost functionality of events page.
 
 ## Plans and Goals
 - Begin designing search algorithm
 - Complete study groups endpoint methods
 - Continue progress on user endpoint methods
 - Remodel pages for visual appeal
-- 
 
 ## Meeting Agenda
 None - no meeting this week
@@ -86,9 +87,14 @@ None - no meeting this week
 - finish implementing UI for the 'Profile' page. (User-view and other people's view) 
 - finish implementing UI for chat function, friendliest, and conversation UI.
 ### Progress and Issues
-
+- The friendliest and chat feature has been temporarily paused, due to overcomplicate and time concerns. 
+- The bottom navigate bar to switch between "Home", "Save", "Going", "Profile" is partially fixed, but still needs to be optimized.
+- partially implement "Profile" page 
 
 ### Plans and Goals
+- optimized and finalize Bottom navigate bar to switch between "Home", "Save", "Going", "Profile"
+- optimized and finalized implemented UI for the 'Profile' page.
+- Push for final release!
 
 
 ## Jintae

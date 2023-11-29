@@ -1,10 +1,18 @@
 import 'dart:convert';
 
 import 'package:firebase_dart/database.dart' as db;
+import 'package:string_similarity/string_similarity.dart';
 
 import '../locator.dart';
 import '../models/event.dart';
+//import '../models/user.dart';
 import '../models/user_data.dart';
+//import 'users_repo.dart';
+
+// Weight must be between 0-1
+final double titleSearchWeight = 1;
+final double descSearchWeight = 2/3;
+final double locSearchWeight = 1/2;
 
 abstract class EventsRepo {
   //* Public Methods
@@ -16,11 +24,14 @@ abstract class EventsRepo {
   /// @returns id of deleted event
   Future<String> deleteEventAsync(String id);
 
-  /// @returns the Event if found, null otherwise
-  Future<Event?> getEventAsync(String id);
-
   /// @returns list of all events
   Future<List<Event>> getEventsAsync();
+
+  /// @returns list of events ranked in order of relevance between query and title/desc
+  Future<List<Event>> rankEventsAsync(String query);
+
+  /// @returns the Event if found, null otherwise
+  Future<Event?> getEventAsync(String id);
 
   /// Adds user with given id to event with given id
   /// @returns new attendees list or null if event is at max capacity,
@@ -34,16 +45,21 @@ abstract class EventsRepo {
 
 class EventsRepoImpl extends EventsRepo {
   //* Private Properties
+  //final UsersRepo _userRepo = locator<UsersRepo>();
   late db.DatabaseReference _eventsRef;
   late UserData _userEventsTable;
 
-  //* Constructors
-  EventsRepoImpl() {
-    final dbRef = locator<db.DatabaseReference>();
-    _eventsRef = dbRef.child('events');
+  //* Public Properties
+  final String endpoint;
+  final String paramName;
 
-    final userEventsRef = dbRef.child('user_events');
-    _userEventsTable = UserData(userEventsRef, 'eventId');
+  //* Constructors
+  EventsRepoImpl(this.endpoint, this.paramName) {
+    final dbRef = locator<db.DatabaseReference>();
+    _eventsRef = dbRef.child(endpoint);
+
+    final userEventsRef = dbRef.child('user_$endpoint');
+    _userEventsTable = UserData(userEventsRef);
   }
 
   //* Overriden Methods
@@ -52,8 +68,8 @@ class EventsRepoImpl extends EventsRepo {
     final db.DatabaseReference newRef = _eventsRef.push();
     final Map<String, dynamic> eventJson = event.toJson();
 
+    eventJson.remove('id');
     eventJson.remove('hostName');
-    eventJson.remove('attendeeNames');
     await newRef.set(eventJson);
 
     return newRef.key as String;
@@ -68,20 +84,41 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   @override
+  Future<List<Event>> getEventsAsync() async {
+    final db.DataSnapshot snapshot = await _eventsRef.once();
+    final json = jsonEncode(snapshot.value);
+    List<Event> events = eventsFromJson(json);
+
+    return injectNames(events);
+  }
+
+  @override
   Future<Event?> getEventAsync(String id) async {
     final db.DataSnapshot snapshot = await _eventsRef.child(id).once();
     final Event? event = eventFromJson(jsonEncode(snapshot.value));
     if (event is Event) {
-      event.setId(id);
+      event.id = id;
     }
-    return event;
+    if (event == null) {
+      return null;
+    } else {
+      return injectNames([event]).first;
+    }
   }
 
   @override
-  Future<List<Event>> getEventsAsync() async {
-    final db.DataSnapshot snapshot = await _eventsRef.once();
-    final json = jsonEncode(snapshot.value);
-    return eventsFromJson(json);
+  Future<List<Event>> rankEventsAsync(String query) async {
+    final List<Event> all = await getEventsAsync();
+    final List<Event> result = [];
+
+    for (Event event in all) {
+      if (scoreEvent(event, query) > 0) {
+        result.add(event);
+      }
+    }
+
+    result.sort((a, b) => compareScore(a, b, query));
+    return result;
   }
 
   @override
@@ -115,6 +152,51 @@ class EventsRepoImpl extends EventsRepo {
   }   
 
   //* Helper methods
+
+  /// Comparator function to sort a list of events by score of relevance to given query
+  int compareScore(Event a, Event b, String query) {
+    return scoreEvent(b, query).compareTo(scoreEvent(a, query));
+  }
+
+  /// Find the host name and attendee Names for every event given and inject them into each event
+  /// * @returns list of events passed in with names if avaliable in database, or [unknown] for unknown users
+  // TODO: implement username retreival based on data structure from getUsersAsync();
+  List<Event> injectNames(List<Event> events) {
+    //List<User> users = []; //_userRepo.getUsersAsync();
+    List<Event> result = [];
+
+    for (Event event in events) {
+      Event copy = event.clone();
+      // insert *magic* /
+      copy.hostName = '[unknown*]';
+      for (String a in copy.attendees) {
+        copy.attendeeNames.add('[$a]');
+      }
+      // end of *magic* /
+      result.add(copy);
+    }
+
+    return result;
+  }
+
+  /// Assign the given event a score of relevance to the given query (case insensitive)
+  /// * if query has an exact match in event text, score = 1
+  /// * otherwise, score = string similarity based on Dice's Coefficient, between 0-1
+  double scoreEvent(Event event, String query) {
+    final String lowerQuery = query.toLowerCase();
+    final String lowerTitle = event.title.toLowerCase();
+    final String lowerDesc = event.desc.toLowerCase();
+    final String lowerLoc = event.location.toLowerCase();
+
+    if ((lowerTitle + lowerDesc + lowerLoc).contains(lowerQuery)) {
+      return 1;
+    } else {
+      final double titleScore = lowerTitle.similarityTo(lowerQuery) *titleSearchWeight;
+      final double descScore = lowerDesc.similarityTo(lowerQuery) *descSearchWeight;
+      final double locScore = lowerLoc.similarityTo(lowerQuery) *locSearchWeight;
+      return (titleScore + descScore + locScore) / 3;
+    }
+  }
 
   /// Returns true iff userId and eventId passed in coorespond 
   /// to an existing user and event in the database, and the event has space
