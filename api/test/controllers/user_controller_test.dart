@@ -7,9 +7,9 @@ import '../../bin/locator.dart';
 import '../../bin/repository/mock/mock_users_repo.dart';
 import '../../bin/repository/users_repo.dart';
 
-final String _rndUrl = 'https://example.com';
+// final String _rndUrl = 'https://example.com';
 
-UserController _controller = UserController();
+// UserController _controller = UserController();
 
 void main() {
   group('Users Controller -', () {
