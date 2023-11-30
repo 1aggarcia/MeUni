@@ -26,17 +26,19 @@ class UserController extends Controller {
   Future<Response> getUserHandler(Request request) async {
     Map<String, dynamic> params = request.url.queryParameters;
 
-    try {
-      User? user = await _usersRepo.getUserAsync(params['id']);
-      if (user != null) {
-        return Response.ok(userToJson(user));
-      } else {
-        return Response(404);
+    if (params.containsKey('id')) {
+      try {
+        User? user = await _usersRepo.getUserAsync(params['id']);
+        if (user != null) {
+          return Response.ok(userToJson(user));
+        } else {
+          return Response(404);
+        }
+      } catch (e) {
+        return Response(400);
       }
-    } catch (e) {
-      print('Failed to get user: $e');
-      return Response(400);
     }
+    return Response(400);
   }
 
   // POST /

@@ -22,7 +22,7 @@ void setupLocator(DatabaseReference dbRef) {
     locator.registerLazySingleton<UniingRepo>(MockUniingRepo.new);
   } else {
     locator.registerLazySingleton<EventsRepo>(() => EventsRepoImpl('events', 'eventId'));
-    locator.registerLazySingleton<UsersRepo>(MockUsersRepo.new);
+    locator.registerLazySingleton<UsersRepo>(UsersRepoImpl.new);
     locator.registerLazySingleton<UniingRepo>(UniingRepoImpl.new);
   }
 }
