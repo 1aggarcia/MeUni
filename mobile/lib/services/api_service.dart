@@ -54,16 +54,16 @@ enum Endpoints {
         return '/events/unjoin';
 
       case Endpoints.getStudyGroups:
-        return '/studygroups/get';
+        return '/study_groups/get';
       case Endpoints.createStudyGroup:
-        return '/studygroups/create';
+        return '/study_groups/create';
       case Endpoints.deleteStudyGroup:
-        return '/studygroups/delete';
+        return '/study_groups/delete';
 
       case Endpoints.joinStudyGroup:
-        return '/studygroups/join';
+        return '/study_groups/join';
       case Endpoints.unJoinStudyGroup:
-        return '/studygroups/unjoin';
+        return '/study_groups/unjoin';
 
       default:
         throw UnimplementedError();
@@ -73,13 +73,13 @@ enum Endpoints {
 
 /// Responsible for communicating with the API to fetch data
 class ApiService {
-  final _host = 'localhost:8080';
+  final _host = 'api-ayyljr3w6a-uw.a.run.app';
 
   /// Sends a GET request to the API based on the given [endpoint],
   /// adding on [params] to the URL if provided
   Future<Response> getAsync(Endpoints endpoint,
       {Map<String, String>? params}) async {
-    Uri url = Uri.http(_host, endpoint.uri, params);
+    Uri url = Uri.https(_host, endpoint.uri, params);
 
     return await get(url);
   }
@@ -89,7 +89,7 @@ class ApiService {
   /// to the server via the POST call's body.
   Future<Response> postAsync(Endpoints endpoint,
       {Map<String, String>? params, String? body}) async {
-    Uri url = Uri.http(_host, endpoint.uri, params);
+    Uri url = Uri.https(_host, endpoint.uri, params);
 
     return await post(url, body: body);
   }

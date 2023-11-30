@@ -51,6 +51,7 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
   Future<List<IEvent>> getIEventsAsync({String? searchQuery}) async {
     Response response = await _apiService.getAsync(
       T == Event ? Endpoints.getEvents : Endpoints.getStudyGroups,
+      params: searchQuery == null ? null : {"query": searchQuery},
     );
 
     if (!responseOk(response)) {
@@ -109,12 +110,18 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
 
   @override
   Future<bool> joinIEventAsync(String id) async {
+    var jsonBody = {
+      'userId': _authService.currUser.id,
+    };
+    if (T == Event) {
+      jsonBody['eventId'] = id;
+    } else {
+      jsonBody['studyGroupId'] = id;
+    }
+
     var response = await _apiService.postAsync(
       T == Event ? Endpoints.joinEvent : Endpoints.joinStudyGroup,
-      body: jsonEncode({
-        'eventId': id,
-        'userId': _authService.currUser.id,
-      }),
+      body: jsonEncode(jsonBody),
     );
 
     return responseOk(response);
@@ -122,12 +129,18 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
 
   @override
   Future<bool> unJoinIEventAsync(String id) async {
+    var jsonBody = {
+      'userId': _authService.currUser.id,
+    };
+    if (T == Event) {
+      jsonBody['eventId'] = id;
+    } else {
+      jsonBody['studyGroupId'] = id;
+    }
+
     var response = await _apiService.postAsync(
       T == Event ? Endpoints.unJoinEvent : Endpoints.unJoinStudyGroup,
-      body: jsonEncode({
-        'eventId': id,
-        'userId': _authService.currUser.id,
-      }),
+      body: jsonEncode(jsonBody),
     );
 
     return responseOk(response);

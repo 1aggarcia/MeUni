@@ -38,7 +38,9 @@ abstract class IEvent {
         endTime = DateTime.parse(json['endTime']),
         hostId = json['hostId'],
         hostName = json['hostName'],
-        attendees = List<String>.from(json['attendees']);
+        attendees = json.containsKey('attendees')
+            ? List<String>.from(json['attendees'])
+            : [];
 
   //* Public Methods
   Map<String, dynamic> toJson() => {

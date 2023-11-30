@@ -11,6 +11,8 @@ import 'package:stacked_services/src/dialog/dialog_service.dart';
 import 'package:stacked_services/src/navigation/navigation_service.dart';
 import 'package:stacked_shared/stacked_shared.dart';
 
+import '../models/event.dart';
+import '../models/study_group.dart';
 import '../repository/i_events_repo.dart';
 import '../repository/mock/mock_i_events_repo.dart';
 import '../repository/mock/mock_users_repo.dart';
