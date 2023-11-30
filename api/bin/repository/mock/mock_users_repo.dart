@@ -53,4 +53,10 @@ class MockUsersRepo extends UsersRepo {
       return null;
     }
   }
+
+  @override
+  Future<String> updateUserAsync(User user) {
+    // TODO: implement updateUserAsync
+    throw UnimplementedError();
+  }
 }

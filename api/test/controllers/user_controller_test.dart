@@ -1,6 +1,8 @@
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 
+import '../../bin/models/user.dart';
+
 import '../../bin/controllers/user_controller.dart';
 import '../../bin/locator.dart';
 import '../../bin/repository/mock/mock_users_repo.dart';
@@ -36,6 +38,35 @@ void main() {
           '"year":4,'
           '"pronouns":"He/Him",'
           '"admin":true}');
+    });
+  });
+
+  Future<Response> sendGetRequest(String args) async {
+    Request req = Request(
+      'GET',
+      Uri.parse('$_rndUrl/events/get$args'),
+    );
+    return await _controller.getUserHandler(req);
+  }
+
+  group('get:', () {
+    test('user1', () async {
+      User user1 = User(
+          id: '0',
+          firstName: 'Adam',
+          lastName: 'Smith',
+          year: 1,
+          pronouns: 'He/Him',
+          admin: true);
+
+      String userJson = userToJson(user1);
+
+      Response response = await sendGetRequest(userJson);
+      expect(response.statusCode, 200);
+
+      response = await sendGetRequest('?id=0');
+      expect(response.statusCode, 200);
+      expect(userJson, await response.readAsString());
     });
   });
 }

@@ -13,7 +13,10 @@ class UserController extends Controller {
   //* Overriden Methods
   @override
   Router setUpRoutes(Router router, String endpoint) {
-    return router..get('$endpoint/profile/get', getUserHandler);
+    return router
+      ..get('$endpoint/profile/get', getUserHandler)
+      ..post('$endpoint/profile/create', createUserHandler)
+      ..post('$endpoint/profile/create', updateUserHandler);
   }
 
   //* Public API Methods
@@ -28,10 +31,43 @@ class UserController extends Controller {
       if (user != null) {
         return Response.ok(userToJson(user));
       } else {
-        return Response(400);
+        return Response(404);
       }
     } catch (e) {
       print('Failed to get user: $e');
+      return Response(400);
+    }
+  }
+
+  // POST /
+  Future<Response> createUserHandler(Request request) async {
+    String body = await request.readAsString();
+
+    try {
+      User? user = userFromJson(body);
+      if (user != null) {
+        String newId = await _usersRepo.addUserAsync(user);
+        return Response.ok(newId);
+      } else {
+        throw Exception('Json body could not be converted into User');
+      }
+    } catch (e) {
+      return Response(400);
+    }
+  }
+
+  Future<Response> updateUserHandler(Request request) async {
+    String body = await request.readAsString();
+
+    try {
+      User? user = userFromJson(body);
+      if (user != null) {
+        String newId = await _usersRepo.addUserAsync(user);
+        return Response.ok(newId);
+      } else {
+        throw Exception('Json body could not be converted into User');
+      }
+    } catch (e) {
       return Response(400);
     }
   }
