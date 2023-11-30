@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+final int maxYear = 4;
+
 class User {
   final String id;
   final String firstName;
@@ -28,11 +30,15 @@ class User {
         json['firstName'] is! String ||
         json['lastName'] is! String ||
         json['year'] is! int ||
-        json['year'] is! int ||
         json['pronouns'] is! String ||
         json['admin'] is! bool) {
       throw Exception(
           'json map passed in with incorrect or missing params for User:\n$json');
+
+    }
+
+    if (1 > json['year'] || json['year'] > maxYear) {
+      throw Exception('Year must be between 1-4:');
     }
 
     return User(
@@ -55,9 +61,16 @@ class User {
       };
 
   bool equals(User other) {
-    throw UnimplementedError();
+    return
+      firstName == other.firstName &&
+      lastName == other.lastName &&
+      year == other.year &&
+      pronouns == other.pronouns &&
+      admin == other.admin;
   }
 }
+
+String userToJson(User data) => json.encode(data.toJson());
 
 User? userFromJson(String str) {
   try {
@@ -68,12 +81,30 @@ User? userFromJson(String str) {
   }
 }
 
-List<User> usersFromJson(String data) {
-  throw UnimplementedError();
+/// Returns json string representing passed in User list
+String usersToJson(List<User> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+/// Converts json string to user list, improperly formatted entires ignored
+List<User> usersFromJson(String str) {
+  try {
+    return usersFromMap(json.decode(str));
+  } catch (e) {
+    print('ERROR: usersFromJson() $e');
+    return [];
+  }
 }
 
+/// Converts json map to user list, improperly formatted entries ignored.
 List<User> usersFromMap(Map<String, dynamic> data) {
-  throw UnimplementedError();
+  List<User> users = [];
+  data.forEach((k, v) {
+    try {
+      User u = User.fromJson(v);
+      users.add(u);
+    } catch (e) {
+      print('ERROR: eventsFromMap() $e');
+    }
+  });
+  return users;
 }
-
-String userToJson(User data) => json.encode(data.toJson());
