@@ -41,6 +41,7 @@ class Event {
   /// * requires json['endTime'] is String formatted as ISO timestamp
   /// * requires json['hostId'] is String
   /// * requires json['attendees'] is List<String> or null
+  // TODO: restrict title length, desc, length, location length
   factory Event.fromJson(Map<String, dynamic> json) {
     if (json['title'] is! String ||
         json['desc'] is! String ||

@@ -87,7 +87,8 @@ class EventsRepoImpl extends EventsRepo {
   Future<List<Event>> getEventsAsync() async {
     final db.DataSnapshot snapshot = await _eventsRef.once();
     final json = jsonEncode(snapshot.value);
-    List<Event> events = eventsFromJson(json);
+    // List reversed to have most recent event first
+    List<Event> events = eventsFromJson(json).reversed.toList();
 
     return injectNames(events);
   }
@@ -168,9 +169,9 @@ class EventsRepoImpl extends EventsRepo {
     for (Event event in events) {
       Event copy = event.clone();
       // insert *magic* /
-      copy.hostName = '[unknown*]';
+      copy.hostName = '[${copy.hostId}.name]';
       for (String a in copy.attendees) {
-        copy.attendeeNames.add('[$a]');
+        copy.attendeeNames.add('[$a.name]');
       }
       // end of *magic* /
       result.add(copy);
