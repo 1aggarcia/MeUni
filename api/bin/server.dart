@@ -8,7 +8,6 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-
 import 'controllers/event_controller.dart';
 import 'controllers/study_group_controller.dart';
 import 'controllers/uniing_controller.dart';
@@ -31,7 +30,7 @@ void main(List<String> args) async {
 
   // Configure routes.
   var router = Router();
-  router = UserController().setUpRoutes(router, '/users');
+  router = UserController().setUpRoutes(router, '/user');
   router = EventController().setUpRoutes(router, '/events');
   router = StudyGroupController().setUpRoutes(router, '/study_groups');
   router = UniingController().setUpRoutes(router, '/uniing');

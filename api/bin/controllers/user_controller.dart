@@ -16,7 +16,7 @@ class UserController extends Controller {
     return router
       ..get('$endpoint/profile/get', getUserHandler)
       ..post('$endpoint/profile/create', createUserHandler)
-      ..post('$endpoint/profile/create', updateUserHandler);
+      ..post('$endpoint/profile/update', updateUserHandler);
   }
 
   //* Public API Methods
