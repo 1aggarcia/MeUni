@@ -1,10 +1,9 @@
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 
-import '../../bin/models/user.dart';
-
 import '../../bin/controllers/user_controller.dart';
 import '../../bin/locator.dart';
+import '../../bin/models/user.dart';
 import '../../bin/repository/mock/mock_users_repo.dart';
 import '../../bin/repository/users_repo.dart';
 
