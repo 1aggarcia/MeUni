@@ -51,6 +51,7 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
   Future<List<IEvent>> getIEventsAsync({String? searchQuery}) async {
     Response response = await _apiService.getAsync(
       T == Event ? Endpoints.getEvents : Endpoints.getStudyGroups,
+      params: searchQuery == null ? null : {"query": searchQuery},
     );
 
     if (!responseOk(response)) {

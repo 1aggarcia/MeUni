@@ -23,14 +23,14 @@ class StudyGroup extends IEvent {
   }) : _course = course;
 
   StudyGroup.fromJson(super.json)
-      : _course = json['course'],
+      : _course = json['title'],
         super.fromJson();
 
   //* Overridden Methods
   @override
   Map<String, dynamic> toJson() {
     var map = super.toJson();
-    map['course'] = _course;
+    map['title'] = _course;
 
     return map;
   }
