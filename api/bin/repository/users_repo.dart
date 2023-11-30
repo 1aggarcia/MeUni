@@ -7,6 +7,8 @@ import '../models/user.dart';
 
 import 'package:firebase_dart/database.dart' as db;
 
+import '../models/user.dart';
+
 abstract class UsersRepo {
   //* Public Methods
 
