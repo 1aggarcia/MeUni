@@ -28,7 +28,6 @@ class User {
         json['firstName'] is! String ||
         json['lastName'] is! String ||
         json['year'] is! int ||
-        json['year'] is! int ||
         json['pronouns'] is! String ||
         json['admin'] is! bool) {
       throw Exception(

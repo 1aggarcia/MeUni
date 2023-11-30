@@ -40,7 +40,7 @@ class UsersRepoImpl extends UsersRepo {
 
   @override
   Future<String> addUserAsync(User user) async {
-    final db.DatabaseReference newRef = _userRef.push();
+    final db.DatabaseReference newRef = _userRef.child(user.id);
     final Map<String, dynamic> userJson = user.toJson();
 
     userJson.remove('id');

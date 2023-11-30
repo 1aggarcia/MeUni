@@ -45,6 +45,7 @@ class UserController extends Controller {
 
     try {
       User? user = userFromJson(body);
+      print('TEST 1');
       if (user != null) {
         String newId = await _usersRepo.addUserAsync(user);
         return Response.ok(newId);
@@ -52,6 +53,7 @@ class UserController extends Controller {
         throw Exception('Json body could not be converted into User');
       }
     } catch (e) {
+      print('Failed to create user: $e');
       return Response(400);
     }
   }
