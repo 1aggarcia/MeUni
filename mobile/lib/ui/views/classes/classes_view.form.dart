@@ -7,11 +7,13 @@
 // ignore_for_file: public_member_api_docs, constant_identifier_names, non_constant_identifier_names,unnecessary_this
 
 import 'package:flutter/material.dart';
+import 'package:meuni_mobile/ui/views/classes/classes_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 
 const bool _autoTextFieldValidation = true;
 
-const String ClassValueKey = 'class';
+const String PrefixValueKey = 'prefix';
+const String CourseCodeValueKey = 'courseCode';
 
 final Map<String, TextEditingController> _ClassesViewTextEditingControllers =
     {};
@@ -19,14 +21,18 @@ final Map<String, TextEditingController> _ClassesViewTextEditingControllers =
 final Map<String, FocusNode> _ClassesViewFocusNodes = {};
 
 final Map<String, String? Function(String?)?> _ClassesViewTextValidations = {
-  ClassValueKey: null,
+  PrefixValueKey: ClassValidators.validatePrefix,
+  CourseCodeValueKey: ClassValidators.validateCourseCode,
 };
 
 mixin $ClassesView {
-  TextEditingController get classController =>
-      _getFormTextEditingController(ClassValueKey);
+  TextEditingController get prefixController =>
+      _getFormTextEditingController(PrefixValueKey);
+  TextEditingController get courseCodeController =>
+      _getFormTextEditingController(CourseCodeValueKey);
 
-  FocusNode get classFocusNode => _getFormFocusNode(ClassValueKey);
+  FocusNode get prefixFocusNode => _getFormFocusNode(PrefixValueKey);
+  FocusNode get courseCodeFocusNode => _getFormFocusNode(CourseCodeValueKey);
 
   TextEditingController _getFormTextEditingController(
     String key, {
@@ -52,7 +58,8 @@ mixin $ClassesView {
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
   void syncFormWithViewModel(FormStateHelper model) {
-    classController.addListener(() => _updateFormData(model));
+    prefixController.addListener(() => _updateFormData(model));
+    courseCodeController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -64,7 +71,8 @@ mixin $ClassesView {
     'This feature was deprecated after 3.1.0.',
   )
   void listenToFormUpdated(FormViewModel model) {
-    classController.addListener(() => _updateFormData(model));
+    prefixController.addListener(() => _updateFormData(model));
+    courseCodeController.addListener(() => _updateFormData(model));
 
     _updateFormData(model, forceValidate: _autoTextFieldValidation);
   }
@@ -74,7 +82,8 @@ mixin $ClassesView {
     model.setData(
       model.formValueMap
         ..addAll({
-          ClassValueKey: classController.text,
+          PrefixValueKey: prefixController.text,
+          CourseCodeValueKey: courseCodeController.text,
         }),
     );
 
@@ -116,42 +125,66 @@ extension ValueProperties on FormStateHelper {
     return !hasAnyValidationMessage;
   }
 
-  String? get classValue => this.formValueMap[ClassValueKey] as String?;
+  String? get prefixValue => this.formValueMap[PrefixValueKey] as String?;
+  String? get courseCodeValue =>
+      this.formValueMap[CourseCodeValueKey] as String?;
 
-  set classValue(String? value) {
+  set prefixValue(String? value) {
     this.setData(
-      this.formValueMap..addAll({ClassValueKey: value}),
+      this.formValueMap..addAll({PrefixValueKey: value}),
     );
 
-    if (_ClassesViewTextEditingControllers.containsKey(ClassValueKey)) {
-      _ClassesViewTextEditingControllers[ClassValueKey]?.text = value ?? '';
+    if (_ClassesViewTextEditingControllers.containsKey(PrefixValueKey)) {
+      _ClassesViewTextEditingControllers[PrefixValueKey]?.text = value ?? '';
     }
   }
 
-  bool get hasClass =>
-      this.formValueMap.containsKey(ClassValueKey) &&
-      (classValue?.isNotEmpty ?? false);
+  set courseCodeValue(String? value) {
+    this.setData(
+      this.formValueMap..addAll({CourseCodeValueKey: value}),
+    );
 
-  bool get hasClassValidationMessage =>
-      this.fieldsValidationMessages[ClassValueKey]?.isNotEmpty ?? false;
+    if (_ClassesViewTextEditingControllers.containsKey(CourseCodeValueKey)) {
+      _ClassesViewTextEditingControllers[CourseCodeValueKey]?.text =
+          value ?? '';
+    }
+  }
 
-  String? get classValidationMessage =>
-      this.fieldsValidationMessages[ClassValueKey];
+  bool get hasPrefix =>
+      this.formValueMap.containsKey(PrefixValueKey) &&
+      (prefixValue?.isNotEmpty ?? false);
+  bool get hasCourseCode =>
+      this.formValueMap.containsKey(CourseCodeValueKey) &&
+      (courseCodeValue?.isNotEmpty ?? false);
+
+  bool get hasPrefixValidationMessage =>
+      this.fieldsValidationMessages[PrefixValueKey]?.isNotEmpty ?? false;
+  bool get hasCourseCodeValidationMessage =>
+      this.fieldsValidationMessages[CourseCodeValueKey]?.isNotEmpty ?? false;
+
+  String? get prefixValidationMessage =>
+      this.fieldsValidationMessages[PrefixValueKey];
+  String? get courseCodeValidationMessage =>
+      this.fieldsValidationMessages[CourseCodeValueKey];
 }
 
 extension Methods on FormStateHelper {
-  setClassValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[ClassValueKey] = validationMessage;
+  setPrefixValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[PrefixValueKey] = validationMessage;
+  setCourseCodeValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[CourseCodeValueKey] = validationMessage;
 
   /// Clears text input fields on the Form
   void clearForm() {
-    classValue = '';
+    prefixValue = '';
+    courseCodeValue = '';
   }
 
   /// Validates text input fields on the Form
   void validateForm() {
     this.setValidationMessages({
-      ClassValueKey: getValidationMessage(ClassValueKey),
+      PrefixValueKey: getValidationMessage(PrefixValueKey),
+      CourseCodeValueKey: getValidationMessage(CourseCodeValueKey),
     });
   }
 }
@@ -171,5 +204,6 @@ String? getValidationMessage(String key) {
 /// Updates the fieldsValidationMessages on the FormViewModel
 void updateValidationData(FormStateHelper model) =>
     model.setValidationMessages({
-      ClassValueKey: getValidationMessage(ClassValueKey),
+      PrefixValueKey: getValidationMessage(PrefixValueKey),
+      CourseCodeValueKey: getValidationMessage(CourseCodeValueKey),
     });

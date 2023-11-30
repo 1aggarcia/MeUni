@@ -1,6 +1,8 @@
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../app/app.router.dart';
 import '../../../models/user.dart';
 import '../../../repository/users_repo.dart';
 import '../../../services/auth_service.dart';
@@ -10,6 +12,8 @@ class ProfileViewModel extends BaseViewModel {
   final _usersRepo = locator<UsersRepo>();
 
   final _authService = locator<AuthService>();
+
+  final _navigationService = locator<NavigationService>();
 
   //* Public Properties
   List<String> classes = [];
@@ -27,4 +31,7 @@ class ProfileViewModel extends BaseViewModel {
       busyObject: classes,
     );
   }
+
+  Future goToEditClassesPageAsync() async =>
+      await _navigationService.navigateToClassesView();
 }

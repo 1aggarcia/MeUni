@@ -72,17 +72,17 @@ class ProfileView extends StackedView<ProfileViewModel> {
 
               // Classes
               viewModel.busy(viewModel.classes)
-                  ? const LoadingIndicator(loadingText: 'Fetching Classes')
+                  ? const LoadingIndicator(loadingText: 'Fetching Courses')
                   : _fieldLabel(
-                      label: 'Classes',
+                      label: 'Courses',
                       value: viewModel.classes.toString(),
                     ),
 
               verticalSpaceMedium,
 
               RoundButton(
-                label: 'Edit Profile',
-                onPressed: () async => (),
+                label: 'Edit Courses',
+                onPressed: () async => await viewModel.goToEditClassesPageAsync(),
               )
             ],
           ),
