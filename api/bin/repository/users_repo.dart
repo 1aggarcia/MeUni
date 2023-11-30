@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:firebase_dart/database.dart' as db;
+
 import '../models/user.dart';
+
 
 abstract class UsersRepo {
   //* Public Methods
@@ -8,12 +13,12 @@ abstract class UsersRepo {
 }
 
 class UsersRepoImpl extends UsersRepo {
-  // TODO : get database reference with locator (example in events_repo.dart)
+  late db.DatabaseReference _userRef;
 
-  //* Overriden Methods
   @override
-  Future<User?> getUserAsync(String id) {
-    // TODO: implement getUserAsync
-    throw UnimplementedError();
+  Future<User?> getUserAsync(String id) async {
+    final db.DataSnapshot snapshot = await _userRef.child(id).once();
+    final json = jsonEncode(snapshot.value);
+    return userFromJson(json);
   }
 }
