@@ -59,18 +59,6 @@ class UserController extends Controller {
   }
 
   Future<Response> updateUserHandler(Request request) async {
-    String body = await request.readAsString();
-
-    try {
-      User? user = userFromJson(body);
-      if (user != null) {
-        String newId = await _usersRepo.addUserAsync(user);
-        return Response.ok(newId);
-      } else {
-        throw Exception('Json body could not be converted into User');
-      }
-    } catch (e) {
-      return Response(400);
-    }
+    return createUserHandler(request);
   }
 }
