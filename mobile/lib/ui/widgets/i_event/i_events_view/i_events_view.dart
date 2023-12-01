@@ -18,21 +18,20 @@ import 'i_events_view_model.dart';
 ])
 class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
     with $IEventsView {
-  //* Private Properties
   final String _label = T == Event ? 'Event' : 'Study Group';
   final String _article = T == Event ? 'an' : 'a';
 
-  //* Constructors
   IEventsView({super.key});
 
-  //* Overridden Methods
   @override
   IEventsViewModel viewModelBuilder(BuildContext context) =>
       IEventsViewModel<T>();
 
   @override
-  void onViewModelReady(IEventsViewModel<IEvent> viewModel) =>
-      syncFormWithViewModel(viewModel);
+  void onViewModelReady(IEventsViewModel<IEvent> viewModel) {
+    super.onViewModelReady(viewModel);
+    viewModel.getIEventsAsync(); // Fetch events when the view is ready
+  }
 
   @override
   Widget builder(
@@ -41,6 +40,9 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
       padding: const EdgeInsets.only(left: 25.0, right: 25.0),
       child: Column(
         children: [
+
+          Divider(height: 20, thickness: 2, color: Colors.black),
+
           // Search Bar
           Padding(
             padding: const EdgeInsets.all(5),
@@ -62,35 +64,26 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
                 ),
                 contentPadding: const EdgeInsets.all(0),
               ),
+              onChanged: (value) {
+                // Optional: Add logic here if you want to perform search/filter as user types
+              },
             ),
-          ),
-
-          RoundButton(
-            label: 'Get ${_label}s',
-            onPressed: viewModel.busy(viewModel.iEvents)
-                ? null
-                : () async {
-                    // Hide keyboard
-                    FocusScopeNode currentFocus = FocusScope.of(context);
-                    if (!currentFocus.hasPrimaryFocus) {
-                      currentFocus.unfocus();
-                    }
-
-                    await viewModel.getIEventsAsync();
-                  },
           ),
           verticalSpaceLarge,
 
-          //* Show all the IEvents
-          if (viewModel.busy(viewModel.iEvents))
-            LoadingIndicator(
-              loadingText: 'Fetching ${_label}s',
-            )
-          else if (viewModel.iEvents.isEmpty)
-            _noIEventIndicator()
-          else
-            Expanded(
-              child: ListView.separated(
+          //* Pull-to-Refresh functionality
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await viewModel.getIEventsAsync();
+              },
+              child: viewModel.busy(viewModel.iEvents)
+                  ? LoadingIndicator(
+                loadingText: 'Fetching ${_label}s',
+              )
+                  : viewModel.iEvents.isEmpty
+                  ? _noIEventIndicator()
+                  : ListView.separated(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemBuilder: (_, index) {
@@ -106,11 +99,13 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
                 itemCount: viewModel.iEvents.length,
               ),
             ),
+          ),
 
           verticalSpaceMedium,
           RoundButton(
             label: 'Add $_article $_label',
-            onPressed: () async => await viewModel.goToCreateIEventPageAsync(),
+            onPressed: () async =>
+            await viewModel.goToCreateIEventPageAsync(),
           ),
           verticalSpaceSmall,
         ],
@@ -118,7 +113,6 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
     );
   }
 
-  //* Private Methods
   Widget _noIEventIndicator() {
     return Center(
       child: Row(
