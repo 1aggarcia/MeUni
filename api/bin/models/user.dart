@@ -108,3 +108,24 @@ List<User> usersFromMap(Map<String, dynamic> data) {
   });
   return users;
 }
+
+/// Converts list of users to map of users where key = id, value = user
+/// * requires all users have a unique id
+Map<String, User> userListToMap(List<User> list) {
+  Map<String, User> map = {};
+  for (User user in list) {
+    map[user.id] = user;
+  }
+  return map;
+}
+
+/// Returns username from given user map if there is a user corresponding to the given id,
+/// otherwise returns '(N/A)'
+String getUserName(String userId, Map<String, User> userMap) {
+  User? user = userMap[userId];
+  if (user == null) {
+    return '(N/A)';
+  } else {
+    return '${user.firstName} ${user.lastName[0]}.';
+  }
+}

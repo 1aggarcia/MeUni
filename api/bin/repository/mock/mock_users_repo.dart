@@ -9,7 +9,7 @@ class MockUsersRepo extends UsersRepo {
   MockUsersRepo() {
     _users = [
       User(
-        id: '1a',
+        id: '0',
         firstName: 'Fei',
         lastName: 'Huang',
         year: 4,
@@ -17,7 +17,7 @@ class MockUsersRepo extends UsersRepo {
         admin: true,
       ),
       User(
-        id: '2a',
+        id: '1',
         firstName: 'John',
         lastName: 'Stuart',
         year: 3,
@@ -25,7 +25,7 @@ class MockUsersRepo extends UsersRepo {
         admin: false,
       ),
       User(
-        id: '3a',
+        id: '2',
         firstName: 'Hannah',
         lastName: 'Brown',
         year: 1,
@@ -33,7 +33,7 @@ class MockUsersRepo extends UsersRepo {
         admin: false,
       ),
       User(
-        id: '4a',
+        id: '3',
         firstName: 'Ronald',
         lastName: 'McDonald',
         year: 2,
@@ -52,6 +52,11 @@ class MockUsersRepo extends UsersRepo {
     } catch (e) {
       return null;
     }
+  }
+
+  @override
+  Future<List<User>> getUsersAsync() async {
+    return _users;
   }
 
   @override

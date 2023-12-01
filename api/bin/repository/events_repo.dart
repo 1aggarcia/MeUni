@@ -6,7 +6,9 @@ import 'package:string_similarity/string_similarity.dart';
 import '../locator.dart';
 import '../models/event.dart';
 //import '../models/user.dart';
+import '../models/user.dart';
 import '../models/user_data.dart';
+import 'users_repo.dart';
 //import 'users_repo.dart';
 
 // Weight must be between 0-1
@@ -45,7 +47,7 @@ abstract class EventsRepo {
 
 class EventsRepoImpl extends EventsRepo {
   //* Private Properties
-  //final UsersRepo _userRepo = locator<UsersRepo>();
+  final UsersRepo _userRepo = locator<UsersRepo>();
   late db.DatabaseReference _eventsRef;
   late UserData _userEventsTable;
 
@@ -103,7 +105,10 @@ class EventsRepoImpl extends EventsRepo {
     if (event == null) {
       return null;
     } else {
-      return injectNames([event]).first;
+      // Convert 1 event to list so to find the hostName with injectNames
+      List<Event> list = await injectNames([event]);
+      // Get 1 event from list
+      return list.first;
     }
   }
 
@@ -160,20 +165,18 @@ class EventsRepoImpl extends EventsRepo {
   }
 
   /// Find the host name and attendee Names for every event given and inject them into each event
-  /// * @returns list of events passed in with names if avaliable in database, or [unknown] for unknown users
-  // TODO: implement username retreival based on data structure from getUsersAsync();
-  List<Event> injectNames(List<Event> events) {
-    //List<User> users = []; //_userRepo.getUsersAsync();
+  /// * @returns list of events passed in with names if avaliable in database
+  Future<List<Event>> injectNames(List<Event> events) async {
+    List<User> userList = await _userRepo.getUsersAsync();
+    Map<String, User> users = userListToMap(userList);
     List<Event> result = [];
 
     for (Event event in events) {
       Event copy = event.clone();
-      // insert *magic* /
-      copy.hostName = '[${copy.hostId}.name]';
-      for (String a in copy.attendees) {
-        copy.attendeeNames.add('[$a.name]');
+      copy.hostName = getUserName(copy.hostId, users);
+      for (String att in copy.attendees) {
+        copy.attendeeNames.add(getUserName(att, users));
       }
-      // end of *magic* /
       result.add(copy);
     }
 

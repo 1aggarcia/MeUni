@@ -12,6 +12,9 @@ abstract class UsersRepo {
   /// Returns the User if found, null otherwise
   Future<User?> getUserAsync(String id);
 
+  /// Returns list of all users
+  Future<List<User>> getUsersAsync();
+
   /// Returns id of the newly created user
   Future<String> addUserAsync(User user);
 }
@@ -35,6 +38,14 @@ class UsersRepoImpl extends UsersRepo {
 
     /// We ought to send back a User; so Json is being processed to User.
     return userFromJson(json);
+  }
+
+  @override
+  Future<List<User>> getUsersAsync() async {
+    final db.DataSnapshot snapshot = await _userRef.once();
+    final json = jsonEncode(snapshot.value);
+
+    return usersFromJson(json);
   }
 
   @override

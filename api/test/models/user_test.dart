@@ -142,5 +142,31 @@ void main() {
       String json = jsonEncode([1, 2, 3, 4]);
       expect(usersFromJson(json), []);
     });
+
+    test('userListToMap', () {
+      Map<String, User> data = {
+        '0': freshman,
+        '1': oldGuy,
+        '2': freshmanCopy,
+      };
+      List<User> list = [freshman, oldGuy, freshmanCopy];
+      Map<String, User> test = userListToMap(list);
+
+      expect(test.length, 3);
+      test.forEach((k, v) {
+        expect(test[k], data[k]);
+      });
+    });
+
+    test('getUserName', () {
+      Map<String, User> data = {
+        '0': freshman,
+        '1': oldGuy,
+        '2': freshmanCopy,
+      };
+      expect(getUserName('0', data), 'Freshman H.'); 
+      expect(getUserName('1', data), 'Old G.'); 
+      expect(getUserName('4', data), '(N/A)'); 
+    });
   });
 }
