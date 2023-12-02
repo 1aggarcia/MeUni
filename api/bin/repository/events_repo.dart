@@ -5,16 +5,16 @@ import 'package:string_similarity/string_similarity.dart';
 
 import '../locator.dart';
 import '../models/event.dart';
-//import '../models/user.dart';
 import '../models/user.dart';
 import '../models/user_data.dart';
 import 'users_repo.dart';
-//import 'users_repo.dart';
 
-// Weight must be between 0-1
+// Weight given to event text in search queries, must be fraction between 0-1
 final double titleSearchWeight = 1;
 final double descSearchWeight = 2/3;
 final double locSearchWeight = 1/2;
+
+final double minAcceptableScore = 0.1;
 
 abstract class EventsRepo {
   //* Public Methods
@@ -79,8 +79,14 @@ class EventsRepoImpl extends EventsRepo {
 
   @override
   Future<String> deleteEventAsync(String id) async {
+    if (id.isEmpty) {
+      // Stop empty request from reaching database, doing so deletes all events from database
+      return 'STOP! You may not delete an event/study group without an id';
+    }
     final db.DatabaseReference eventRef = _eventsRef.child(id);
+    // Remove event from events list
     await eventRef.remove();
+    // Remove all pairs (user, event) for any user from user event reference
     await _userEventsTable.removeData(id);
     return id;
   }
@@ -118,7 +124,7 @@ class EventsRepoImpl extends EventsRepo {
     final List<Event> result = [];
 
     for (Event event in all) {
-      if (scoreEvent(event, query) > 0) {
+      if (scoreEvent(event, query) > minAcceptableScore) {
         result.add(event);
       }
     }
@@ -135,7 +141,9 @@ class EventsRepoImpl extends EventsRepo {
       Event event = await getEventAsync(eventId) as Event;
       event.attendees.add(userId);
 
+      // Update attendees list in event
       await _eventsRef.child(eventId).update({'attendees': event.attendees});
+      // Add pair (user, event) to user event reference
       await _userEventsTable.add(userId, eventId);
 
       return event.attendees;
@@ -150,7 +158,9 @@ class EventsRepoImpl extends EventsRepo {
     } else {
       event.attendees.remove(userId);
 
+      // Update attendees list in event
       await _eventsRef.child(eventId).update({'attendees': event.attendees});
+      // Remove pair (user, event) from user event reference
       await _userEventsTable.removeUser(userId);
 
       return event.attendees;    
@@ -168,6 +178,7 @@ class EventsRepoImpl extends EventsRepo {
   /// * @returns list of events passed in with names if avaliable in database
   Future<List<Event>> injectNames(List<Event> events) async {
     List<User> userList = await _userRepo.getUsersAsync();
+    // Storing users in a map reduces runtime to linear
     Map<String, User> users = userListToMap(userList);
     List<Event> result = [];
 
@@ -187,17 +198,22 @@ class EventsRepoImpl extends EventsRepo {
   /// * if query has an exact match in event text, score = 1
   /// * otherwise, score = string similarity based on Dice's Coefficient, between 0-1
   double scoreEvent(Event event, String query) {
+    // String similarity is case sensitive, so we convert everything to lowercase to
+    // make it case insensitive
     final String lowerQuery = query.toLowerCase();
     final String lowerTitle = event.title.toLowerCase();
     final String lowerDesc = event.desc.toLowerCase();
     final String lowerLoc = event.location.toLowerCase();
 
+    // Check for exact match in event text
     if ((lowerTitle + lowerDesc + lowerLoc).contains(lowerQuery)) {
       return 1;
     } else {
+      // all scores are a fraction between 0-1, weighted differently depending of event property
       final double titleScore = lowerTitle.similarityTo(lowerQuery) *titleSearchWeight;
       final double descScore = lowerDesc.similarityTo(lowerQuery) *descSearchWeight;
       final double locScore = lowerLoc.similarityTo(lowerQuery) *locSearchWeight;
+
       return (titleScore + descScore + locScore) / 3;
     }
   }
@@ -205,10 +221,13 @@ class EventsRepoImpl extends EventsRepo {
   /// Returns true iff userId and eventId passed in coorespond 
   /// to an existing user and event in the database, and the event has space
   Future<bool> userCanJoinAsync(String userId, String eventId) async{
-    // TODO: check for user validity
+    // Check that the user exists
+    if (await _userRepo.getUserAsync(userId) == null) {
+      return false;
+    }
     Event? event = await getEventAsync(eventId);
-    return (event != null &&
-        !event.attendees.contains(userId) &&
-        event.attendees.length < event.max);
+    return (event != null && // event exists
+        !event.attendees.contains(userId) && // user isn't already in event
+        event.attendees.length < event.max); // event is not at max capacity
   }
 }

@@ -10,8 +10,8 @@ class UserData {
 
   //* Public Methods
 
-  /// Assigned given data to given user id
-  /// @returns true if successful
+  /// Assigns given data to given user id
+  /// @returns success
   Future<bool> add(String userId, String data) async {
     final pair = {'userId': userId, 'data': data};
     final DatabaseReference newRef = _reference.push();
