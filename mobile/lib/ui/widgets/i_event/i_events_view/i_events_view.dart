@@ -18,19 +18,24 @@ import 'i_events_view_model.dart';
 ])
 class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
     with $IEventsView {
+  //* Private Properties
   final String _label = T == Event ? 'Event' : 'Study Group';
   final String _article = T == Event ? 'an' : 'a';
 
+  //* Constructors
   IEventsView({super.key});
 
+  //* Overridden Methods
   @override
   IEventsViewModel viewModelBuilder(BuildContext context) =>
       IEventsViewModel<T>();
 
   @override
-  void onViewModelReady(IEventsViewModel<IEvent> viewModel) {
+  void onViewModelReady(IEventsViewModel<IEvent> viewModel) async {
     super.onViewModelReady(viewModel);
-    viewModel.getIEventsAsync(); // Fetch events when the view is ready
+
+    syncFormWithViewModel(viewModel);
+    await viewModel.getIEventsAsync();
   }
 
   @override
@@ -41,6 +46,7 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
       child: Column(
         children: [
           verticalSpaceSmall,
+
           // Search Bar
           Padding(
             padding: const EdgeInsets.all(5),
@@ -48,13 +54,20 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
               controller: T == Event
                   ? searchEventController
                   : searchStudyGroupController,
+              onFieldSubmitted: (_) async => await viewModel.getIEventsAsync(),
               decoration: InputDecoration(
                 hintText: 'Search ${_label}s',
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: IconButton(
-                  onPressed: T == Event
-                      ? searchEventController.clear
-                      : searchStudyGroupController.clear,
+                  onPressed: () async {
+                    if (T == Event) {
+                      searchEventController.clear();
+                    } else {
+                      searchStudyGroupController.clear();
+                    }
+
+                    await viewModel.getIEventsAsync();
+                  },
                   icon: const Icon(Icons.clear),
                 ),
                 border: OutlineInputBorder(
@@ -62,47 +75,42 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
                 ),
                 contentPadding: const EdgeInsets.all(0),
               ),
-              onChanged: (value) {
-                // Optional: Add logic here if you want to perform search/filter as user types
-              },
             ),
           ),
           verticalSpaceSmall,
-          //* Pull-to-Refresh functionality
+
+          // Events
           Expanded(
             child: RefreshIndicator(
-              onRefresh: () async {
-                await viewModel.getIEventsAsync();
-              },
+              onRefresh: () async => await viewModel.getIEventsAsync(),
               child: viewModel.busy(viewModel.iEvents)
                   ? LoadingIndicator(
-                loadingText: 'Fetching ${_label}s',
-              )
+                      loadingText: 'Fetching ${_label}s',
+                    )
                   : viewModel.iEvents.isEmpty
-                  ? _noIEventIndicator()
-                  : ListView.separated(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemBuilder: (_, index) {
-                  return GestureDetector(
-                    onTap: () async =>
-                        viewModel.goToIEventDetailPageAsync(index),
-                    child: IEventCard(
-                      iEvent: viewModel.iEvents[index],
-                    ),
-                  );
-                },
-                separatorBuilder: (_, __) => verticalSpaceMedium,
-                itemCount: viewModel.iEvents.length,
-              ),
+                      ? _noIEventIndicator()
+                      : ListView.separated(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: viewModel.iEvents.length,
+                          separatorBuilder: (_, __) => verticalSpaceMedium,
+                          itemBuilder: (_, index) {
+                            return GestureDetector(
+                              onTap: () async =>
+                                  viewModel.goToIEventDetailPageAsync(index),
+                              child: IEventCard(
+                                iEvent: viewModel.iEvents[index],
+                              ),
+                            );
+                          },
+                        ),
             ),
           ),
 
           verticalSpaceSmall,
           RoundButton(
             label: 'Add $_article $_label',
-            onPressed: () async =>
-            await viewModel.goToCreateIEventPageAsync(),
+            onPressed: () async => await viewModel.goToCreateIEventPageAsync(),
           ),
           verticalSpaceSmall,
         ],
@@ -110,6 +118,7 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
     );
   }
 
+  //* Private Methods
   Widget _noIEventIndicator() {
     return Center(
       child: Row(
