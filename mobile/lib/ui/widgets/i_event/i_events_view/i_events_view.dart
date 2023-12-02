@@ -40,9 +40,7 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
       padding: const EdgeInsets.only(left: 25.0, right: 25.0),
       child: Column(
         children: [
-
-          Divider(height: 20, thickness: 2, color: Colors.black),
-
+          verticalSpaceSmall,
           // Search Bar
           Padding(
             padding: const EdgeInsets.all(5),
@@ -69,7 +67,7 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
               },
             ),
           ),
-          verticalSpaceLarge,
+          verticalSpaceMedium,
 
           //* Pull-to-Refresh functionality
           Expanded(
