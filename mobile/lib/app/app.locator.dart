@@ -20,9 +20,6 @@ import '../repository/users_repo.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
 
-import '../models/event.dart';
-import '../models/study_group.dart';
-
 final locator = StackedLocator.instance;
 
 Future<void> setupLocator({

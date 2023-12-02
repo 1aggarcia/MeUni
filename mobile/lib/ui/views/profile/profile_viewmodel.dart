@@ -27,7 +27,7 @@ class ProfileViewModel extends BaseViewModel {
   //* Public Methods
   Future<void> getClassesAsync() async {
     classes = await runBusyFuture(
-      _usersRepo.getUserClasses(_authService.currUser.id),
+      _usersRepo.getUserClassesAsync(_authService.currUser.id),
       busyObject: classes,
     );
   }

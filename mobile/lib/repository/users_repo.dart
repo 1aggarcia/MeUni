@@ -17,7 +17,11 @@ abstract class UsersRepo {
 
   Future<User?> getUserAsync(String id);
 
-  Future<List<String>> getUserClasses(String id);
+  Future<bool> addUserClassAsync({
+    required String id,
+    required String className,
+  });
+  Future<List<String>> getUserClassesAsync(String id);
 
   Future<void> updateUserAsync(User user);
 }
@@ -37,8 +41,17 @@ class UsersRepoImpl extends UsersRepo {
   }
 
   @override
-  Future<List<String>> getUserClasses(String id) async {
-    // TODO: implement getUserClasses
+  Future<bool> addUserClassAsync({
+    required String id,
+    required String className,
+  }) {
+    // TODO: implement addUserClassAsync
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<String>> getUserClassesAsync(String id) {
+    // TODO: implement getUserClassesAsync
     throw UnimplementedError();
   }
 
@@ -52,12 +65,13 @@ class UsersRepoImpl extends UsersRepo {
   }
 
   @override
-  Future<User> addUserAsync(
-      {required String id,
-      required String firstName,
-      required String lastName,
-      required int year,
-      required String pronouns}) {
+  Future<User> addUserAsync({
+    required String id,
+    required String firstName,
+    required String lastName,
+    required int year,
+    required String pronouns,
+  }) {
     // TODO: implement addUserAsync
     throw UnimplementedError();
   }

@@ -21,7 +21,7 @@ final Map<String, TextEditingController> _ClassesViewTextEditingControllers =
 final Map<String, FocusNode> _ClassesViewFocusNodes = {};
 
 final Map<String, String? Function(String?)?> _ClassesViewTextValidations = {
-  PrefixValueKey: ClassValidators.validatePrefix,
+  PrefixValueKey: null,
   CourseCodeValueKey: ClassValidators.validateCourseCode,
 };
 

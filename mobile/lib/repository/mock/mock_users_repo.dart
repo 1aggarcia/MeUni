@@ -5,6 +5,7 @@ import '../users_repo.dart';
 class MockUsersRepo extends UsersRepo {
   //* Private Properties
   List<User> _users = [];
+  final Map<String, List<String>> _userClasses = {};
 
   //* Constructors
   MockUsersRepo() {
@@ -65,10 +66,28 @@ class MockUsersRepo extends UsersRepo {
   }
 
   @override
-  Future<List<String>> getUserClasses(String id) async {
+  Future<bool> addUserClassAsync({
+    required String id,
+    required String className,
+  }) async {
     await Future.delayed(App.demoDuration);
 
-    return ['CSE 403', 'CSE 332', 'MUS 350'];
+    List<String>? classList = _userClasses[id];
+
+    if (classList != null) {
+      classList.add(className);
+    } else {
+      _userClasses[id] = [className];
+    }
+
+    return true;
+  }
+
+  @override
+  Future<List<String>> getUserClassesAsync(String id) async {
+    await Future.delayed(App.demoDuration);
+
+    return _userClasses[id] ?? [];
   }
 
   @override

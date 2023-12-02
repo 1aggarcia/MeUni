@@ -1,35 +1,35 @@
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
+import '../../../app/app.locator.dart';
+import '../../../repository/users_repo.dart';
+import '../../../services/auth_service.dart';
 import 'classes_view.form.dart';
 
 class ClassesViewModel extends FormViewModel {
-  String prefixVal = '';
+  //* Private Properties
+  final _usersRepo = locator<UsersRepo>();
 
-  String? setPrefix(String? value) {
-    if (value == null) {
-      return null;
+  final _authService = locator<AuthService>();
+  final _navService = locator<NavigationService>();
+
+  //* Public Methods
+  Future<void> addClassAsync() async {
+    if (isFormValid) {
+      await runBusyFuture(
+        _usersRepo.addUserClassAsync(
+          id: _authService.currUser.id,
+          className: '${prefixValue!} ${courseCodeValue!}',
+        ),
+      );
     }
-    prefixValue = value;
-    rebuildUi();
-  }
 
+    _navService.back();
+  }
 }
 
 class ClassValidators {
   //* Public Methods
-  static String? validatePrefix(String? value) {
-    if (value == null) {
-      return null;
-    }
-
-    if (value.isEmpty) {
-      return 'Prefix Cannot be Empty';
-    }
-
-    // check if prefix is in course list
-
-  }
-
   static String? validateCourseCode(String? value) {
     if (value == null) {
       return null;
@@ -42,6 +42,7 @@ class ClassValidators {
     } else if (courseCode < 100 || courseCode > 699) {
       return 'courseCode must be from 100-699';
     }
-  }
 
+    return null;
+  }
 }
