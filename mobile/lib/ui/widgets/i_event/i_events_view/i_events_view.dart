@@ -67,8 +67,7 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
               },
             ),
           ),
-          verticalSpaceMedium,
-
+          verticalSpaceSmall,
           //* Pull-to-Refresh functionality
           Expanded(
             child: RefreshIndicator(
@@ -99,7 +98,7 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
             ),
           ),
 
-          verticalSpaceMedium,
+          verticalSpaceSmall,
           RoundButton(
             label: 'Add $_article $_label',
             onPressed: () async =>
