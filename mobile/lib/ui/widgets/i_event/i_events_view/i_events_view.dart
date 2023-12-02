@@ -31,8 +31,12 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
       IEventsViewModel<T>();
 
   @override
-  void onViewModelReady(IEventsViewModel<IEvent> viewModel) =>
-      syncFormWithViewModel(viewModel);
+  void onViewModelReady(IEventsViewModel<IEvent> viewModel) async {
+    super.onViewModelReady(viewModel);
+
+    syncFormWithViewModel(viewModel);
+    await viewModel.getIEventsAsync();
+  }
 
   @override
   Widget builder(
@@ -41,6 +45,8 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
       padding: const EdgeInsets.only(left: 25.0, right: 25.0),
       child: Column(
         children: [
+          verticalSpaceSmall,
+
           // Search Bar
           Padding(
             padding: const EdgeInsets.all(5),
@@ -48,13 +54,20 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
               controller: T == Event
                   ? searchEventController
                   : searchStudyGroupController,
+              onFieldSubmitted: (_) async => await viewModel.getIEventsAsync(),
               decoration: InputDecoration(
                 hintText: 'Search ${_label}s',
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: IconButton(
-                  onPressed: T == Event
-                      ? searchEventController.clear
-                      : searchStudyGroupController.clear,
+                  onPressed: () async {
+                    if (T == Event) {
+                      searchEventController.clear();
+                    } else {
+                      searchStudyGroupController.clear();
+                    }
+
+                    await viewModel.getIEventsAsync();
+                  },
                   icon: const Icon(Icons.clear),
                 ),
                 border: OutlineInputBorder(
@@ -64,50 +77,37 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
               ),
             ),
           ),
+          verticalSpaceSmall,
 
-          RoundButton(
-            label: 'Get ${_label}s',
-            onPressed: viewModel.busy(viewModel.iEvents)
-                ? null
-                : () async {
-                    // Hide keyboard
-                    FocusScopeNode currentFocus = FocusScope.of(context);
-                    if (!currentFocus.hasPrimaryFocus) {
-                      currentFocus.unfocus();
-                    }
-
-                    await viewModel.getIEventsAsync();
-                  },
-          ),
-          verticalSpaceLarge,
-
-          //* Show all the IEvents
-          if (viewModel.busy(viewModel.iEvents))
-            LoadingIndicator(
-              loadingText: 'Fetching ${_label}s',
-            )
-          else if (viewModel.iEvents.isEmpty)
-            _noIEventIndicator()
-          else
-            Expanded(
-              child: ListView.separated(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemBuilder: (_, index) {
-                  return GestureDetector(
-                    onTap: () async =>
-                        viewModel.goToIEventDetailPageAsync(index),
-                    child: IEventCard(
-                      iEvent: viewModel.iEvents[index],
-                    ),
-                  );
-                },
-                separatorBuilder: (_, __) => verticalSpaceMedium,
-                itemCount: viewModel.iEvents.length,
-              ),
+          // Events
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async => await viewModel.getIEventsAsync(),
+              child: viewModel.busy(viewModel.iEvents)
+                  ? LoadingIndicator(
+                      loadingText: 'Fetching ${_label}s',
+                    )
+                  : viewModel.iEvents.isEmpty
+                      ? _noIEventIndicator()
+                      : ListView.separated(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: viewModel.iEvents.length,
+                          separatorBuilder: (_, __) => verticalSpaceMedium,
+                          itemBuilder: (_, index) {
+                            return GestureDetector(
+                              onTap: () async =>
+                                  viewModel.goToIEventDetailPageAsync(index),
+                              child: IEventCard(
+                                iEvent: viewModel.iEvents[index],
+                              ),
+                            );
+                          },
+                        ),
             ),
+          ),
 
-          verticalSpaceMedium,
+          verticalSpaceSmall,
           RoundButton(
             label: 'Add $_article $_label',
             onPressed: () async => await viewModel.goToCreateIEventPageAsync(),
