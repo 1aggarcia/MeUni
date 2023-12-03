@@ -15,8 +15,9 @@ class UserController extends Controller {
   Router setUpRoutes(Router router, String endpoint) {
     return router
       ..get('$endpoint/profile/get', getUserHandler)
-      ..post('$endpoint/profile/create', createUserHandler)
-      ..post('$endpoint/profile/update', updateUserHandler);
+      ..post('$endpoint/profile/create', createUserHandler);
+      // Unused method
+      //..post('$endpoint/profile/update', updateUserHandler);
   }
 
   //* Public API Methods
@@ -58,7 +59,8 @@ class UserController extends Controller {
     }
   }
 
-  Future<Response> updateUserHandler(Request request) async {
-    return createUserHandler(request);
-  }
+  // Unused method
+  // Future<Response> updateUserHandler(Request request) async {
+  //   return createUserHandler(request);
+  // }
 }

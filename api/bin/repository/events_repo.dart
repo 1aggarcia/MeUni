@@ -176,6 +176,8 @@ class EventsRepoImpl extends EventsRepo {
 
   /// Find the host name and attendee Names for every event given and inject them into each event
   /// * @returns list of events passed in with names if avaliable in database
+  // TODO: Don't download the entire userlist every time, get the users 1 by 1.
+    // Will be at most 16 small database calls
   Future<List<Event>> injectNames(List<Event> events) async {
     List<User> userList = await _userRepo.getUsersAsync();
     // Storing users in a map reduces runtime to linear

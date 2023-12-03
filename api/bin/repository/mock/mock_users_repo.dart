@@ -2,12 +2,7 @@ import '../../models/user.dart';
 import '../users_repo.dart';
 
 class MockUsersRepo extends UsersRepo {
-  //* Private Properties
-  List<User> _users = [];
-
-  //* Constructors
-  MockUsersRepo() {
-    _users = [
+  List<User> users = [
       User(
         id: '0',
         firstName: 'Fei',
@@ -41,14 +36,13 @@ class MockUsersRepo extends UsersRepo {
         admin: false,
       )
     ];
-  }
 
   //* Overriden Methods
 
   @override
   Future<User?> getUserAsync(String id) async {
     try {
-      return _users.singleWhere((e) => e.id == id);
+      return users.singleWhere((e) => e.id == id);
     } catch (e) {
       return null;
     }
@@ -56,11 +50,16 @@ class MockUsersRepo extends UsersRepo {
 
   @override
   Future<List<User>> getUsersAsync() async {
-    return _users;
+    return users;
   }
 
   @override
-  Future<String> addUserAsync(User user) {
-    throw UnimplementedError();
+  Future<String> addUserAsync(User user) async {
+    users.add(user);
+    return user.id;
+  }
+
+  List<User> getMockUsers() {
+    return users;
   }
 }
