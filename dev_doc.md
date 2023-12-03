@@ -26,7 +26,17 @@ Similarly, for service testing, testing logic is hosted in the `api/test/control
 
 
 # Building a Release of the Software
-The developer must edit the `.env.template` file in the api directory to fill in the indicated variables with their personal values to store the firebase credentials for access to the databse. The developer must then convert this file to a .env after modifying it as needed.
+The developer must install the Flutter SDK compatible to their OS system (https://docs.flutter.dev/get-started/install).
+The developer must follow all steps below to setup their enviornment and build a release of the software.
+- Install Dart SDK compatible to your OS system (https://docs.flutter.dev/get-started/install). Follow all steps in documentation for complete setup.
+- Clone this repo and run `flutter pub get` the `MeUni/mobile` and `MeUni/api` directories
+- Request for the `.env`, `meuni.jks`, and `key.properties` file by emailing meuni.help@gmail.com or any of the team members Apolo, Fei, Jintae, Sandeep, or Thevina, with the subject header `Resource Files Request` and body detailing your name, organization, and reason for requesting files and working on application development. Alternatively, there are templates for the `.env` and `key.properties` files in the repository within the location they are to be included which can be customly defined as well. The `meuni.jks` file must be requested for, however. The `.env` file should be located in the `api` folder and the `meuni.jks`, and `key.properties` file should be located in the `mobile/android` folder.
+- Set Flutter SDK Path and Dart SDK Path in IDE Language Settings
+- Create a configuration that points to `MeUni/mobile/lib/main.dart` to run application
+- Create an emulator to run application on. We recommend Pixel 2 API 29
+- Run the mobile application (which can be done via the play button), or via the command `flutter run` within the `MeUni/mobile` directory
+- Run the server application via the command `dart run server.dart` within the `MeUni/api/bin` directory
+- Application testing can be done via the command `flutter test` which is to be run either within the `MeUni/mobile` and/or `MeUni/api` directories to run the corresponding mobile or api tests
 
 Our CI/CD pipeline will build an apk file upon every push/build to the main branch. The developer can download the generated application apk based on the last version of the application pushed on their device and launch the application for usage.
 
