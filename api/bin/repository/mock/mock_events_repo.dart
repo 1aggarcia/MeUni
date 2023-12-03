@@ -94,6 +94,12 @@ class MockEventsRepo extends EventsRepo {
   }
 
   @override
+  Future<List<Event>> getUserEventsAsync(String userId) async {
+    // Much harder to implement without user table and host table
+    return getEventsAsync();
+  }
+
+  @override
   // Copy & paste from events_repo.dart
   Future<List<Event>> rankEventsAsync(String query) async {
     final List<Event> all = await getEventsAsync();

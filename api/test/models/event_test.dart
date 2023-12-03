@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:test/test.dart';
 import '../../bin/models/event.dart';
 
+// String of length 333 characters
+final String longString333 = 'saldkfhajsoifjaelfiajewflkajrcqwkjrckwqlhqjwihjqweilcrhqewjkewqjkcqwhnklehqwjkdhqwcakrchqewhjrfhaejhofigj vgrv djwicmzfczxmklfgjvdajhfgbkzxm,.vbhasm,d.fvenams,cvbsehsjkmngbrjkfcxvmsaejksl bkecmjebvhjawiougfioeaijtigoaw4hngklejf;ikawjf;lawhnfkwjnf;kjfiljawelkrjq;rfjqeifjqeiorjqiorjqujifhkwjehfkjwhfkawhfkjhawrfuhuiefhweifjkadlfhkajss';
+
 void main() {
   group('Events Model -', () {
     Event evt = Event(
@@ -195,6 +198,50 @@ void main() {
           '"attendees": ["1"]}';
       fromJson = eventFromJson(json);
       expect(fromJson is Event, true);
+    });
+
+    test('eventFromJson - short title, desc, loc', () {
+      String jsonTooShort = '{"title": "",'
+          '"desc": "",'
+          '"location": "",'
+          '"max": 1,'
+          '"startTime": "2023-11-05T03:04:15.537017Z",'
+          '"endTime": "2023-11-05T03:24:15.537017Z",'
+          '"hostId": "3",'
+          '"attendees": ["1"]}';
+      String jsonOk = '{"title": "a",'
+          '"desc": "b",'
+          '"location": "c",'
+          '"max": 1,'
+          '"startTime": "2023-11-05T03:04:15.537017Z",'
+          '"endTime": "2023-11-05T03:24:15.537017Z",'
+          '"hostId": "3",'
+          '"attendees": ["1"]}';
+
+      expect(eventFromJson(jsonTooShort), null);
+      expect(eventFromJson(jsonOk) is Event, true);
+    });
+
+    test('eventFromJson - long title, desc, loc', () {
+      String jsonTooLong = '{"title": "${longString333}s",'
+          '"desc": "${longString333}s",'
+          '"location": "${longString333}s",'
+          '"max": 1,'
+          '"startTime": "2023-11-05T03:04:15.537017Z",'
+          '"endTime": "2023-11-05T03:24:15.537017Z",'
+          '"hostId": "3",'
+          '"attendees": ["1"]}';
+      String jsonOk = '{"title": "$longString333",'
+          '"desc": "$longString333",'
+          '"location": "$longString333",'
+          '"max": 1,'
+          '"startTime": "2023-11-05T03:04:15.537017Z",'
+          '"endTime": "2023-11-05T03:24:15.537017Z",'
+          '"hostId": "3",'
+          '"attendees": ["1"]}';
+
+      expect(eventFromJson(jsonTooLong), null);
+      expect(eventFromJson(jsonOk) is Event, true);
     });
 
     test('eventsToJson', () {

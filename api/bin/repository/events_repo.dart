@@ -29,6 +29,9 @@ abstract class EventsRepo {
   /// @returns list of all events
   Future<List<Event>> getEventsAsync();
 
+  /// Returns list of all events that the specified user is in
+  Future<List<Event>> getUserEventsAsync(String userId);
+
   /// @returns list of events ranked in order of relevance between query and title/desc
   Future<List<Event>> rankEventsAsync(String query);
 
@@ -55,7 +58,7 @@ class EventsRepoImpl extends EventsRepo {
   final String endpoint;
   final String paramName;
 
-  //* Constructors
+  //* Constructor
   EventsRepoImpl(this.endpoint, this.paramName) {
     final dbRef = locator<db.DatabaseReference>();
     _eventsRef = dbRef.child(endpoint);
@@ -70,6 +73,7 @@ class EventsRepoImpl extends EventsRepo {
     final db.DatabaseReference newRef = _eventsRef.push();
     final Map<String, dynamic> eventJson = event.toJson();
 
+    // These paramenters should not be included in the database
     eventJson.remove('id');
     eventJson.remove('hostName');
     await newRef.set(eventJson);
@@ -99,6 +103,22 @@ class EventsRepoImpl extends EventsRepo {
     List<Event> events = eventsFromJson(json).reversed.toList();
 
     return injectNames(events);
+  }
+
+  @override
+  Future<List<Event>> getUserEventsAsync(String userId) async {
+    // This list is from every pair (userId, eventId) associated to given user
+    List<String> eventIdList = await _userEventsTable.getEntries(userId);
+    List<Event> result = [];
+
+    // Now the list of events is built from the id list
+    for (String eventId in eventIdList) {
+      Event? event = await getEventAsync(eventId);
+      if (event != null) {
+        result.add(event);
+      }
+    }
+    return result;
   }
 
   @override
@@ -161,7 +181,7 @@ class EventsRepoImpl extends EventsRepo {
       // Update attendees list in event
       await _eventsRef.child(eventId).update({'attendees': event.attendees});
       // Remove pair (user, event) from user event reference
-      await _userEventsTable.removeUser(userId);
+      await _userEventsTable.remove(userId, eventId);
 
       return event.attendees;    
     }
@@ -229,6 +249,7 @@ class EventsRepoImpl extends EventsRepo {
     }
     Event? event = await getEventAsync(eventId);
     return (event != null && // event exists
+        event.hostId != userId && // user isn't the host
         !event.attendees.contains(userId) && // user isn't already in event
         event.attendees.length < event.max); // event is not at max capacity
   }
