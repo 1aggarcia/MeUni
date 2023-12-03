@@ -20,6 +20,7 @@ class StudyGroup extends IEvent {
     required super.hostId,
     required super.hostName,
     required super.attendees,
+    super.attendeeNames,
   }) : _course = course;
 
   StudyGroup.fromJson(super.json)

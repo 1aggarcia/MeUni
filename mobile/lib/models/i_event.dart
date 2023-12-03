@@ -12,7 +12,9 @@ abstract class IEvent {
 
   final String hostId;
   final String hostName;
+
   final List<String> attendees;
+  final List<String> attendeeNames;
 
   String get title;
 
@@ -27,7 +29,8 @@ abstract class IEvent {
     required this.hostId,
     required this.hostName,
     required this.attendees,
-  });
+    List<String>? attendeeNames,
+  }) : attendeeNames = attendeeNames ?? [];
 
   IEvent.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -40,6 +43,9 @@ abstract class IEvent {
         hostName = json['hostName'],
         attendees = json.containsKey('attendees')
             ? List<String>.from(json['attendees'])
+            : [],
+        attendeeNames = json.containsKey('attendeeNames')
+            ? List<String>.from(json['attendeeNames'])
             : [];
 
   //* Public Methods
@@ -51,7 +57,6 @@ abstract class IEvent {
         'startTime': startTime.toIso8601String(),
         'endTime': endTime.toIso8601String(),
         'hostId': hostId,
-        'hostName': hostName,
         'attendees': attendees,
       };
 }

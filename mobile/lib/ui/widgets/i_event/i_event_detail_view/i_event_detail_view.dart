@@ -8,6 +8,7 @@ import '../../../../models/i_event.dart';
 import '../../../common/app_colors.dart';
 import '../../../common/ui_helpers.dart';
 import '../../loading_indicator.dart';
+import '../../missing_indicator.dart';
 import '../../round_button.dart';
 import 'i_event_detail_view_model.dart';
 
@@ -15,6 +16,15 @@ class IEventDetailView<T extends IEvent>
     extends StackedView<IEventDetailViewModel> {
   //* Private Properties
   final String _label = T == Event ? 'Event' : 'Study Group';
+
+  final TextStyle _labelTextStyle = const TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+  );
+  final TextStyle _valueTextStyle = const TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+  );
 
   //* Public Properties
   final String iEventId;
@@ -49,7 +59,10 @@ class IEventDetailView<T extends IEvent>
         body: viewModel.isBusy
             ? LoadingIndicator(loadingText: 'Loading $_label Details')
             : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 20,
+                ),
                 child: Center(
                   child: Column(
                     children: [
@@ -112,10 +125,28 @@ class IEventDetailView<T extends IEvent>
                       verticalSpaceMedium,
 
                       // Attendees
-                      _fieldLabel(
-                        label: 'Attendees',
-                        value: viewModel.iEvent.attendees.toString(),
+                      Text(
+                        'Attendees (${viewModel.iEvent.attendees.length}/'
+                        '${viewModel.iEvent.max})',
+                        style: _labelTextStyle,
                       ),
+                      verticalSpaceSmall,
+                      viewModel.iEvent.attendeeNames.isEmpty
+                          ? const MissingIndicator(label: 'No Attendees')
+                          : ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              separatorBuilder: (_, __) => verticalSpaceTiny,
+                              itemCount: viewModel.iEvent.attendeeNames.length,
+                              itemBuilder: (_, index) {
+                                return Center(
+                                  child: Text(
+                                    viewModel.iEvent.attendeeNames[index],
+                                    style: _valueTextStyle,
+                                  ),
+                                );
+                              },
+                            ),
 
                       verticalSpaceMedium,
 
@@ -142,18 +173,12 @@ class IEventDetailView<T extends IEvent>
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-          ),
+          style: _labelTextStyle,
         ),
         verticalSpaceSmall,
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
+          style: _valueTextStyle,
         ),
       ],
     );

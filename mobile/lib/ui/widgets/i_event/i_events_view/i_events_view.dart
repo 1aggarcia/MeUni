@@ -7,6 +7,7 @@ import '../../../../models/i_event.dart';
 import '../../../common/app_colors.dart';
 import '../../../common/ui_helpers.dart';
 import '../../loading_indicator.dart';
+import '../../missing_indicator.dart';
 import '../../round_button.dart';
 import '../i_event_card.dart';
 import 'i_events_view.form.dart';
@@ -88,7 +89,7 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
                       loadingText: 'Fetching ${_label}s',
                     )
                   : viewModel.iEvents.isEmpty
-                      ? _noIEventIndicator()
+                      ? MissingIndicator(label: 'No ${_label}s')
                       : ListView.separated(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -113,30 +114,6 @@ class IEventsView<T extends IEvent> extends StackedView<IEventsViewModel>
             onPressed: () async => await viewModel.goToCreateIEventPageAsync(),
           ),
           verticalSpaceSmall,
-        ],
-      ),
-    );
-  }
-
-  //* Private Methods
-  Widget _noIEventIndicator() {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.error_outline,
-            size: 40,
-          ),
-          horizontalSpaceSmall,
-          Text(
-            'No ${_label}s',
-            style: const TextStyle(
-              color: kcTextAccentColor,
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
         ],
       ),
     );

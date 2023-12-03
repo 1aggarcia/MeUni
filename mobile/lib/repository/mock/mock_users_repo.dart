@@ -26,6 +26,14 @@ class MockUsersRepo extends UsersRepo {
         pronouns: 'He/Him',
         admin: false,
       ),
+      User(
+        id: '3',
+        firstName: 'Hannah',
+        lastName: 'Something',
+        year: 3,
+        pronouns: 'She/Her',
+        admin: false,
+      ),
     ];
   }
 

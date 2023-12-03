@@ -20,6 +20,7 @@ class Event extends IEvent {
     required super.hostId,
     required super.hostName,
     required super.attendees,
+    super.attendeeNames,
   }) : _title = title;
 
   Event.fromJson(super.json)

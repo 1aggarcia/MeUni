@@ -126,6 +126,7 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
         hostName: 'Fei',
         hostId: '1',
         attendees: ['2', '3'],
+        attendeeNames: ['John', 'Hannah'],
       ),
       Event(
         id: '${_nextId++}',
@@ -138,6 +139,7 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
         hostId: '2',
         hostName: 'John',
         attendees: ['1', '3'],
+        attendeeNames: ['Fei', 'Hannah'],
       ),
       Event(
         id: '${_nextId++}',
@@ -150,6 +152,7 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
         hostId: '3',
         hostName: 'Hannah',
         attendees: ['1'],
+        attendeeNames: ['Fei'],
       ),
     ];
   }
@@ -167,6 +170,7 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
         hostName: 'Fei',
         hostId: '1',
         attendees: ['2', '3'],
+        attendeeNames: ['John', 'Hannah'],
       ),
       StudyGroup(
         id: '2',
@@ -179,6 +183,7 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
         hostId: '2',
         hostName: 'John',
         attendees: ['1', '3'],
+        attendeeNames: ['Fei', 'Hannah'],
       ),
       StudyGroup(
         id: '3',
@@ -191,6 +196,7 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
         hostId: '3',
         hostName: 'Hannah',
         attendees: ['1'],
+        attendeeNames: ['Fei'],
       ),
     ];
   }
