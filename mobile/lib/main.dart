@@ -1,12 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:meuni_mobile/app/app.bottomsheets.dart';
-import 'package:meuni_mobile/app/app.dialogs.dart';
-import 'package:meuni_mobile/app/app.locator.dart';
-import 'package:meuni_mobile/app/app.router.dart';
 import 'package:stacked_services/stacked_services.dart';
+
+import 'app/app.bottomsheets.dart';
+import 'app/app.dialogs.dart';
+import 'app/app.locator.dart';
+import 'app/app.router.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   await setupLocator();
   setupDialogUi();
   setupBottomSheetUi();

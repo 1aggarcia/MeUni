@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:meuni_mobile/ui/common/app_colors.dart';
-import 'package:meuni_mobile/ui/common/ui_helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../common/app_colors.dart';
+import '../../common/ui_helpers.dart';
 import 'info_alert_dialog_model.dart';
 
 const double _graphicSize = 60;
@@ -13,10 +13,10 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
   final Function(DialogResponse) completer;
 
   const InfoAlertDialog({
-    Key? key,
+    super.key,
     required this.request,
     required this.completer,
-  }) : super(key: key);
+  });
 
   @override
   Widget builder(
@@ -26,7 +26,7 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
   ) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      backgroundColor: Colors.white,
+      backgroundColor: kcSecondaryColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
@@ -83,13 +83,13 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
                 width: double.infinity,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: kcTextPrimaryColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Text(
                   'Got it',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: kcTextAccentColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
