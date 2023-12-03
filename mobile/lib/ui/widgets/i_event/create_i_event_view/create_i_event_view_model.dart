@@ -25,7 +25,7 @@ class CreateIEventViewModel<T extends IEvent> extends FormViewModel {
           title: iEventNameValue!,
           desc: iEventDescriptionValue!,
           location: iEventLocationValue!,
-          max: 15,
+          max: int.parse(iEventMaxValue!),
           startTime: DateTime(
             dateTime.year,
             dateTime.month,
@@ -72,6 +72,22 @@ class CreateIEventValidators {
 
   static String? validateLocation(String? value) =>
       _validateNotEmpty(value, 'Location');
+
+  static String? validateMax(String? value) {
+    if (value == null) {
+      return null;
+    }
+
+    int? intValue = int.tryParse(value);
+
+    if (intValue == null) {
+      return 'Max must be a number';
+    } else if (intValue < 1 || intValue > 15) {
+      return 'Max must be between 1 and 15';
+    }
+
+    return null;
+  }
 
   static String? validateStartTime(String? value) =>
       _validateNotEmpty(value, 'Start Time');

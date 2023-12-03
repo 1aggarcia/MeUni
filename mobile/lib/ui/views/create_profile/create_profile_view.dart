@@ -94,7 +94,7 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
                     // Year
                     TextFormField(
                       controller: yearController,
-                      // keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelText: 'Year',
                         errorText: viewModel.yearValidationMessage,

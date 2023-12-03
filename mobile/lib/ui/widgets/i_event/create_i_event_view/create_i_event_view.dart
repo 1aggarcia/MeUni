@@ -24,6 +24,10 @@ import 'create_i_event_view_model.dart';
     validator: CreateIEventValidators.validateLocation,
   ),
   FormTextField(
+    name: 'iEventMax',
+    validator: CreateIEventValidators.validateMax,
+  ),
+  FormTextField(
     name: 'iEventDate',
     validator: CreateIEventValidators.validateDate,
   ),
@@ -108,6 +112,18 @@ class CreateIEventView<T extends IEvent>
                         decoration: InputDecoration(
                           labelText: '$_label Location',
                           errorText: viewModel.iEventLocationValidationMessage,
+                        ),
+                      ),
+
+                      verticalSpaceSmall,
+
+                      // Event Max
+                      TextFormField(
+                        controller: iEventMaxController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: '$_label Max',
+                          errorText: viewModel.iEventMaxValidationMessage,
                         ),
                       ),
 

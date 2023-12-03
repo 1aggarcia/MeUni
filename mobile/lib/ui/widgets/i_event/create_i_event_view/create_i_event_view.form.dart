@@ -15,6 +15,7 @@ const bool _autoTextFieldValidation = true;
 const String IEventNameValueKey = 'iEventName';
 const String IEventDescriptionValueKey = 'iEventDescription';
 const String IEventLocationValueKey = 'iEventLocation';
+const String IEventMaxValueKey = 'iEventMax';
 const String IEventDateValueKey = 'iEventDate';
 const String IEventStartTimeValueKey = 'iEventStartTime';
 const String IEventEndTimeValueKey = 'iEventEndTime';
@@ -29,6 +30,7 @@ final Map<String, String? Function(String?)?> _CreateIEventViewTextValidations =
   IEventNameValueKey: CreateIEventValidators.validateName,
   IEventDescriptionValueKey: CreateIEventValidators.validateDescription,
   IEventLocationValueKey: CreateIEventValidators.validateLocation,
+  IEventMaxValueKey: CreateIEventValidators.validateMax,
   IEventDateValueKey: CreateIEventValidators.validateDate,
   IEventStartTimeValueKey: CreateIEventValidators.validateStartTime,
   IEventEndTimeValueKey: CreateIEventValidators.validateEndTime,
@@ -41,6 +43,8 @@ mixin $CreateIEventView {
       _getFormTextEditingController(IEventDescriptionValueKey);
   TextEditingController get iEventLocationController =>
       _getFormTextEditingController(IEventLocationValueKey);
+  TextEditingController get iEventMaxController =>
+      _getFormTextEditingController(IEventMaxValueKey);
   TextEditingController get iEventDateController =>
       _getFormTextEditingController(IEventDateValueKey);
   TextEditingController get iEventStartTimeController =>
@@ -53,6 +57,7 @@ mixin $CreateIEventView {
       _getFormFocusNode(IEventDescriptionValueKey);
   FocusNode get iEventLocationFocusNode =>
       _getFormFocusNode(IEventLocationValueKey);
+  FocusNode get iEventMaxFocusNode => _getFormFocusNode(IEventMaxValueKey);
   FocusNode get iEventDateFocusNode => _getFormFocusNode(IEventDateValueKey);
   FocusNode get iEventStartTimeFocusNode =>
       _getFormFocusNode(IEventStartTimeValueKey);
@@ -86,6 +91,7 @@ mixin $CreateIEventView {
     iEventNameController.addListener(() => _updateFormData(model));
     iEventDescriptionController.addListener(() => _updateFormData(model));
     iEventLocationController.addListener(() => _updateFormData(model));
+    iEventMaxController.addListener(() => _updateFormData(model));
     iEventDateController.addListener(() => _updateFormData(model));
     iEventStartTimeController.addListener(() => _updateFormData(model));
     iEventEndTimeController.addListener(() => _updateFormData(model));
@@ -103,6 +109,7 @@ mixin $CreateIEventView {
     iEventNameController.addListener(() => _updateFormData(model));
     iEventDescriptionController.addListener(() => _updateFormData(model));
     iEventLocationController.addListener(() => _updateFormData(model));
+    iEventMaxController.addListener(() => _updateFormData(model));
     iEventDateController.addListener(() => _updateFormData(model));
     iEventStartTimeController.addListener(() => _updateFormData(model));
     iEventEndTimeController.addListener(() => _updateFormData(model));
@@ -118,6 +125,7 @@ mixin $CreateIEventView {
           IEventNameValueKey: iEventNameController.text,
           IEventDescriptionValueKey: iEventDescriptionController.text,
           IEventLocationValueKey: iEventLocationController.text,
+          IEventMaxValueKey: iEventMaxController.text,
           IEventDateValueKey: iEventDateController.text,
           IEventStartTimeValueKey: iEventStartTimeController.text,
           IEventEndTimeValueKey: iEventEndTimeController.text,
@@ -168,6 +176,7 @@ extension ValueProperties on FormStateHelper {
       this.formValueMap[IEventDescriptionValueKey] as String?;
   String? get iEventLocationValue =>
       this.formValueMap[IEventLocationValueKey] as String?;
+  String? get iEventMaxValue => this.formValueMap[IEventMaxValueKey] as String?;
   String? get iEventDateValue =>
       this.formValueMap[IEventDateValueKey] as String?;
   String? get iEventStartTimeValue =>
@@ -207,6 +216,18 @@ extension ValueProperties on FormStateHelper {
     if (_CreateIEventViewTextEditingControllers.containsKey(
         IEventLocationValueKey)) {
       _CreateIEventViewTextEditingControllers[IEventLocationValueKey]?.text =
+          value ?? '';
+    }
+  }
+
+  set iEventMaxValue(String? value) {
+    this.setData(
+      this.formValueMap..addAll({IEventMaxValueKey: value}),
+    );
+
+    if (_CreateIEventViewTextEditingControllers.containsKey(
+        IEventMaxValueKey)) {
+      _CreateIEventViewTextEditingControllers[IEventMaxValueKey]?.text =
           value ?? '';
     }
   }
@@ -256,6 +277,9 @@ extension ValueProperties on FormStateHelper {
   bool get hasIEventLocation =>
       this.formValueMap.containsKey(IEventLocationValueKey) &&
       (iEventLocationValue?.isNotEmpty ?? false);
+  bool get hasIEventMax =>
+      this.formValueMap.containsKey(IEventMaxValueKey) &&
+      (iEventMaxValue?.isNotEmpty ?? false);
   bool get hasIEventDate =>
       this.formValueMap.containsKey(IEventDateValueKey) &&
       (iEventDateValue?.isNotEmpty ?? false);
@@ -274,6 +298,8 @@ extension ValueProperties on FormStateHelper {
   bool get hasIEventLocationValidationMessage =>
       this.fieldsValidationMessages[IEventLocationValueKey]?.isNotEmpty ??
       false;
+  bool get hasIEventMaxValidationMessage =>
+      this.fieldsValidationMessages[IEventMaxValueKey]?.isNotEmpty ?? false;
   bool get hasIEventDateValidationMessage =>
       this.fieldsValidationMessages[IEventDateValueKey]?.isNotEmpty ?? false;
   bool get hasIEventStartTimeValidationMessage =>
@@ -288,6 +314,8 @@ extension ValueProperties on FormStateHelper {
       this.fieldsValidationMessages[IEventDescriptionValueKey];
   String? get iEventLocationValidationMessage =>
       this.fieldsValidationMessages[IEventLocationValueKey];
+  String? get iEventMaxValidationMessage =>
+      this.fieldsValidationMessages[IEventMaxValueKey];
   String? get iEventDateValidationMessage =>
       this.fieldsValidationMessages[IEventDateValueKey];
   String? get iEventStartTimeValidationMessage =>
@@ -304,6 +332,8 @@ extension Methods on FormStateHelper {
           validationMessage;
   setIEventLocationValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[IEventLocationValueKey] = validationMessage;
+  setIEventMaxValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[IEventMaxValueKey] = validationMessage;
   setIEventDateValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[IEventDateValueKey] = validationMessage;
   setIEventStartTimeValidationMessage(String? validationMessage) =>
@@ -317,6 +347,7 @@ extension Methods on FormStateHelper {
     iEventNameValue = '';
     iEventDescriptionValue = '';
     iEventLocationValue = '';
+    iEventMaxValue = '';
     iEventDateValue = '';
     iEventStartTimeValue = '';
     iEventEndTimeValue = '';
@@ -329,6 +360,7 @@ extension Methods on FormStateHelper {
       IEventDescriptionValueKey:
           getValidationMessage(IEventDescriptionValueKey),
       IEventLocationValueKey: getValidationMessage(IEventLocationValueKey),
+      IEventMaxValueKey: getValidationMessage(IEventMaxValueKey),
       IEventDateValueKey: getValidationMessage(IEventDateValueKey),
       IEventStartTimeValueKey: getValidationMessage(IEventStartTimeValueKey),
       IEventEndTimeValueKey: getValidationMessage(IEventEndTimeValueKey),
@@ -355,6 +387,7 @@ void updateValidationData(FormStateHelper model) =>
       IEventDescriptionValueKey:
           getValidationMessage(IEventDescriptionValueKey),
       IEventLocationValueKey: getValidationMessage(IEventLocationValueKey),
+      IEventMaxValueKey: getValidationMessage(IEventMaxValueKey),
       IEventDateValueKey: getValidationMessage(IEventDateValueKey),
       IEventStartTimeValueKey: getValidationMessage(IEventStartTimeValueKey),
       IEventEndTimeValueKey: getValidationMessage(IEventEndTimeValueKey),
