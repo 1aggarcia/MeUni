@@ -49,11 +49,11 @@ import '../ui/views/study_groups/study_groups_view.dart';
     LazySingleton(classType: BottomSheetService),
     LazySingleton(classType: DialogService),
     LazySingleton(
-      classType: MockIEventsRepo<Event>,
+      classType: IEventsRepoImpl<Event>,
       asType: IEventsRepo<Event>,
     ),
     LazySingleton(
-      classType: MockIEventsRepo<StudyGroup>,
+      classType: IEventsRepoImpl<StudyGroup>,
       asType: IEventsRepo<StudyGroup>,
     ),
     LazySingleton(classType: MockUsersRepo, asType: UsersRepo),

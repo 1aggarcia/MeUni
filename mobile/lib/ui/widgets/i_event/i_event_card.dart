@@ -38,11 +38,17 @@ class IEventCard extends StatelessWidget {
 
   //* Private Methods
   Widget _cardLabel(String label) {
+    const cutOffPoint = 40;
+
+    String cutLabel = label.length < cutOffPoint
+        ? label
+        : '${label.substring(0, cutOffPoint - 3)}...';
+
     return Container(
       alignment: Alignment.bottomCenter,
       child: SizedBox(
         child: Text(
-          label,
+          cutLabel,
           textAlign: TextAlign.center,
           style: const TextStyle(
             color: kcTextPrimaryColor,

@@ -179,6 +179,7 @@ class IEventDetailView<T extends IEvent>
         Text(
           value,
           style: _valueTextStyle,
+          textAlign: TextAlign.center,
         ),
       ],
     );
