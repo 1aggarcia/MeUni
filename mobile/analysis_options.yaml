@@ -1,14 +1,1 @@
 include: package:flutter_lints/flutter.yaml
-
-analyzer:
-  exclude: [ "**/app.*.dart", "**/*_view.form.dart", "**/test_helpers.dart" ]
-
-linter:
-  rules:
-    directives_ordering: true
-    discarded_futures: true
-    prefer_interpolation_to_compose_strings: true
-    prefer_relative_imports: true
-    prefer_single_quotes: true
-    unawaited_futures: true
-    unnecessary_lambdas: true

@@ -10,75 +10,29 @@ class MockUsersRepo extends UsersRepo {
   MockUsersRepo() {
     _users = [
       User(
-        id: '1',
         firstName: 'Fei',
         lastName: 'Huang',
         year: 4,
         pronouns: 'He/Him',
         admin: true,
+        id: 1,
       ),
       User(
-        id: '2',
         firstName: 'John',
         lastName: 'Stuart',
         year: 3,
         pronouns: 'He/Him',
         admin: false,
-      ),
+        id: 2,
+      )
     ];
   }
 
   //* Public Properties
   @override
-  Future<User> addUserAsync({
-    required String id,
-    required String firstName,
-    required String lastName,
-    required int year,
-    required String pronouns,
-  }) async {
+  Future<User> getUserAsync(int id) async {
     await Future.delayed(App.demoDuration);
 
-    User user = User(
-      id: id,
-      firstName: firstName,
-      lastName: lastName,
-      year: year,
-      pronouns: pronouns,
-      admin: false,
-    );
-
-    _users.add(user);
-
-    return user;
-  }
-
-  @override
-  Future<User?> getUserAsync(String id) async {
-    await Future.delayed(App.demoDuration);
-
-    try {
-      return _users.singleWhere((u) => u.id == id);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  @override
-  Future<List<String>> getUserClasses(String id) async {
-    await Future.delayed(App.demoDuration);
-
-    return ['CSE 403', 'CSE 332', 'MUS 350'];
-  }
-
-  @override
-  Future<void> updateUserAsync(User user) async {
-    await Future.delayed(App.demoDuration);
-
-    for (int i = 0; i < _users.length; i++) {
-      if (_users[i].id == user.id) {
-        _users[i] = user;
-      }
-    }
+    return _users.singleWhere((u) => u.id == id);
   }
 }

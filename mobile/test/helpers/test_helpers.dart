@@ -1,10 +1,8 @@
-import 'package:meuni_mobile/app/app.locator.dart';
-import 'package:meuni_mobile/services/api_service.dart';
-import 'package:meuni_mobile/services/auth_service.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:meuni_mobile/app/app.locator.dart';
 import 'package:stacked_services/stacked_services.dart';
-
+import 'package:meuni_mobile/services/api_service.dart';
 // @stacked-import
 
 import 'test_helpers.mocks.dart';
@@ -14,7 +12,6 @@ import 'test_helpers.mocks.dart';
   MockSpec<BottomSheetService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<DialogService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<ApiService>(onMissingStub: OnMissingStub.returnDefault),
-  MockSpec<AuthService>(onMissingStub: OnMissingStub.returnDefault),
 // @stacked-mock-spec
 ])
 void registerServices() {
@@ -22,7 +19,6 @@ void registerServices() {
   getAndRegisterBottomSheetService();
   getAndRegisterDialogService();
   getAndRegisterApiService();
-  getAndRegisterAuthService();
 // @stacked-mock-register
 }
 
@@ -80,13 +76,6 @@ MockApiService getAndRegisterApiService() {
   _removeRegistrationIfExists<ApiService>();
   final service = MockApiService();
   locator.registerSingleton<ApiService>(service);
-  return service;
-}
-
-MockAuthService getAndRegisterAuthService() {
-  _removeRegistrationIfExists<AuthService>();
-  final service = MockAuthService();
-  locator.registerSingleton<AuthService>(service);
   return service;
 }
 // @stacked-mock-create

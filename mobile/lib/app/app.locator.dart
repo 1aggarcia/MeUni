@@ -11,17 +11,10 @@ import 'package:stacked_services/src/dialog/dialog_service.dart';
 import 'package:stacked_services/src/navigation/navigation_service.dart';
 import 'package:stacked_shared/stacked_shared.dart';
 
-import '../models/event.dart';
-import '../models/study_group.dart';
-import '../repository/i_events_repo.dart';
-import '../repository/mock/mock_i_events_repo.dart';
+import '../repository/events_repo.dart';
 import '../repository/mock/mock_users_repo.dart';
 import '../repository/users_repo.dart';
 import '../services/api_service.dart';
-import '../services/auth_service.dart';
-
-import '../models/event.dart';
-import '../models/study_group.dart';
 
 final locator = StackedLocator.instance;
 
@@ -34,14 +27,10 @@ Future<void> setupLocator({
       environment: environment, environmentFilter: environmentFilter);
 
 // Register dependencies
-  locator.registerLazySingleton(() => ApiService());
-  locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => BottomSheetService());
   locator.registerLazySingleton(() => DialogService());
-  locator.registerLazySingleton<IEventsRepo<Event>>(
-      () => MockIEventsRepo<Event>());
-  locator.registerLazySingleton<IEventsRepo<StudyGroup>>(
-      () => MockIEventsRepo<StudyGroup>());
-  locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
   locator.registerLazySingleton(() => NavigationService());
+  locator.registerLazySingleton<EventsRepo>(() => EventsRepoImpl());
+  locator.registerLazySingleton<UsersRepo>(() => MockUsersRepo());
+  locator.registerLazySingleton(() => ApiService());
 }
