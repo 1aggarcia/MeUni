@@ -32,6 +32,9 @@ abstract class EventsRepo {
   /// Returns list of all events that the specified user is in
   Future<List<Event>> getUserEventsAsync(String userId);
 
+  /// Returns list of all events that the specified user hosts
+  Future<List<Event>> getHostEventsAsync(String userId);
+
   /// @returns list of events ranked in order of relevance between query and title/desc
   Future<List<Event>> rankEventsAsync(String query);
 
@@ -120,6 +123,19 @@ class EventsRepoImpl extends EventsRepo {
     }
     return result;
   }
+
+  @override
+  Future<List<Event>> getHostEventsAsync(String userId) async {
+    List<Event> all = await getEventsAsync();
+    List<Event> result = [];
+
+    for (Event event in all) {
+      if (event.hostId == userId) {
+        result.add(event);
+      }
+    }
+    return result;
+  }  
 
   @override
   Future<Event?> getEventAsync(String id) async {

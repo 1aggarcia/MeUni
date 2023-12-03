@@ -21,7 +21,7 @@ class EventStudyController extends Controller {
     return router
       ..get('$endpoint/get', getHandler)
       ..get('$endpoint/user/get', userGetHandler)
-      //..get('$endpoint/host/get', hostGetHandler)
+      ..get('$endpoint/host/get', hostGetHandler)
       ..post('$endpoint/create', createHandler)
       ..post('$endpoint/delete', deleteHandler)
       ..post('$endpoint/join', joinHandler)
@@ -80,7 +80,12 @@ class EventStudyController extends Controller {
     if (params.containsKey('id') && params['id'] is String) {
       try {
         String userId = params['id'];
-        List<Event> events = await _eventsRepo.getUserEventsAsync(userId);
+        List<Event> events;
+        if (isHost) {
+          events = await _eventsRepo.getHostEventsAsync(userId);
+        } else {
+          events = await _eventsRepo.getUserEventsAsync(userId);
+        }
         return Response.ok(eventsToJson(events));
       } catch (e) {
         return Response(400, body: 'Server Error: $e');

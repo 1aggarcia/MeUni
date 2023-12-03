@@ -95,8 +95,22 @@ class MockEventsRepo extends EventsRepo {
 
   @override
   Future<List<Event>> getUserEventsAsync(String userId) async {
-    // Much harder to implement without user table and host table
+    // Much harder to implement without user-events table
+    // Possible but not worth the time
     return getEventsAsync();
+  }
+
+  @override
+  Future<List<Event>> getHostEventsAsync(String userId) async {
+    List<Event> all = await getEventsAsync();
+    List<Event> result = [];
+
+    for (Event event in all) {
+      if (event.hostId == userId) {
+        result.add(event);
+      }
+    }
+    return result;
   }
 
   @override
