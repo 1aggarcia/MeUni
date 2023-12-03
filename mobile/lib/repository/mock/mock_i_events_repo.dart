@@ -98,6 +98,7 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
     }
 
     iEvent.attendees.add(_authService.currUser.id);
+    iEvent.attendeeNames.add(_authService.currUser.fullName);
     return true;
   }
 
@@ -109,7 +110,8 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
       return false;
     }
 
-    return iEvent.attendees.remove(_authService.currUser.id);
+    return iEvent.attendees.remove(_authService.currUser.id) &&
+        iEvent.attendeeNames.remove(_authService.currUser.fullName);
   }
 
   //* Private Methods

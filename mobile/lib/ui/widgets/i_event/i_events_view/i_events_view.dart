@@ -4,7 +4,6 @@ import 'package:stacked/stacked_annotations.dart';
 
 import '../../../../models/event.dart';
 import '../../../../models/i_event.dart';
-import '../../../common/app_colors.dart';
 import '../../../common/ui_helpers.dart';
 import '../../loading_indicator.dart';
 import '../../missing_indicator.dart';
