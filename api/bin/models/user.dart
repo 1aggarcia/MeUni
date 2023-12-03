@@ -129,14 +129,3 @@ Map<String, User> userListToMap(List<User> list) {
   }
   return map;
 }
-
-/// Returns username from given user map if there is a user corresponding to the given id,
-/// otherwise returns '(N/A)'
-String getUserName(String userId, Map<String, User> userMap) {
-  User? user = userMap[userId];
-  if (user == null) {
-    return '(N/A)';
-  } else {
-    return '${user.firstName} ${user.lastName[0]}.';
-  }
-}

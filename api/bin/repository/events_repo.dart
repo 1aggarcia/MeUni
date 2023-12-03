@@ -212,19 +212,17 @@ class EventsRepoImpl extends EventsRepo {
 
   /// Find the host name and attendee Names for every event given and inject them into each event
   /// * @returns list of events passed in with names if avaliable in database
-  // TODO: Don't download the entire userlist every time, get the users 1 by 1.
-    // Will be at most 16 small database calls
   Future<List<Event>> injectNames(List<Event> events) async {
-    List<User> userList = await _userRepo.getUsersAsync();
-    // Storing users in a map reduces runtime to linear
-    Map<String, User> users = userListToMap(userList);
     List<Event> result = [];
 
+    // Get usernames one by one from database
+    // This is at most 16 database calls, 1 host + 15 attendees
+    // Much better than downloading the entire user list only to throw away all of it in the worst case
     for (Event event in events) {
       Event copy = event.clone();
-      copy.hostName = getUserName(copy.hostId, users);
+      copy.hostName = await getUserName(copy.hostId);
       for (String att in copy.attendees) {
-        copy.attendeeNames.add(getUserName(att, users));
+        copy.attendeeNames.add(await getUserName(att));
       }
       result.add(copy);
     }
@@ -268,5 +266,16 @@ class EventsRepoImpl extends EventsRepo {
         event.hostId != userId && // user isn't the host
         !event.attendees.contains(userId) && // user isn't already in event
         event.attendees.length < event.max); // event is not at max capacity
+  }
+
+  /// Returns username from database if there is a user corresponding to the given id,
+  /// otherwise returns '(unknown user)'
+  Future<String> getUserName(String userId) async {
+    User? user = await _userRepo.getUserAsync(userId);
+    if (user == null) {
+      return '(unknown user)';
+    } else {
+      return '${user.firstName} ${user.lastName[0]}.';
+    }
   }
 }

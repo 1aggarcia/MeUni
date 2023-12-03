@@ -192,16 +192,5 @@ void main() {
         expect(test[k], data[k]);
       });
     });
-
-    test('getUserName', () {
-      Map<String, User> data = {
-        '0': freshman,
-        '1': oldGuy,
-        '2': freshmanCopy,
-      };
-      expect(getUserName('0', data), 'Freshman H.'); 
-      expect(getUserName('1', data), 'Old G.'); 
-      expect(getUserName('4', data), '(N/A)'); 
-    });
   });
 }
