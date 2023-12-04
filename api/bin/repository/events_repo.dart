@@ -13,6 +13,7 @@ import 'users_repo.dart';
 final double titleSearchWeight = 1;
 final double descSearchWeight = 2/3;
 final double locSearchWeight = 1/2;
+final double nameSearchWeight = 1/2;
 
 final double minAcceptableScore = 0.1;
 
@@ -240,17 +241,19 @@ class EventsRepoImpl extends EventsRepo {
     final String lowerTitle = event.title.toLowerCase();
     final String lowerDesc = event.desc.toLowerCase();
     final String lowerLoc = event.location.toLowerCase();
+    final String lowerName = event.hostName.toLowerCase();
 
     // Check for exact match in event text
-    if ((lowerTitle + lowerDesc + lowerLoc).contains(lowerQuery)) {
+    if ((lowerTitle + lowerDesc + lowerLoc + lowerName).contains(lowerQuery)) {
       return 1;
     } else {
       // all scores are a fraction between 0-1, weighted differently depending of event property
       final double titleScore = lowerTitle.similarityTo(lowerQuery) *titleSearchWeight;
       final double descScore = lowerDesc.similarityTo(lowerQuery) *descSearchWeight;
       final double locScore = lowerLoc.similarityTo(lowerQuery) *locSearchWeight;
+      final double nameScore = lowerName.similarityTo(lowerName) *nameSearchWeight;
 
-      return (titleScore + descScore + locScore) / 3;
+      return (titleScore + descScore + locScore + nameScore) / 4;
     }
   }
 
