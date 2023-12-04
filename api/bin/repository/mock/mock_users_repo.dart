@@ -65,16 +65,16 @@ class MockUsersRepo extends UsersRepo {
 
   @override
   Future<List<String>> getUserCoursesAsync(String id) async {
-    throw UnimplementedError();
+    return [];
   }
 
   @override
   Future<bool> addUserCoursesAsync(String userId, String course) async {
-    throw UnimplementedError();
+    return false;
   }
 
   @override
   Future<bool> removeUserCoursesAsync(String userId, String course) async {
-    throw UnimplementedError();
+    return false;
   }
 }

@@ -88,7 +88,7 @@ class UserController extends Controller {
       String? course = body['course'];
       if (userId != null && course != null) {
         bool success = await _usersRepo.addUserCoursesAsync(userId, course);
-        return Response.ok(success);
+        return Response.ok(success.toString());
       } else {
         throw Exception('userId and courses are null');
       }
@@ -107,7 +107,7 @@ class UserController extends Controller {
       String? course = body['course'];
       if (userId != null && course != null) {
         bool success = await _usersRepo.removeUserCoursesAsync(userId, course);
-        return Response.ok(success);
+        return Response.ok(success.toString());
       } else {
         throw Exception('userId and courses are null');
       }
