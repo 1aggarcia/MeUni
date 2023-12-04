@@ -1,16 +1,25 @@
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 
-import '../../bin/models/user.dart';
-
 import '../../bin/controllers/user_controller.dart';
 import '../../bin/locator.dart';
+import '../../bin/models/user.dart';
 import '../../bin/repository/mock/mock_users_repo.dart';
 import '../../bin/repository/users_repo.dart';
 
 final String _rndUrl = 'https://example.com';
 
 UserController _controller = UserController();
+List<User> _mockUsers = MockUsersRepo().getMockUsers();
+
+User anotherUser = User(
+  id: '44',
+  firstName: 'Another',
+  lastName: 'User',
+  year: 2,
+  admin: false,
+  pronouns: 'He/She'
+);
 
 void main() {
   group('Users Controller -', () {
@@ -18,55 +27,61 @@ void main() {
       await locator.reset();
 
       locator.registerLazySingleton<UsersRepo>(MockUsersRepo.new);
-
+      
       _controller = UserController();
     });
 
-    test('GET user profile', () async {
+    Future<Response> sendGetRequest(String args) async {
+        Request req = Request(
+          'GET',
+          Uri.parse('$_rndUrl/user/profile/get$args'),
+        );
+        return await _controller.getUserHandler(req);
+    }
+
+    Future<Response> sendPostRequest(String route, String body, Function handler) async {
       Request req = Request(
-        'GET',
-        Uri.parse('$_rndUrl/profile/get?id=1a'),
+        'POST',
+        Uri.parse('$_rndUrl/$route'),
+        body: body,
       );
-      Response response = await _controller.getUserHandler(req);
+      return await handler(req);         
+    }
 
-      expect(response.statusCode, 200);
-      expect(
+    group('get:', () {
+      test('good id', () async {
+        Response response = await sendGetRequest('?id=0');
+        expect(response.statusCode, 200);
+        expect(
           await response.readAsString(),
-          '{"id":"1a",'
-          '"firstName":"Fei",'
-          '"lastName":"Huang",'
-          '"year":4,'
-          '"pronouns":"He/Him",'
-          '"admin":true}');
+          userToJson(_mockUsers[0]),
+        );
+      });
+
+      test('bad id', () async {
+        Response response = await sendGetRequest('?id=999');
+        expect(response.statusCode, 404);
+      });
+
+      test('missing id param', () async {
+        Response response = await sendGetRequest('');
+        expect(response.statusCode, 400);
+      });
     });
-  });
 
-  Future<Response> sendGetRequest(String args) async {
-    Request req = Request(
-      'GET',
-      Uri.parse('$_rndUrl/events/get$args'),
-    );
-    return await _controller.getUserHandler(req);
-  }
+    group('create:', () {
+      test('good json', () async {
+        String body = userToJson(anotherUser);
+        Response response = await sendPostRequest('/user/profile/create', body, _controller.createUserHandler);
+        expect(response.statusCode, 200);
+        expect(await response.readAsString(), '44');
+      });
 
-  group('get:', () {
-    test('user1', () async {
-      User user1 = User(
-          id: '0',
-          firstName: 'Adam',
-          lastName: 'Smith',
-          year: 1,
-          pronouns: 'He/Him',
-          admin: true);
-
-      String userJson = userToJson(user1);
-
-      Response response = await sendGetRequest(userJson);
-      expect(response.statusCode, 200);
-
-      response = await sendGetRequest('?id=0');
-      expect(response.statusCode, 200);
-      expect(userJson, await response.readAsString());
+      test('improperly formatted json', () async {
+        String body = '{"string":"not a user"}';
+        Response response = await sendPostRequest('/user/profile/create', body, _controller.createUserHandler);
+        expect(response.statusCode, 400);
+      });
     });
   });
 }

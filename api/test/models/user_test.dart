@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:test/test.dart';
 import '../../bin/models/user.dart';
 
-// Commentted tests fail due to incomplete implementation
-
 void main() {
   group('Users Model -', () {
     User freshman = User(
@@ -100,6 +98,43 @@ void main() {
       expect(userFromJson(jsonYearBig), null);
     });
 
+    test('userFromJson - short names', () {
+      String jsonTooShort = '{"id":"0",'
+      '"firstName":"",'
+      '"lastName":"",'
+      '"year":1,'
+      '"pronouns":"She/her",'
+      '"admin":false}';
+
+      String jsonOk = '{"id":"0",'
+      '"firstName":"a",'
+      '"lastName":"a",'
+      '"year":1,'
+      '"pronouns":"She/her",'
+      '"admin":false}';
+
+      expect(userFromJson(jsonTooShort), null);
+      expect(userFromJson(jsonOk) is User, true);
+    });
+
+    test('userFromJson - long names', () {
+      String jsonTooLong = '{"id":"0",'
+      '"firstName":"Hubert Blaine Wolfeschlegelsteinhausenbergerdorfslk",'
+      '"lastName":"Hubert Blaine Wolfeschlegelsteinhausenbergerdorfslk",'
+      '"year":1,'
+      '"pronouns":"She/her",'
+      '"admin":false}';
+      String jsonOk = '{"id":"0",'
+      '"firstName":"Hubert Blaine Wolfeschlegelsteinhausenbergerdorfsl",'
+      '"lastName":"Hubert Blaine Wolfeschlegelsteinhausenbergerdorfsl",'
+      '"year":1,'
+      '"pronouns":"She/her",'
+      '"admin":false}';
+
+      expect(userFromJson(jsonTooLong), null);
+      expect(userFromJson(jsonOk) is User, true);
+    });
+
     test('usersToJson', () {
       List<User> data = [freshman, oldGuy];
       String test = usersToJson(data);
@@ -141,6 +176,21 @@ void main() {
     test('usersFromJson - improper formatting', () {
       String json = jsonEncode([1, 2, 3, 4]);
       expect(usersFromJson(json), []);
+    });
+
+    test('userListToMap', () {
+      Map<String, User> data = {
+        '0': freshman,
+        '1': oldGuy,
+        '2': freshmanCopy,
+      };
+      List<User> list = [freshman, oldGuy, freshmanCopy];
+      Map<String, User> test = userListToMap(list);
+
+      expect(test.length, 3);
+      test.forEach((k, v) {
+        expect(test[k], data[k]);
+      });
     });
   });
 }

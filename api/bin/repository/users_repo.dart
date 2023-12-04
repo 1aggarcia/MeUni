@@ -12,9 +12,11 @@ abstract class UsersRepo {
   /// Returns the User if found, null otherwise
   Future<User?> getUserAsync(String id);
 
-  Future<String> updateUserAsync(User user);
+  /// Returns list of all users
+  Future<List<User>> getUsersAsync();
 
-  addUserAsync(User user) {}
+  /// Returns id of the newly created user
+  Future<String> addUserAsync(User user);
 }
 
 class UsersRepoImpl extends UsersRepo {
@@ -39,18 +41,19 @@ class UsersRepoImpl extends UsersRepo {
   }
 
   @override
-  Future<String> addUserAsync(User user) async {
-    final db.DatabaseReference newRef = _userRef.child(user.id);
-    final Map<String, dynamic> userJson = user.toJson();
+  Future<List<User>> getUsersAsync() async {
+    final db.DataSnapshot snapshot = await _userRef.once();
+    final json = jsonEncode(snapshot.value);
 
-    userJson.remove('id');
-    await newRef.set(userJson);
-
-    return newRef.key as String;
+    return usersFromJson(json);
   }
 
   @override
-  Future<String> updateUserAsync(User user) async {
-    throw UnimplementedError();
+  Future<String> addUserAsync(User user) async {
+    final db.DatabaseReference newRef = _userRef.child(user.id);
+    final Map<String, dynamic> userJson = user.toJson();
+    await newRef.set(userJson);
+
+    return newRef.key as String;
   }
 }

@@ -13,6 +13,6 @@ class Secrets {
     databaseURL: env['DATABASE_URL'] as String,
   );
 
-  static final String serviceAccount = env['SERVICE_ACCOUNT'] as String;
-  static final String serviceKey = env['SERVICE_KEY'] as String;
+  // static final String serviceAccount = env['SERVICE_ACCOUNT'] as String;
+  // static final String serviceKey = env['SERVICE_KEY'] as String;
 }

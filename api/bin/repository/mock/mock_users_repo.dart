@@ -2,14 +2,9 @@ import '../../models/user.dart';
 import '../users_repo.dart';
 
 class MockUsersRepo extends UsersRepo {
-  //* Private Properties
-  List<User> _users = [];
-
-  //* Constructors
-  MockUsersRepo() {
-    _users = [
+  List<User> users = [
       User(
-        id: '1a',
+        id: '0',
         firstName: 'Fei',
         lastName: 'Huang',
         year: 4,
@@ -17,7 +12,7 @@ class MockUsersRepo extends UsersRepo {
         admin: true,
       ),
       User(
-        id: '2a',
+        id: '1',
         firstName: 'John',
         lastName: 'Stuart',
         year: 3,
@@ -25,7 +20,7 @@ class MockUsersRepo extends UsersRepo {
         admin: false,
       ),
       User(
-        id: '3a',
+        id: '2',
         firstName: 'Hannah',
         lastName: 'Brown',
         year: 1,
@@ -33,7 +28,7 @@ class MockUsersRepo extends UsersRepo {
         admin: false,
       ),
       User(
-        id: '4a',
+        id: '3',
         firstName: 'Ronald',
         lastName: 'McDonald',
         year: 2,
@@ -41,22 +36,30 @@ class MockUsersRepo extends UsersRepo {
         admin: false,
       )
     ];
-  }
 
   //* Overriden Methods
 
   @override
   Future<User?> getUserAsync(String id) async {
     try {
-      return _users.singleWhere((e) => e.id == id);
+      return users.singleWhere((e) => e.id == id);
     } catch (e) {
       return null;
     }
   }
 
   @override
-  Future<String> updateUserAsync(User user) {
-    // TODO: implement updateUserAsync
-    throw UnimplementedError();
+  Future<List<User>> getUsersAsync() async {
+    return users;
+  }
+
+  @override
+  Future<String> addUserAsync(User user) async {
+    users.add(user);
+    return user.id;
+  }
+
+  List<User> getMockUsers() {
+    return users;
   }
 }

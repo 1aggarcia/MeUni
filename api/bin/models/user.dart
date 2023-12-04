@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 final int maxYear = 4;
+final int maxStringLength = 50;
 
 class User {
   final String id;
@@ -20,12 +21,13 @@ class User {
 
   /// Creates an instance user from a json map.
   /// * requires json['id'] is String
-  /// * requires json['firstName'] is String
-  /// * requires json['lastName'] is String
+  /// * requires json['firstName'] is String with length 1-50
+  /// * requires json['lastName'] is String with length 1-50
   /// * requires json['year'] is int within range 1-4
   /// * requires json['pronouns'] is String
   /// * requires json['admin'] is bool
   factory User.fromJson(Map<String, dynamic> json) {
+    // Check requirements part 1: check types for required params
     if (json['id'] is! String ||
         json['firstName'] is! String ||
         json['lastName'] is! String ||
@@ -37,10 +39,19 @@ class User {
 
     }
 
+    // part 2: check that params with limited ranges are within those ranges
     if (1 > json['year'] || json['year'] > maxYear) {
       throw Exception('Year must be between 1-4:');
     }
+    if (json['firstName'].isEmpty || json['firstName'].length > maxStringLength) {
+      throw Exception('First name is too long/short: len ${json['firstName'].length} chars');
+    }
+    if (json['lastName'].isEmpty || json['lastName'].length > maxStringLength) {
+      throw Exception('Last name is too long/short: len ${json['lastName'].length} chars');
+    }
 
+
+    // all requirements met: create user
     return User(
         id: json['id'],
         firstName: json['firstName'],
@@ -107,4 +118,14 @@ List<User> usersFromMap(Map<String, dynamic> data) {
     }
   });
   return users;
+}
+
+/// Converts list of users to map of users where key = id, value = user
+/// * requires all users have a unique id
+Map<String, User> userListToMap(List<User> list) {
+  Map<String, User> map = {};
+  for (User user in list) {
+    map[user.id] = user;
+  }
+  return map;
 }

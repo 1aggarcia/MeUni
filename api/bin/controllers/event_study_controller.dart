@@ -20,6 +20,8 @@ class EventStudyController extends Controller {
   Router setUpRoutes(Router router, String endpoint) {
     return router
       ..get('$endpoint/get', getHandler)
+      ..get('$endpoint/user/get', userGetHandler)
+      ..get('$endpoint/host/get', hostGetHandler)
       ..post('$endpoint/create', createHandler)
       ..post('$endpoint/delete', deleteHandler)
       ..post('$endpoint/join', joinHandler)
@@ -37,7 +39,7 @@ class EventStudyController extends Controller {
     Map<String, dynamic> params = request.url.queryParameters;
 
     if (params.containsKey('id') && params.containsKey('query')) {
-      return Response(400);
+      return Response(400, body: 'Too many parameters passed in');
 
     } else if (params.containsKey('id') && params['id'] is String) {
       return getEventHandler(params['id']);
@@ -57,10 +59,39 @@ class EventStudyController extends Controller {
       if (event != null) {
         return Response.ok(eventToJson(event));
       } else {
-        return Response(404);
+        return Response(404, body: 'Not found: $id');
       }
     } catch (e) {
       return Response(400);
+    }
+  }
+
+  Future<Response> userGetHandler(Request request) {
+    return userHostGetHandler(request, false);
+  }
+
+  Future<Response> hostGetHandler(Request request) {
+    return userHostGetHandler(request, true);
+  }
+
+  /// Handles requests /user/get and /host/get, disinguishing the two with bool isHost
+  Future<Response> userHostGetHandler(Request request, bool isHost) async {
+    Map<String, dynamic> params = request.url.queryParameters;
+    if (params.containsKey('id') && params['id'] is String) {
+      try {
+        String userId = params['id'];
+        List<Event> events;
+        if (isHost) {
+          events = await _eventsRepo.getHostEventsAsync(userId);
+        } else {
+          events = await _eventsRepo.getUserEventsAsync(userId);
+        }
+        return Response.ok(eventsToJson(events));
+      } catch (e) {
+        return Response(400, body: 'Server Error: $e');
+      }
+    } else {
+      return Response(400, body: "Missing 'id' param");
     }
   }
 
@@ -85,10 +116,10 @@ class EventStudyController extends Controller {
         String newId = await _eventsRepo.addEventAsync(event);
         return Response.ok(newId);
       } else {
-        throw Exception('Json body could not be converted to event');
+        return Response(400, body: 'Json body could not be converted to event');
       }
     } catch (e) {
-      return Response(400);
+      return Response(400, body: 'Server Error: $e');
     }
   }
 
@@ -102,7 +133,7 @@ class EventStudyController extends Controller {
         String result = await _eventsRepo.deleteEventAsync(id);
         return Response.ok(result);
       } else {
-        throw Exception("Missing param 'id'");
+        return Response(400, body: "Missing param 'id'");
       }
     } catch (e) {
       return Response(400);
@@ -137,13 +168,13 @@ class EventStudyController extends Controller {
         if (result != null) {
           return Response.ok(jsonEncode(result));
         } else {
-          throw Exception('Event did not allow specified join operation');
+          return Response(400, body: 'Event did not allow specified join operation');
         }
       } else {
-        throw Exception("Missing one or more params, 'userId', '$_paramName'");
+        return Response(400, body: "Missing one or more params, 'userId', '$_paramName'");
       }
     } catch (e) {
-      return Response(400);
+      return Response(400, body: 'Server Error: $e');
     }
   }
 }
