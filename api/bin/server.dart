@@ -1,6 +1,5 @@
 import 'dart:io' as io;
 
-//import 'package:firebase_dart/auth.dart';
 import 'package:firebase_dart/core.dart';
 import 'package:firebase_dart/database.dart';
 import 'package:firebase_dart/implementation/pure_dart.dart';
@@ -8,10 +7,8 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-
 import 'controllers/event_controller.dart';
 import 'controllers/study_group_controller.dart';
-import 'controllers/uniing_controller.dart';
 import 'controllers/user_controller.dart';
 import 'locator.dart';
 import 'secrets.dart';
@@ -23,18 +20,11 @@ void main(List<String> args) async {
   final app = await Firebase.initializeApp(options: Secrets.options);
   final DatabaseReference database = FirebaseDatabase(app: app).reference();
   setupLocator(database);
-
-  // Authenticate with service account
-  // var auth = FirebaseAuth.instanceFor(app: app);
-  // await auth.signInWithEmailAndPassword(email: Secrets.serviceAccount, password: Secrets.serviceKey);
-  // print('Authenticated: ${auth.currentUser?.uid}');
-
   // Configure routes.
   var router = Router();
-  router = UserController().setUpRoutes(router, '/users');
+  router = UserController().setUpRoutes(router, '/user');
   router = EventController().setUpRoutes(router, '/events');
   router = StudyGroupController().setUpRoutes(router, '/study_groups');
-  router = UniingController().setUpRoutes(router, '/uniing');
 
   // Use any available host or container IP (usually `0.0.0.0`).
   final ip = io.InternetAddress.anyIPv4;

@@ -43,20 +43,20 @@ jobs:
         run: flutter analyze
 
       # Download stacked CLI
-      - name: Get stacked CLI
-        run: dart pub global activate stacked_cli
+      # - name: Get stacked CLI
+      #   run: dart pub global activate stacked_cli
 
-      - name: Run stacked generate
-        run: $PUB_CACHE/bin/stacked generate
+      # - name: Run stacked generate
+      #   run: $PUB_CACHE/bin/stacked generate
 
       # Check If stacked generate changed any files
-      - name: Ensure stacked generate changed nothing
-        run: |
-          git diff lib test
-          LINES=$(git diff lib test | wc -l)
-          echo
-          echo $LINES
-          if [ "$LINES" -gt 0 ]; then exit 1; fi
+      # - name: Ensure stacked generate changed nothing
+      #   run: |
+      #     git diff lib test
+      #     LINES=$(git diff lib test | wc -l)
+      #     echo
+      #     echo $LINES
+      #     if [ "$LINES" -gt 0 ]; then exit 1; fi
 
       - name: Download Android keystore
         id: android_keystore

@@ -10,8 +10,8 @@ class UserData {
 
   //* Public Methods
 
-  /// Assigned given data to given user id
-  /// @returns true if successful
+  /// Assigns given data to given user id
+  /// @returns success
   Future<bool> add(String userId, String data) async {
     final pair = {'userId': userId, 'data': data};
     final DatabaseReference newRef = _reference.push();
@@ -27,9 +27,10 @@ class UserData {
     final dynamic value = snapshot.value;
 
     if (value is Map<String, dynamic>) {
-      final pair = {'userId': userId, 'data': data};
       value.forEach((k, v) async {
-        if (v is Map<String, dynamic> && v == pair) {
+        if (v is Map<String, dynamic> &&
+            v['userId'] == userId &&
+            v['data'] == data) {
           // potential for multiple database calls
           await _reference.child(k).remove();
           wasRemoved = true;

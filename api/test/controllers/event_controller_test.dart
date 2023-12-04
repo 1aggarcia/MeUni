@@ -171,12 +171,12 @@ void main() {
       });
     });
 
-    Future<Response> sendGetRequest(String args) async {
+    Future<Response> sendGetRequest(String args, Function handler) async {
         Request req = Request(
           'GET',
-          Uri.parse('$_rndUrl/events/get$args'),
+          Uri.parse('$_rndUrl/events/$args'),
         );
-        return await _controller.getHandler(req);
+        return await handler(req);
     }
 
     group('get:', () {
@@ -190,7 +190,7 @@ void main() {
         response = await sendCreateRequest(dingDongJson);
         expect(response.statusCode, 200);
 
-        response = await sendGetRequest('');
+        response = await sendGetRequest('get', _controller.getHandler);
         expect(response.statusCode, 200);
         expect(
           await response.readAsString(),
@@ -216,21 +216,21 @@ void main() {
         Response response = await sendCreateRequest(eventJson);
         expect(response.statusCode, 200);
 
-        response = await sendGetRequest('?id=0');
+        response = await sendGetRequest('get?id=0', _controller.getHandler);
         expect(response.statusCode, 200);
         expect(eventJson, await response.readAsString());
       });
 
       test('bad id', () async {
-        Response response = await sendGetRequest('?id=999');
+        Response response = await sendGetRequest('get?id=999', _controller.getHandler);
         expect(response.statusCode, 404);
       });
 
       test('id and query param', () async {
-        Response response = await sendGetRequest('?id=0&query=kl');
+        Response response = await sendGetRequest('get?id=0&query=kl', _controller.getHandler);
         expect(response.statusCode, 400);
 
-        response = await sendGetRequest('?query=asd&id=0');
+        response = await sendGetRequest('get?query=asd&id=0', _controller.getHandler);
         expect(response.statusCode, 400);
       });
 
@@ -246,7 +246,7 @@ void main() {
         expect(response.statusCode, 200);
 
         // Search
-        response = await sendGetRequest('?query=keywrd');
+        response = await sendGetRequest('get?query=keywrd', _controller.getHandler);
         expect(response.statusCode, 200);
         expect(
           await response.readAsString(),
@@ -263,7 +263,7 @@ void main() {
         expect(response.statusCode, 200);
 
         // Search
-        response = await sendGetRequest('?query=pizza');
+        response = await sendGetRequest('get?query=pizza', _controller.getHandler);
         expect(response.statusCode, 200);
         expect(
           await response.readAsString(),
@@ -280,7 +280,7 @@ void main() {
         expect(response.statusCode, 200);
 
         // Search
-        response = await sendGetRequest('?query=keyword');
+        response = await sendGetRequest('get?query=keyword', _controller.getHandler);
         expect(response.statusCode, 200);
         expect(
           await response.readAsString(),
@@ -288,6 +288,59 @@ void main() {
         );
       });
     });
+
+    group('get (2):', () {
+      test('user/get', () async {
+        // output cant be tested due to lacking mock implementation, but I have manually tested it
+        Response response = await sendGetRequest('user/get?id=3', _controller.userGetHandler);
+        expect(response.statusCode, 200);
+
+        response = await sendGetRequest('user/get?id=s234jf', _controller.userGetHandler);
+        expect(response.statusCode, 200);
+      });
+
+      test('user/get - missing id param', () async {
+        Response response = await sendGetRequest('user/get', _controller.userGetHandler);
+        expect(response.statusCode, 400);
+
+        response = await sendGetRequest('user/get?notid=34', _controller.userGetHandler);
+        expect(response.statusCode, 400);
+      });
+
+      test('host/get', () async {
+        // Create events
+        Response response = await sendCreateRequest(eventJson); // host is not 3b
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(searchTitleJson); // host=3b
+        expect(response.statusCode, 200);
+
+        response = await sendCreateRequest(searchDescJson); // host=3b
+        expect(response.statusCode, 200);
+        
+        // Get them
+        response = await sendGetRequest('host/get?id=3b', _controller.hostGetHandler);
+        expect(response.statusCode, 200);
+        expect(await response.readAsString(), 
+        eventsToJson([searchTitleEvent, searchDescEvent]));
+      });
+
+      test('host/get - no events', () async {
+        Response response = await sendGetRequest('host/get?id=34', _controller.hostGetHandler);
+        expect(response.statusCode, 200);
+
+        response = await sendGetRequest('host/get?id=3sadf23', _controller.hostGetHandler);
+        expect(response.statusCode, 200);
+      });
+
+      test('host/get - missing id param', () async {
+        Response response = await sendGetRequest('user/get', _controller.hostGetHandler);
+        expect(response.statusCode, 400);
+
+        response = await sendGetRequest('user/get?notid=34', _controller.hostGetHandler);
+        expect(response.statusCode, 400);
+      });
+    });    
 
     Future<Response> sendDeleteRequest(String body) async {
       return await sendPostRequest('events/delete', body, _controller.deleteHandler);
@@ -305,7 +358,7 @@ void main() {
       expect(await response.readAsString(), '0');
 
       // Verify event no longer in dataase
-      response = await sendGetRequest('?id=0');
+      response = await sendGetRequest('get?id=0', _controller.getHandler);
       expect(response.statusCode, 404);
     });
 
