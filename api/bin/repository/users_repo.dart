@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:firebase_dart/database.dart' as db;
+// import 'package:firebase_dart/firebase_dart.dart';
 
 // import 'package:firebase_dart/firebase_dart.dart' as fdb;
 
 import '../locator.dart';
 import '../models/user.dart';
+import '../models/user_data.dart';
 
 abstract class UsersRepo {
   //* Public Methods
@@ -17,15 +19,26 @@ abstract class UsersRepo {
 
   /// Returns id of the newly created user
   Future<String> addUserAsync(User user);
+
+  /// Returns list of courses
+  Future<List<String>> getUserCoursesAsync(String id);
+
+  Future<bool> addUserCoursesAsync(String userId, String course);
+
+  Future<bool> removeUserCoursesAsync(String userId, String course);
 }
 
 class UsersRepoImpl extends UsersRepo {
   late db.DatabaseReference _userRef;
+  late final UserData _userCoursesTable;
+  late final db.DatabaseReference _courseRef;
 
   // Constructor
   UsersRepoImpl() {
     final dbRef = locator<db.DatabaseReference>();
     _userRef = dbRef.child('users');
+    _courseRef = dbRef.child('user_courses');
+    _userCoursesTable = UserData(_courseRef);
   }
 
   @override
@@ -55,5 +68,20 @@ class UsersRepoImpl extends UsersRepo {
     await newRef.set(userJson);
 
     return newRef.key as String;
+  }
+
+  @override
+  Future<List<String>> getUserCoursesAsync(String userId) async {
+    return await _userCoursesTable.getEntries(userId);
+  }
+
+  @override
+  Future<bool> addUserCoursesAsync(String userId, String course) async {
+    return await _userCoursesTable.add(userId, course);
+  }
+
+  @override
+  Future<bool> removeUserCoursesAsync(String userId, String course) async {
+    return await _userCoursesTable.remove(userId, course);
   }
 }
