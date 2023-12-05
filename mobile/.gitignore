@@ -42,3 +42,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Unsupported platforms
+linux/
+macos/
+web/
+windows/
