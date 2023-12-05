@@ -6,6 +6,7 @@ import '../../../../models/event.dart';
 import '../../../../models/i_event.dart';
 import '../../../../repository/i_events_repo.dart';
 import '../../../../services/auth_service.dart';
+import '../../../common/app_colors.dart';
 
 class IEventDetailViewModel<T extends IEvent> extends BaseViewModel {
   //* Private Properties
@@ -83,27 +84,38 @@ class IEventDetailViewModel<T extends IEvent> extends BaseViewModel {
             'There was an error leaving the $_label. The $_label may be full.',
       );
     }
-
+    
     _navService.back();
   }
 
   Future<void> deleteIEventAsync() async {
-    bool deleteSuccess =
-        await runBusyFuture(_iEventsRepo.deleteIEventAsync(iEventId));
+    DialogResponse<dynamic>? confirmation = await _dialogService.showConfirmationDialog(
+      title: 'Are you sure you want to delete this $_label?',
+      description: 'This action cannot be undone',
+      confirmationTitleColor: kcTextErrorColor,
+      confirmationTitle: 'Delete',
+      cancelTitle: 'Go back',
+      cancelTitleColor: kcBlue
+    );
 
-    if (deleteSuccess) {
-      await _dialogService.showDialog(
-        title: 'Success!',
-        description: 'Successfully deleted.',
-      );
-    } else {
-      await _dialogService.showDialog(
-        title: 'Failed!',
-        description:
-            'There was an error deleted the $_label.',
-      );
+    if (confirmation != null && confirmation.confirmed) {
+      bool deleteSuccess =
+          await runBusyFuture(_iEventsRepo.deleteIEventAsync(iEventId));
+
+      if (deleteSuccess) {
+        await _dialogService.showDialog(
+          title: 'Success!',
+          description: 'Successfully deleted.',
+        );
+      } else {
+        await _dialogService.showDialog(
+          title: 'Failed!',
+          description:
+              'There was an error deleted the $_label.',
+        );
+      }
+
+      _navService.back();
     }
-
-    _navService.back();
   }
 }

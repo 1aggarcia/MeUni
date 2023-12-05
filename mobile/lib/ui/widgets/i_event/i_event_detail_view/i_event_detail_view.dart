@@ -53,7 +53,7 @@ class IEventDetailView<T extends IEvent>
         appBar: AppBar(
           title: Text(
             viewModel.isBusy
-            ? 'Loading $_label Details'
+            ? 'Loading ...'
             : viewModel.iEvent.title
           ),
           backgroundColor: kcPrimaryColor,
