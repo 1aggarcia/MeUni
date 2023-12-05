@@ -7,7 +7,7 @@ import '../../../models/user.dart';
 import '../../../repository/users_repo.dart';
 import '../../../services/auth_service.dart';
 
-class ProfileViewModel extends BaseViewModel {
+class ProfileViewModel extends FutureViewModel {
   //* Private Properties
   final _usersRepo = locator<UsersRepo>();
 
@@ -24,12 +24,13 @@ class ProfileViewModel extends BaseViewModel {
     user = _authService.currUser;
   }
 
+  //* Overridden Methods
+  @override
+  Future futureToRun() => getClassesAsync();
+
   //* Public Methods
   Future<void> getClassesAsync() async {
-    classes = await runBusyFuture(
-      _usersRepo.getUserClassesAsync(_authService.currUser.id),
-      busyObject: classes,
-    );
+    classes = await _usersRepo.getUserClassesAsync(_authService.currUser.id);
   }
 
   Future goToEditClassesPageAsync() async =>

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
@@ -39,11 +38,6 @@ class IEventDetailView<T extends IEvent>
   @override
   IEventDetailViewModel viewModelBuilder(BuildContext context) =>
       IEventDetailViewModel<T>(iEventId);
-
-  @override
-  void onViewModelReady(IEventDetailViewModel<IEvent> viewModel) =>
-      SchedulerBinding.instance.addPostFrameCallback(
-          (timeStamp) async => await viewModel.getIEventAsync());
 
   @override
   Widget builder(

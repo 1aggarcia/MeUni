@@ -27,10 +27,6 @@ class ProfileView extends StackedView<ProfileViewModel> {
   ProfileViewModel viewModelBuilder(BuildContext context) => ProfileViewModel();
 
   @override
-  void onViewModelReady(ProfileViewModel viewModel) async =>
-      await viewModel.getClassesAsync();
-
-  @override
   Widget builder(
       BuildContext context, ProfileViewModel viewModel, Widget? child) {
     return Container(
@@ -71,7 +67,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
               verticalSpaceMedium,
 
               // Classes
-              viewModel.busy(viewModel.classes)
+              viewModel.isBusy
                   ? const LoadingIndicator(loadingText: 'Fetching Courses')
                   : _fieldLabel(
                       label: 'Courses',
@@ -82,7 +78,8 @@ class ProfileView extends StackedView<ProfileViewModel> {
 
               RoundButton(
                 label: 'Edit Courses',
-                onPressed: () async => await viewModel.goToEditClassesPageAsync(),
+                onPressed: () async =>
+                    await viewModel.goToEditClassesPageAsync(),
               )
             ],
           ),

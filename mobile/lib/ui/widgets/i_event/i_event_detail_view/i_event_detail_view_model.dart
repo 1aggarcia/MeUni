@@ -8,7 +8,7 @@ import '../../../../repository/i_events_repo.dart';
 import '../../../../services/auth_service.dart';
 import '../../../common/app_colors.dart';
 
-class IEventDetailViewModel<T extends IEvent> extends BaseViewModel {
+class IEventDetailViewModel<T extends IEvent> extends FutureViewModel {
   //* Private Properties
   final _authService = locator<AuthService>();
   final _dialogService = locator<DialogService>();
@@ -27,9 +27,11 @@ class IEventDetailViewModel<T extends IEvent> extends BaseViewModel {
   late final IEvent iEvent;
 
   //* Constructors
-  IEventDetailViewModel(this.iEventId) {
-    setBusy(true);
-  }
+  IEventDetailViewModel(this.iEventId);
+
+  //* Overridden Methods
+  @override
+  Future futureToRun() => getIEventAsync();
 
   //* Public Methods
   Future<void> getIEventAsync() async {
@@ -43,8 +45,6 @@ class IEventDetailViewModel<T extends IEvent> extends BaseViewModel {
       _navService.back();
     } else {
       iEvent = result;
-
-      setBusy(false);
     }
   }
 
