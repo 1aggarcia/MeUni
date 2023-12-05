@@ -18,11 +18,11 @@ class IEventDetailView<T extends IEvent>
   final String _label = T == Event ? 'Event' : 'Study Group';
 
   final TextStyle _labelTextStyle = const TextStyle(
-    fontSize: 24,
-    fontWeight: FontWeight.w700,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
   );
   final TextStyle _valueTextStyle = const TextStyle(
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: FontWeight.w700,
   );
 
@@ -72,19 +72,17 @@ class IEventDetailView<T extends IEvent>
                     children: [
                       // Title
                       _fieldLabel(
-                        label: viewModel.iEvent.title,
-                        value: viewModel.iEvent.desc
-                        // label: T == Event ? 'Title' : 'Course',
-                        // value: viewModel.iEvent.title,
+                        label: 'Full Title',
+                        value: viewModel.iEvent.title
                       ),
 
-                      //verticalSpaceMedium,
+                      verticalSpaceMedium,
 
                       // Description
-                      // _fieldLabel(
-                      //   label: 'Description',
-                      //   value: viewModel.iEvent.desc,
-                      // ),
+                      _fieldLabel(
+                        label: 'Description',
+                        value: viewModel.iEvent.desc
+                      ),
 
                       verticalSpaceMedium,
 
@@ -164,6 +162,11 @@ class IEventDetailView<T extends IEvent>
                           onPressed: () async => viewModel.canUnJoin
                               ? await viewModel.unJoinIEventAsync()
                               : await viewModel.joinIEventAsync(),
+                        ),
+                      if (viewModel.isUserHost)
+                        RoundButton(
+                          label: 'Delete $_label',
+                          onPressed: () async => await viewModel.deleteIEventAsync()
                         )
                     ],
                   ),
@@ -181,7 +184,7 @@ class IEventDetailView<T extends IEvent>
           label,
           style: _labelTextStyle,
         ),
-        verticalSpaceSmall,
+        verticalSpaceTiny,
         Text(
           value,
           style: _valueTextStyle,

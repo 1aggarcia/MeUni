@@ -25,6 +25,7 @@ abstract class IEventsRepo<T extends IEvent> {
 
   Future<bool> joinIEventAsync(String id);
   Future<bool> unJoinIEventAsync(String id);
+  Future<bool> deleteIEventAsync(String id);
 }
 
 class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
@@ -140,6 +141,20 @@ class IEventsRepoImpl<T extends IEvent> extends IEventsRepo<T> {
 
     var response = await _apiService.postAsync(
       T == Event ? Endpoints.unJoinEvent : Endpoints.unJoinStudyGroup,
+      body: jsonEncode(jsonBody),
+    );
+
+    return responseOk(response);
+  }
+
+  @override
+  Future<bool> deleteIEventAsync(String id) async {
+    var jsonBody = {
+      'id': id,
+    };
+
+    var response = await _apiService.postAsync(
+      T == Event ? Endpoints.deleteEvent : Endpoints.deleteStudyGroup,
       body: jsonEncode(jsonBody),
     );
 

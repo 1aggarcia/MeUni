@@ -114,6 +114,12 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
         iEvent.attendeeNames.remove(_authService.currUser.fullName);
   }
 
+  @override
+  Future<bool> deleteIEventAsync(String id) async {
+    return true; // not good
+    // just trying not to break the app the day before the release
+  }
+
   //* Private Methods
   List<Event> _getMockEvents() {
     return [

@@ -86,4 +86,24 @@ class IEventDetailViewModel<T extends IEvent> extends BaseViewModel {
 
     _navService.back();
   }
+
+  Future<void> deleteIEventAsync() async {
+    bool deleteSuccess =
+        await runBusyFuture(_iEventsRepo.deleteIEventAsync(iEventId));
+
+    if (deleteSuccess) {
+      await _dialogService.showDialog(
+        title: 'Success!',
+        description: 'Successfully deleted.',
+      );
+    } else {
+      await _dialogService.showDialog(
+        title: 'Failed!',
+        description:
+            'There was an error deleted the $_label.',
+      );
+    }
+
+    _navService.back();
+  }
 }
