@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import '../../../models/i_event.dart';
 import '../../common/app_colors.dart';
 
+const double titleFontSize = 20;
+const double textFontSize = 15;
+
 class IEventCard extends StatelessWidget {
   //* Public Properties
   final IEvent iEvent;
@@ -27,18 +30,19 @@ class IEventCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _cardLabel(iEvent.title),
-          _cardLabel(iEvent.desc),
-          _cardLabel('$startDate @ $startTime - $endTime'),
-          _cardLabel(iEvent.location),
+          _cardLabel(iEvent.title, titleFontSize),
+          _cardLabel(iEvent.desc, textFontSize),
+          _cardLabel('$startDate, $startTime - $endTime', textFontSize),
+          _cardLabel('@ ${iEvent.location}', textFontSize),
         ],
       ),
     );
   }
 
   //* Private Methods
-  Widget _cardLabel(String label) {
+  Widget _cardLabel(String label, double fontSize) {
     const cutOffPoint = 40;
+
 
     String cutLabel = label.length < cutOffPoint
         ? label
@@ -50,9 +54,9 @@ class IEventCard extends StatelessWidget {
         child: Text(
           cutLabel,
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: TextStyle(
             color: kcTextPrimaryColor,
-            fontSize: 15,
+            fontSize: fontSize,
             fontFamily: 'Hind Siliguri',
             fontWeight: FontWeight.w600,
             letterSpacing: 0.07,

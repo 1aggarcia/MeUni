@@ -51,7 +51,11 @@ class IEventDetailView<T extends IEvent>
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('$_label Detail'),
+          title: Text(
+            viewModel.isBusy
+            ? 'Loading $_label Details'
+            : viewModel.iEvent.title
+          ),
           backgroundColor: kcPrimaryColor,
           foregroundColor: kcSecondaryColor,
         ),
@@ -68,17 +72,19 @@ class IEventDetailView<T extends IEvent>
                     children: [
                       // Title
                       _fieldLabel(
-                        label: T == Event ? 'Title' : 'Course',
-                        value: viewModel.iEvent.title,
+                        label: viewModel.iEvent.title,
+                        value: viewModel.iEvent.desc
+                        // label: T == Event ? 'Title' : 'Course',
+                        // value: viewModel.iEvent.title,
                       ),
 
-                      verticalSpaceMedium,
+                      //verticalSpaceMedium,
 
                       // Description
-                      _fieldLabel(
-                        label: 'Description',
-                        value: viewModel.iEvent.desc,
-                      ),
+                      // _fieldLabel(
+                      //   label: 'Description',
+                      //   value: viewModel.iEvent.desc,
+                      // ),
 
                       verticalSpaceMedium,
 
