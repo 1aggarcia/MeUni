@@ -1,9 +1,9 @@
 import 'package:stacked/stacked.dart';
 
 enum NavView {
-  Events,
-  StudyGroups,
-  Profile,
+  events,
+  studyGroups,
+  profile,
 }
 
 class HomeViewModel extends IndexTrackingViewModel {

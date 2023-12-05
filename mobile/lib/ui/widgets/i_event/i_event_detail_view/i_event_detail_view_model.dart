@@ -125,7 +125,7 @@ class IEventDetailViewModel<T extends IEvent> extends FutureViewModel {
     await _navService.clearStackAndShow(
       Routes.homeView,
       arguments: HomeViewArguments(
-        initialView: T == Event ? NavView.Events : NavView.StudyGroups,
+        initialView: T == Event ? NavView.events : NavView.studyGroups,
       ),
     );
   }

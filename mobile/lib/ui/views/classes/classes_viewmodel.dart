@@ -28,7 +28,7 @@ class ClassesViewModel extends FormViewModel {
 
     await _navService.clearStackAndShow(
       Routes.homeView,
-      arguments: const HomeViewArguments(initialView: NavView.Profile),
+      arguments: const HomeViewArguments(initialView: NavView.profile),
     );
   }
 }

@@ -49,7 +49,7 @@ class CreateIEventViewModel<T extends IEvent> extends FormViewModel {
       await _navService.clearStackAndShow(
         Routes.homeView,
         arguments: HomeViewArguments(
-          initialView: T == Event ? NavView.Events : NavView.StudyGroups,
+          initialView: T == Event ? NavView.events : NavView.studyGroups,
         ),
       );
     }

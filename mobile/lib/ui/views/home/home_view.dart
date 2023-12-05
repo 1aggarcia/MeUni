@@ -9,10 +9,10 @@ import 'home_viewmodel.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
   //* Public Properties
-  NavView? initialView;
+  final NavView? initialView;
 
   //* Constructors
-  HomeView({super.key, this.initialView});
+  const HomeView({super.key, this.initialView});
 
   //* Overridden Methods
   @override
@@ -46,19 +46,19 @@ class HomeView extends StackedView<HomeViewModel> {
           onTap: viewModel.setIndex,
           items: [
             BottomNavigationBarItem(
-              icon: viewModel.currentView == NavView.Events
+              icon: viewModel.currentView == NavView.events
                   ? const Icon(Icons.home)
                   : const Icon(Icons.home_outlined),
               label: 'Events',
             ),
             BottomNavigationBarItem(
-              icon: viewModel.currentView == NavView.StudyGroups
+              icon: viewModel.currentView == NavView.studyGroups
                   ? const Icon(Icons.book)
                   : const Icon(Icons.book_outlined),
               label: 'Study Groups',
             ),
             BottomNavigationBarItem(
-              icon: viewModel.currentView == NavView.Profile
+              icon: viewModel.currentView == NavView.profile
                   ? const Icon(Icons.person)
                   : const Icon(Icons.person_outline),
               label: 'Profile',
@@ -72,13 +72,13 @@ class HomeView extends StackedView<HomeViewModel> {
   //* Private Methods
   Widget _getViewForView(NavView view) {
     switch (view) {
-      case NavView.Events:
+      case NavView.events:
         return const EventsView();
 
-      case NavView.StudyGroups:
+      case NavView.studyGroups:
         return const StudyGroupsView();
 
-      case NavView.Profile:
+      case NavView.profile:
         return const ProfileView();
 
       default:
