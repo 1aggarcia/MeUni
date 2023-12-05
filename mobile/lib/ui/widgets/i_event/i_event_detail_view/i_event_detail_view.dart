@@ -51,11 +51,8 @@ class IEventDetailView<T extends IEvent>
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            viewModel.isBusy
-            ? 'Loading ...'
-            : viewModel.iEvent.title
-          ),
+          title:
+              Text(viewModel.isBusy ? 'Loading ...' : viewModel.iEvent.title),
           backgroundColor: kcPrimaryColor,
           foregroundColor: kcSecondaryColor,
         ),
@@ -72,17 +69,13 @@ class IEventDetailView<T extends IEvent>
                     children: [
                       // Title
                       _fieldLabel(
-                        label: 'Full Title',
-                        value: viewModel.iEvent.title
-                      ),
+                          label: 'Full Title', value: viewModel.iEvent.title),
 
                       verticalSpaceMedium,
 
                       // Description
                       _fieldLabel(
-                        label: 'Description',
-                        value: viewModel.iEvent.desc
-                      ),
+                          label: 'Description', value: viewModel.iEvent.desc),
 
                       verticalSpaceMedium,
 
@@ -154,7 +147,7 @@ class IEventDetailView<T extends IEvent>
 
                       verticalSpaceMedium,
 
-                      if (!viewModel.isUserHost)
+                      if (!viewModel.isUserHost) ...[
                         RoundButton(
                           label: viewModel.canUnJoin
                               ? 'Leave $_label'
@@ -162,11 +155,12 @@ class IEventDetailView<T extends IEvent>
                           onPressed: () async => viewModel.canUnJoin
                               ? await viewModel.unJoinIEventAsync()
                               : await viewModel.joinIEventAsync(),
-                        ),
-                      if (viewModel.isUserHost)
+                        )
+                      ] else
                         RoundButton(
                           label: 'Delete $_label',
-                          onPressed: () async => await viewModel.deleteIEventAsync()
+                          onPressed: () async =>
+                              await viewModel.deleteIEventAsync(),
                         )
                     ],
                   ),

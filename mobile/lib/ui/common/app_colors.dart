@@ -10,5 +10,3 @@ const Color kcTextAccentColor = Color(0xFF685050);
 const Color kcTextErrorColor = Colors.red;
 
 const Color kcBackgroundColor = Color(0xFFEBE3DD);
-
-const Color kcBlue = Colors.blue;

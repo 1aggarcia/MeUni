@@ -48,6 +48,36 @@ class IEventDetailViewModel<T extends IEvent> extends BaseViewModel {
     }
   }
 
+  Future<void> deleteIEventAsync() async {
+    var dialogResponse = await _dialogService.showConfirmationDialog(
+      title: 'Are you sure you want to delete this $_label?',
+      description: 'This action cannot be undone',
+      confirmationTitleColor: kcTextErrorColor,
+      confirmationTitle: 'Delete',
+      cancelTitle: 'Go back',
+      cancelTitleColor: kcPrimaryColor,
+    );
+
+    if (dialogResponse != null && dialogResponse.confirmed) {
+      bool deleteSuccess =
+          await runBusyFuture(_iEventsRepo.deleteIEventAsync(iEventId));
+
+      if (deleteSuccess) {
+        await _dialogService.showDialog(
+          title: 'Success!',
+          description: 'Successfully deleted.',
+        );
+      } else {
+        await _dialogService.showDialog(
+          title: 'Failed!',
+          description: 'There was an error deleting the $_label.',
+        );
+      }
+
+      _navService.back();
+    }
+  }
+
   Future<void> joinIEventAsync() async {
     var joinSuccess =
         await runBusyFuture(_iEventsRepo.joinIEventAsync(iEventId));
@@ -84,38 +114,7 @@ class IEventDetailViewModel<T extends IEvent> extends BaseViewModel {
             'There was an error leaving the $_label. The $_label may be full.',
       );
     }
-    
+
     _navService.back();
-  }
-
-  Future<void> deleteIEventAsync() async {
-    DialogResponse<dynamic>? confirmation = await _dialogService.showConfirmationDialog(
-      title: 'Are you sure you want to delete this $_label?',
-      description: 'This action cannot be undone',
-      confirmationTitleColor: kcTextErrorColor,
-      confirmationTitle: 'Delete',
-      cancelTitle: 'Go back',
-      cancelTitleColor: kcBlue
-    );
-
-    if (confirmation != null && confirmation.confirmed) {
-      bool deleteSuccess =
-          await runBusyFuture(_iEventsRepo.deleteIEventAsync(iEventId));
-
-      if (deleteSuccess) {
-        await _dialogService.showDialog(
-          title: 'Success!',
-          description: 'Successfully deleted.',
-        );
-      } else {
-        await _dialogService.showDialog(
-          title: 'Failed!',
-          description:
-              'There was an error deleted the $_label.',
-        );
-      }
-
-      _navService.back();
-    }
   }
 }

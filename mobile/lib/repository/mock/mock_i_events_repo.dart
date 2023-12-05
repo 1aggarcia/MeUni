@@ -88,6 +88,18 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
   }
 
   @override
+  Future<bool> deleteIEventAsync(String id) async {
+    await Future.delayed(App.demoDuration);
+
+    try {
+      _iEvents.removeWhere((e) => e.id == id);
+      return true;
+    } catch (ex) {
+      return false;
+    }
+  }
+
+  @override
   Future<bool> joinIEventAsync(String id) async {
     IEvent? iEvent = await getIEventAsync(id);
 
@@ -112,12 +124,6 @@ class MockIEventsRepo<T extends IEvent> extends IEventsRepo<T> {
 
     return iEvent.attendees.remove(_authService.currUser.id) &&
         iEvent.attendeeNames.remove(_authService.currUser.fullName);
-  }
-
-  @override
-  Future<bool> deleteIEventAsync(String id) async {
-    return true; // not good
-    // just trying not to break the app the day before the release
   }
 
   //* Private Methods

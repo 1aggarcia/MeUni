@@ -4,9 +4,6 @@ import 'package:intl/intl.dart';
 import '../../../models/i_event.dart';
 import '../../common/app_colors.dart';
 
-const double titleFontSize = 20;
-const double textFontSize = 15;
-
 class IEventCard extends StatelessWidget {
   //* Public Properties
   final IEvent iEvent;
@@ -17,6 +14,9 @@ class IEventCard extends StatelessWidget {
   //* Overridden Methods
   @override
   Widget build(BuildContext context) {
+    const double titleFontSize = 20;
+    const double textFontSize = 15;
+
     final startDate = DateFormat.MMMEd().format(iEvent.startTime);
     final startTime = DateFormat.jm().format(iEvent.startTime);
     final endTime = DateFormat.jm().format(iEvent.endTime);
@@ -42,7 +42,6 @@ class IEventCard extends StatelessWidget {
   //* Private Methods
   Widget _cardLabel(String label, double fontSize) {
     const cutOffPoint = 40;
-
 
     String cutLabel = label.length < cutOffPoint
         ? label
