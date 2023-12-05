@@ -8,11 +8,16 @@ import '../study_groups/study_groups_view.dart';
 import 'home_viewmodel.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
-  const HomeView({super.key});
+  //* Public Properties
+  NavView? initialView;
+
+  //* Constructors
+  HomeView({super.key, this.initialView});
 
   //* Overridden Methods
   @override
-  HomeViewModel viewModelBuilder(BuildContext context) => HomeViewModel();
+  HomeViewModel viewModelBuilder(BuildContext context) =>
+      HomeViewModel(initialView);
 
   @override
   Widget builder(BuildContext context, HomeViewModel viewModel, Widget? child) {
@@ -31,7 +36,7 @@ class HomeView extends StackedView<HomeViewModel> {
           ),
         ),
         backgroundColor: kcBackgroundColor,
-        body: _getViewForIndex(viewModel.currentIndex),
+        body: _getViewForView(viewModel.currentView),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           backgroundColor: kcMediumGrey,
@@ -41,19 +46,19 @@ class HomeView extends StackedView<HomeViewModel> {
           onTap: viewModel.setIndex,
           items: [
             BottomNavigationBarItem(
-              icon: viewModel.currentIndex == 0
+              icon: viewModel.currentView == NavView.Events
                   ? const Icon(Icons.home)
                   : const Icon(Icons.home_outlined),
               label: 'Events',
             ),
             BottomNavigationBarItem(
-              icon: viewModel.currentIndex == 1
+              icon: viewModel.currentView == NavView.StudyGroups
                   ? const Icon(Icons.book)
                   : const Icon(Icons.book_outlined),
               label: 'Study Groups',
             ),
             BottomNavigationBarItem(
-              icon: viewModel.currentIndex == 2
+              icon: viewModel.currentView == NavView.Profile
                   ? const Icon(Icons.person)
                   : const Icon(Icons.person_outline),
               label: 'Profile',
@@ -65,15 +70,15 @@ class HomeView extends StackedView<HomeViewModel> {
   }
 
   //* Private Methods
-  Widget _getViewForIndex(int index) {
-    switch (index) {
-      case 0:
+  Widget _getViewForView(NavView view) {
+    switch (view) {
+      case NavView.Events:
         return const EventsView();
 
-      case 1:
+      case NavView.StudyGroups:
         return const StudyGroupsView();
 
-      case 2:
+      case NavView.Profile:
         return const ProfileView();
 
       default:

@@ -18,6 +18,7 @@ import 'package:meuni_mobile/ui/views/event_detail/event_detail_view.dart'
     as _i11;
 import 'package:meuni_mobile/ui/views/events/events_view.dart' as _i5;
 import 'package:meuni_mobile/ui/views/home/home_view.dart' as _i6;
+import 'package:meuni_mobile/ui/views/home/home_viewmodel.dart' as _i15;
 import 'package:meuni_mobile/ui/views/login/login_view.dart' as _i7;
 import 'package:meuni_mobile/ui/views/profile/profile_view.dart' as _i8;
 import 'package:meuni_mobile/ui/views/startup/startup_view.dart' as _i9;
@@ -26,7 +27,7 @@ import 'package:meuni_mobile/ui/views/study_group_detail/study_group_detail_view
 import 'package:meuni_mobile/ui/views/study_groups/study_groups_view.dart'
     as _i10;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i15;
+import 'package:stacked_services/stacked_services.dart' as _i16;
 
 class Routes {
   static const createEventView = '/create-event-view';
@@ -147,8 +148,12 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i6.HomeView: (data) {
+      final args = data.getArgs<HomeViewArguments>(
+        orElse: () => const HomeViewArguments(),
+      );
       return _i14.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i6.HomeView(),
+        builder: (context) =>
+            _i6.HomeView(key: args.key, initialView: args.initialView),
         settings: data,
       );
     },
@@ -207,6 +212,33 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
+class HomeViewArguments {
+  const HomeViewArguments({
+    this.key,
+    this.initialView,
+  });
+
+  final _i14.Key? key;
+
+  final _i15.NavView? initialView;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "initialView": "$initialView"}';
+  }
+
+  @override
+  bool operator ==(covariant HomeViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.initialView == initialView;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ initialView.hashCode;
+  }
+}
+
 class EventDetailViewArguments {
   const EventDetailViewArguments({
     this.key,
@@ -261,7 +293,7 @@ class StudyGroupDetailViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i15.NavigationService {
+extension NavigatorStateExtension on _i16.NavigationService {
   Future<dynamic> navigateToCreateEventView([
     int? routerId,
     bool preventDuplicates = true,
@@ -318,14 +350,17 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToHomeView([
+  Future<dynamic> navigateToHomeView({
+    _i14.Key? key,
+    _i15.NavView? initialView,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.homeView,
+        arguments: HomeViewArguments(key: key, initialView: initialView),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -493,14 +528,17 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithHomeView([
+  Future<dynamic> replaceWithHomeView({
+    _i14.Key? key,
+    _i15.NavView? initialView,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.homeView,
+        arguments: HomeViewArguments(key: key, initialView: initialView),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

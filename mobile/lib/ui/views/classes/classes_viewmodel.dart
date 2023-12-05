@@ -2,8 +2,10 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../app/app.router.dart';
 import '../../../repository/users_repo.dart';
 import '../../../services/auth_service.dart';
+import '../home/home_viewmodel.dart';
 import 'classes_view.form.dart';
 
 class ClassesViewModel extends FormViewModel {
@@ -24,7 +26,10 @@ class ClassesViewModel extends FormViewModel {
       );
     }
 
-    _navService.back();
+    await _navService.clearStackAndShow(
+      Routes.homeView,
+      arguments: const HomeViewArguments(initialView: NavView.Profile),
+    );
   }
 }
 

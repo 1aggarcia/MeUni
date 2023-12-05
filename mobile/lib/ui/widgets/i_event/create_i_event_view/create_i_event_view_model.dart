@@ -3,8 +3,11 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app.locator.dart';
+import '../../../../app/app.router.dart';
+import '../../../../models/event.dart';
 import '../../../../models/i_event.dart';
 import '../../../../repository/i_events_repo.dart';
+import '../../../views/home/home_viewmodel.dart';
 import 'create_i_event_view.form.dart';
 
 class CreateIEventViewModel<T extends IEvent> extends FormViewModel {
@@ -43,7 +46,12 @@ class CreateIEventViewModel<T extends IEvent> extends FormViewModel {
         ),
       );
 
-      _navService.back();
+      await _navService.clearStackAndShow(
+        Routes.homeView,
+        arguments: HomeViewArguments(
+          initialView: T == Event ? NavView.Events : NavView.StudyGroups,
+        ),
+      );
     }
   }
 

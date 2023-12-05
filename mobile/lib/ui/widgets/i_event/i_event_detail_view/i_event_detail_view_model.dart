@@ -2,11 +2,13 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../../app/app.locator.dart';
+import '../../../../app/app.router.dart';
 import '../../../../models/event.dart';
 import '../../../../models/i_event.dart';
 import '../../../../repository/i_events_repo.dart';
 import '../../../../services/auth_service.dart';
 import '../../../common/app_colors.dart';
+import '../../../views/home/home_viewmodel.dart';
 
 class IEventDetailViewModel<T extends IEvent> extends FutureViewModel {
   //* Private Properties
@@ -42,7 +44,7 @@ class IEventDetailViewModel<T extends IEvent> extends FutureViewModel {
         description: 'Please try again another time.',
       );
 
-      _navService.back();
+      await _goBackAsync();
     } else {
       iEvent = result;
     }
@@ -74,7 +76,7 @@ class IEventDetailViewModel<T extends IEvent> extends FutureViewModel {
         );
       }
 
-      _navService.back();
+      await _goBackAsync();
     }
   }
 
@@ -95,7 +97,7 @@ class IEventDetailViewModel<T extends IEvent> extends FutureViewModel {
       );
     }
 
-    _navService.back();
+    await _goBackAsync();
   }
 
   Future<void> unJoinIEventAsync() async {
@@ -115,6 +117,16 @@ class IEventDetailViewModel<T extends IEvent> extends FutureViewModel {
       );
     }
 
-    _navService.back();
+    await _goBackAsync();
+  }
+
+  //* Private Methods
+  Future<void> _goBackAsync() async {
+    await _navService.clearStackAndShow(
+      Routes.homeView,
+      arguments: HomeViewArguments(
+        initialView: T == Event ? NavView.Events : NavView.StudyGroups,
+      ),
+    );
   }
 }
