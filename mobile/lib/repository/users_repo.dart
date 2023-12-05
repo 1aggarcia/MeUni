@@ -7,7 +7,7 @@ import '../models/user.dart';
 import '../services/api_service.dart';
 
 abstract class UsersRepo {
-  Future<User> addUserAsync({
+  Future<User?> addUserAsync({
     required String id,
     required String firstName,
     required String lastName,
@@ -32,11 +32,38 @@ class UsersRepoImpl extends UsersRepo {
 
   //* Overridden Methods
   @override
+  Future<User?> addUserAsync({
+    required String id,
+    required String firstName,
+    required String lastName,
+    required int year,
+    required String pronouns,
+  }) async {
+    User user = User(
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      year: year,
+      pronouns: pronouns,
+      admin: false,
+    );
+
+    Response response = await _apiService.postAsync(
+      Endpoints.createUser,
+      body: _userToJson(user),
+    );
+
+    String apiId = response.body;
+    return apiId == user.id ? user : null;
+  }
+
+  @override
   Future<User?> getUserAsync(String id) async {
     Response response = await _apiService.getAsync(
       Endpoints.getUser,
       params: {'id': id},
     );
+
     return _userFromJson(response.body);
   }
 
@@ -44,15 +71,26 @@ class UsersRepoImpl extends UsersRepo {
   Future<bool> addUserClassAsync({
     required String id,
     required String className,
-  }) {
-    // TODO: implement addUserClassAsync
-    throw UnimplementedError();
+  }) async {
+    Response response = await _apiService.postAsync(
+      Endpoints.createUserClass,
+      body: jsonEncode({
+        'userId': id,
+        'course': className,
+      }),
+    );
+
+    return responseOk(response);
   }
 
   @override
-  Future<List<String>> getUserClassesAsync(String id) {
-    // TODO: implement getUserClassesAsync
-    throw UnimplementedError();
+  Future<List<String>> getUserClassesAsync(String id) async {
+    Response response = await _apiService.getAsync(
+      Endpoints.getUserClasses,
+      params: {'id': id},
+    );
+
+    return _classesFromJson(response.body);
   }
 
   @override
@@ -64,20 +102,11 @@ class UsersRepoImpl extends UsersRepo {
     );
   }
 
-  @override
-  Future<User> addUserAsync({
-    required String id,
-    required String firstName,
-    required String lastName,
-    required int year,
-    required String pronouns,
-  }) {
-    // TODO: implement addUserAsync
-    throw UnimplementedError();
-  }
-
   //* Private Methods
-  User _userFromJson(String str) => User.fromJson(json.decode(str));
+  List<String> _classesFromJson(String json) =>
+      List<String>.from(jsonDecode(json));
 
-  String _userToJson(User data) => json.encode(data.toJson());
+  User _userFromJson(String json) => User.fromJson(jsonDecode(json));
+
+  String _userToJson(User data) => jsonEncode(data.toJson());
 }

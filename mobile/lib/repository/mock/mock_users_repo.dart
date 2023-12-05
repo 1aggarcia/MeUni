@@ -39,7 +39,7 @@ class MockUsersRepo extends UsersRepo {
 
   //* Public Properties
   @override
-  Future<User> addUserAsync({
+  Future<User?> addUserAsync({
     required String id,
     required String firstName,
     required String lastName,

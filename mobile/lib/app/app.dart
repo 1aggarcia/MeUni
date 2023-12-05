@@ -56,7 +56,7 @@ import '../ui/views/study_groups/study_groups_view.dart';
       classType: IEventsRepoImpl<StudyGroup>,
       asType: IEventsRepo<StudyGroup>,
     ),
-    LazySingleton(classType: MockUsersRepo, asType: UsersRepo),
+    LazySingleton(classType: UsersRepoImpl, asType: UsersRepo),
     LazySingleton(classType: NavigationService),
 // @stacked-service
   ],
