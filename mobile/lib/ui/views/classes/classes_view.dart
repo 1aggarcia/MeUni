@@ -87,8 +87,10 @@ class ClassesView extends StackedView<ClassesViewModel> with $ClassesView {
                     // Add Class
                     RoundButton(
                       label: 'Add Class',
-                      onPressed: () async => await viewModel.addClassAsync(),
-                    )
+                      onPressed: viewModel.isFormValid
+                          ? () async => await viewModel.addClassAsync()
+                          : null,
+                    ),
                   ],
                 ),
               ),

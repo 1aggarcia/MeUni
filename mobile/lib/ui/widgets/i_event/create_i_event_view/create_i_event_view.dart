@@ -7,6 +7,7 @@ import '../../../../models/i_event.dart';
 import '../../../common/app_colors.dart';
 import '../../../common/ui_helpers.dart';
 import '../../loading_indicator.dart';
+import '../../round_button.dart';
 import 'create_i_event_view.form.dart';
 import 'create_i_event_view_model.dart';
 
@@ -81,7 +82,7 @@ class CreateIEventView<T extends IEvent>
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Event Name
                       TextFormField(
@@ -204,17 +205,14 @@ class CreateIEventView<T extends IEvent>
                       verticalSpaceSmall,
 
                       // Add Event Button
-                      MaterialButton(
-                        color: kcPrimaryColor,
-                        disabledColor: kcPrimaryColor.withAlpha(100),
+                      RoundButton(
+                        label: 'Add $_label',
                         onPressed: viewModel.isFormValid
                             ? () async => await viewModel.addIEventAsync()
                             : null,
-                        child: Text(
-                          'Add $_label',
-                          style: const TextStyle(color: kcSecondaryColor),
-                        ),
                       ),
+
+                      verticalSpaceSmall,
                     ],
                   ),
                 ),

@@ -24,10 +24,10 @@ final Map<String, FocusNode> _CreateProfileViewFocusNodes = {};
 
 final Map<String, String? Function(String?)?>
     _CreateProfileViewTextValidations = {
-  FirstNameValueKey: null,
-  LastNameValueKey: null,
+  FirstNameValueKey: CreateProfileValidators.validateNonEmpty,
+  LastNameValueKey: CreateProfileValidators.validateNonEmpty,
   YearValueKey: CreateProfileValidators.validateYear,
-  PronounsValueKey: null,
+  PronounsValueKey: CreateProfileValidators.validateNonEmpty,
 };
 
 mixin $CreateProfileView {

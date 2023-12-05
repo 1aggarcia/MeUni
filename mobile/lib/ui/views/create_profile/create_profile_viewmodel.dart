@@ -42,4 +42,16 @@ class CreateProfileValidators {
 
     return null;
   }
+
+  static String? validateNonEmpty(String? value) {
+    if (value == null) {
+      return null;
+    }
+
+    if (value.isEmpty) {
+      return '';
+    }
+
+    return null;
+  }
 }

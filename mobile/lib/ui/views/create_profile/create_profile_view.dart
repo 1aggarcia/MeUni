@@ -9,13 +9,22 @@ import 'create_profile_view.form.dart';
 import 'create_profile_viewmodel.dart';
 
 @FormView(fields: [
-  FormTextField(name: 'firstName'),
-  FormTextField(name: 'lastName'),
+  FormTextField(
+    name: 'firstName',
+    validator: CreateProfileValidators.validateNonEmpty,
+  ),
+  FormTextField(
+    name: 'lastName',
+    validator: CreateProfileValidators.validateNonEmpty,
+  ),
   FormTextField(
     name: 'year',
     validator: CreateProfileValidators.validateYear,
   ),
-  FormTextField(name: 'pronouns'),
+  FormTextField(
+    name: 'pronouns',
+    validator: CreateProfileValidators.validateNonEmpty,
+  ),
 ])
 class CreateProfileView extends StackedView<CreateProfileViewModel>
     with $CreateProfileView {
@@ -114,11 +123,13 @@ class CreateProfileView extends StackedView<CreateProfileViewModel>
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: kcPrimaryColor,
+                        disabledBackgroundColor: kcPrimaryColor.withAlpha(120),
                         foregroundColor: kcSecondaryColor,
                         minimumSize: const Size(double.infinity, 50),
                       ),
-                      onPressed: () async =>
-                          await viewModel.createProfileAsync(),
+                      onPressed: viewModel.isFormValid
+                          ? () async => await viewModel.createProfileAsync()
+                          : null,
                       child: const Text('Create Profile'),
                     ),
                   ],
