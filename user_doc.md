@@ -2,7 +2,7 @@
 MeUni is a mobile platform where UW students can meet new friends based on their hobbies and interests. Users can also meet based on similar school schedules or interest in school events/organization, and form study groups. It is avaliable for Android and iOS systems. MeUni serves to make it easy to organize small meetups with other students who share the same interests and view events all throuought campus, fostering new connections.
 
 # How to Install MeUni
-We expect MeUni to be installable on at least Android devices through an APK file. A link to download will be provided in the project's README file. Users download the file and open it to install. Google Play charges a one time $25 fee to publish apps and the App Store a $99 annual fee, but supplying APKs through a third-party is free.
+For the version v1.0, MeUni is installable at Android devices through the APK file in the assets section of the [v1.0]() release page. The system will likely give you warnings saying the file is unsafe upon download, and block the app upon installation, since we are not verified developers on the Play Store. You may bypass this warning by tapping "More Details", then "Install Anyway" when opening the .apk file.
 
 # How to Run MeUni
 Once installed, MeUni appears on the home screen of your smartphone. Click on the app, and it starts to run.
