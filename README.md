@@ -35,7 +35,7 @@ The repo is setup as such:
 - the mobile directory contains logic for our views and view model, where we capture information given by the user to route to the backend and present server communicated details through the UI accordingly. This code is all included in the user APK.
 
 Final Release APK:
-- This APK file is the easiest way to run MeUni, allowing you to directly install the v1.0 version of MeUni to an Android System. The system will likely give you warnings saying the file is unsafe upon download, and block the app upon installation, since we are not verified developers on the Play Store. You may bypass this warning by tapping "More Details", then "Install Anyway" when opening the .apk file.
+- This APK file is the easiest way to run MeUni, allowing you to directly install the v1.0 version of MeUni to an Android System. MeUni is installable on Android devices by downloading the .apk file "MeUni_Android.apk" in the "Assets" section of the [v1.0 release page](https://github.com/SunnySoldier357/MeUni/releases/tag/v1.0). The system will likely give you warnings saying the file is unsafe upon download, and block the app upon installation, since we are not verified developers in the Google Play Store. You may bypass this warning by tapping "More Details", then "Install Anyway" when opening the .apk file.
 
 How to Build, Test, and Run this System Application (Instructions are for Setup with Android Studio and IDE Emulator)
 - Install Flutter SDK compatible to your OS system (https://docs.flutter.dev/get-started/install). Follow all steps in documentation for complete setup.
