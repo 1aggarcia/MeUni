@@ -3,39 +3,39 @@ import '../users_repo.dart';
 
 class MockUsersRepo extends UsersRepo {
   List<User> users = [
-      User(
-        id: '0',
-        firstName: 'Fei',
-        lastName: 'Huang',
-        year: 4,
-        pronouns: 'He/Him',
-        admin: true,
-      ),
-      User(
-        id: '1',
-        firstName: 'John',
-        lastName: 'Stuart',
-        year: 3,
-        pronouns: 'He/Him',
-        admin: false,
-      ),
-      User(
-        id: '2',
-        firstName: 'Hannah',
-        lastName: 'Brown',
-        year: 1,
-        pronouns: 'She/Her',
-        admin: false,
-      ),
-      User(
-        id: '3',
-        firstName: 'Ronald',
-        lastName: 'McDonald',
-        year: 2,
-        pronouns: 'He/Him',
-        admin: false,
-      )
-    ];
+    User(
+      id: '0',
+      firstName: 'Fei',
+      lastName: 'Huang',
+      year: 4,
+      pronouns: 'He/Him',
+      admin: true,
+    ),
+    User(
+      id: '1',
+      firstName: 'John',
+      lastName: 'Stuart',
+      year: 3,
+      pronouns: 'He/Him',
+      admin: false,
+    ),
+    User(
+      id: '2',
+      firstName: 'Hannah',
+      lastName: 'Brown',
+      year: 1,
+      pronouns: 'She/Her',
+      admin: false,
+    ),
+    User(
+      id: '3',
+      firstName: 'Ronald',
+      lastName: 'McDonald',
+      year: 2,
+      pronouns: 'He/Him',
+      admin: false,
+    )
+  ];
 
   //* Overriden Methods
 
@@ -61,5 +61,20 @@ class MockUsersRepo extends UsersRepo {
 
   List<User> getMockUsers() {
     return users;
+  }
+
+  @override
+  Future<List<String>> getUserCoursesAsync(String id) async {
+    return [];
+  }
+
+  @override
+  Future<bool> addUserCoursesAsync(String userId, String course) async {
+    return false;
+  }
+
+  @override
+  Future<bool> removeUserCoursesAsync(String userId, String course) async {
+    return false;
   }
 }
