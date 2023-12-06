@@ -64,7 +64,7 @@ class UsersRepoImpl extends UsersRepo {
       params: {'id': id},
     );
 
-    return _userFromJson(response.body);
+    return responseOk(response) ? _userFromJson(response.body) : null;
   }
 
   @override
