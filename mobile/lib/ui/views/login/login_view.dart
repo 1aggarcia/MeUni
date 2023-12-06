@@ -1,100 +1,68 @@
+import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked/stacked_annotations.dart';
 
+import '../../common/app_colors.dart';
 import '../../common/ui_helpers.dart';
-import 'login_view.form.dart';
+import '../../widgets/loading_indicator.dart';
 import 'login_viewmodel.dart';
 
-@FormView(fields: [
-  FormTextField(name: 'Username', validator: LoginValidators.validateUsername),
-  FormTextField(name: 'Password', validator: LoginValidators.validatePassword),
-])
-class LoginView extends StackedView<LoginViewModel> with $LoginView {
-  const LoginView({Key? key}) : super(key: key);
+class LoginView extends StackedView<LoginViewModel> {
+  const LoginView({super.key});
+
+  //* Overridden Methods
+  @override
+  LoginViewModel viewModelBuilder(BuildContext context) => LoginViewModel();
 
   @override
   Widget builder(
       BuildContext context, LoginViewModel viewModel, Widget? child) {
-    const labelTextStyle = TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w700,
-    );
-
-    const errorTextStyle = TextStyle(
-      color: Colors.red,
-      fontSize: 12,
-      fontWeight: FontWeight.w700,
-    );
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: Container(
-        padding: const EdgeInsets.only(left: 25.0, right: 25.0),
-        child: SingleChildScrollView(
+      backgroundColor: kcBackgroundColor,
+      body: SafeArea(
+        child: Center(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              verticalSpaceMedium,
-
-              // UserName
               const Text(
-                'UserName',
-                style: labelTextStyle,
-              ),
-              verticalSpaceSmall,
-              TextFormField(controller: usernameController),
-              if (viewModel.hasUsernameValidationMessage) ...[
-                verticalSpaceTiny,
-                Text(
-                  viewModel.usernameValidationMessage!,
-                  style: errorTextStyle,
+                'MeUni',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: kcTextAccentColor,
+                  fontSize: 96,
+                  fontFamily: 'Cupertino',
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-
-              verticalSpaceMedium,
-
-              // Password
+              ),
               const Text(
-                'Password',
-                style: labelTextStyle,
-              ),
-              verticalSpaceSmall,
-              TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-              ),
-              if (viewModel.hasPasswordValidationMessage) ...[
-                verticalSpaceTiny,
-                Text(
-                  viewModel.passwordValidationMessage!,
-                  style: errorTextStyle,
-                ),
-                verticalSpaceSmall,
-              ],
-
-              // Login Button
-              MaterialButton(
-                color: Colors.black,
-                onPressed: () async => await viewModel.loginUser(),
-                child: const Text(
-                  'Login',
-                  style: TextStyle(color: Colors.white),
+                'All Kind of Friendship',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF614545),
+                  fontSize: 21,
+                  fontFamily: 'Libre Baskerville',
+                  fontWeight: FontWeight.w400,
+                  height: 0,
                 ),
               ),
+              verticalSpaceMassive,
+              viewModel.isBusy
+                  ? const LoadingIndicator(
+                      loadingText: 'Logging in',
+                    )
+                  : GoogleAuthButton(
+                      onPressed: viewModel.signInWithGoogleAsync,
+                      style: const AuthButtonStyle(
+                        buttonColor: Color(0xff428554),
+                        iconSize: 24,
+                        iconBackground: Colors.white,
+                        buttonType: AuthButtonType.secondary,
+                      ),
+                    ),
             ],
           ),
         ),
       ),
     );
   }
-
-  @override
-  void onViewModelReady(LoginViewModel viewModel) =>
-      syncFormWithViewModel(viewModel);
-
-  @override
-  LoginViewModel viewModelBuilder(BuildContext context) => LoginViewModel();
 }

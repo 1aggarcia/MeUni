@@ -3,66 +3,33 @@ import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
 import '../../../app/app.router.dart';
-import '../../../models/user.dart';
-import '../../../repository/users_repo.dart';
-import './login_view.form.dart';
+import '../../../services/auth_service.dart';
 
-class LoginViewModel extends FormViewModel {
+class LoginViewModel extends BaseViewModel {
   //* Private Properties
-  final _userRepo = locator<UsersRepo>();
-
-  final _navigationService = locator<NavigationService>();
-
-  //* Public Properties
-  bool isLoading = false;
+  final _authService = locator<AuthService>();
+  final _dialogService = locator<DialogService>();
+  final _navService = locator<NavigationService>();
 
   //* Public Methods
-  Future loginUser() async {
-    if (isFormValid) {
-      isLoading = true;
-      rebuildUi();
+  Future<void> signInWithGoogleAsync() async {
+    setBusy(true);
 
-      int id = 0;
-      String userName = usernameValue!;
-      if (userName == 'Fei') {
-        id = 1;
-      } else if (usernameValue == 'John') {
-        id = 2;
+    if (await _authService.loginAsync()) {
+      // Login Success!
+      if (_authService.isLoggedIn) {
+        await _navService.replaceWithHomeView();
       } else {
-        return null;
+        await _navService.replaceWithCreateProfileView();
       }
-
-      User user = await _userRepo.getUserAsync(id);
-      _userRepo.loggedInUser = user;
-
-      isLoading = false;
-      _navigationService.replaceWithEventsView();
-    }
-  }
-}
-
-class LoginValidators {
-  static String? validateUsername(String? username) {
-    if (username == null) {
-      return null;
+    } else {
+      // Login Failed
+      await _dialogService.showDialog(
+        title: 'Error!',
+        description: 'Please try again another time.',
+      );
     }
 
-    if (username.isEmpty) {
-      return 'Username not recognized';
-    }
-
-    return null;
-  }
-
-  static String? validatePassword(String? password) {
-    if (password == null) {
-      return null;
-    }
-
-    if (password.isEmpty) {
-      return 'Incorrect Password';
-    }
-
-    return null;
+    setBusy(false);
   }
 }

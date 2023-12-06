@@ -1,59 +1,41 @@
 import 'package:flutter/material.dart';
 
-class RoundButton extends MaterialButton {
+import '../common/app_colors.dart';
+
+class RoundButton extends StatelessWidget {
   //* Public Properties
   final String label;
+  final VoidCallback? onPressed;
 
   //* Constructors
   const RoundButton({
-    required super.key,
+    super.key,
     required this.label,
-    VoidCallback? onPressed,
-  }) : super(onPressed: onPressed);
+    this.onPressed,
+  });
 
-  //* Overriden Methods
+  //* Overridden Methods
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-          clipBehavior: Clip.antiAlias,
-          decoration: ShapeDecoration(
-            color: const Color(0xFF2B2E4A),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(999),
-            ),
-            shadows: const [
-              BoxShadow(
-                color: Color(0x3F000000),
-                blurRadius: 4,
-                offset: Offset(0, 4),
-                spreadRadius: 0,
-              )
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontFamily: 'Lato',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ],
-          ),
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.all(15),
+        backgroundColor: kcPrimaryColor,
+        disabledBackgroundColor: kcPrimaryColor.withAlpha(120),
+        foregroundColor: kcSecondaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
         ),
-      ],
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          color: kcSecondaryColor,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 }

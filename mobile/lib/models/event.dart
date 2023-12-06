@@ -1,77 +1,38 @@
-import 'dart:convert';
+import 'i_event.dart';
 
-Event eventFromJson(String str) {
-  var decode = json.decode(str);
-  return Event.fromJson(decode);
-}
+class Event extends IEvent {
+  //* Private Properties
+  final String _title;
 
-String eventToJson(Event data) => json.encode(data.toJson());
-
-List<Event> eventsFromJson(String str) =>
-    List<Event>.from(json.decode(str).map((x) => Event.fromJson(x)));
-
-String eventsToJson(List<Event> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-
-class Event {
   //* Public Properties
-  final int id;
-
-  final String title;
-  final String desc;
-  final String location;
-
-  final int max;
-
-  final DateTime startTime;
-  final DateTime endTime;
-
-  final int hostId;
-  final String hostName;
-  final List<int> attendees;
+  @override
+  String get title => _title;
 
   //* Constructors
-  Event(
-      {required this.id,
-      required this.title,
-      required this.desc,
-      required this.location,
-      required this.max,
-      required this.startTime,
-      required this.endTime,
-      required this.hostId,
-      required this.hostName,
-      required this.attendees});
+  Event({
+    required super.id,
+    required String title,
+    required super.desc,
+    required super.location,
+    required super.max,
+    required super.startTime,
+    required super.endTime,
+    required super.hostId,
+    required super.hostName,
+    required super.attendees,
+    super.attendeeNames,
+  }) : _title = title;
 
-  factory Event.fromJson(Map<String, dynamic> json) {
+  Event.fromJson(super.json)
+      : _title = json['title'],
+        super.fromJson();
 
-    List<int> attendees = List<int>.from(json['attendees']);
+  //* Overridden Methods
+  @override
+  Map<String, dynamic> toJson() {
+    var map = super.toJson();
+    map['title'] = _title;
 
-    return Event(
-        id: json['id'],
-        title: json['title'],
-        desc: json['desc'],
-        location: json['location'],
-        max: json['max'],
-        startTime: DateTime.parse(json['startTime']),
-        endTime: DateTime.parse(json['endTime']),
-        hostId: json['hostId'],
-        hostName: json['hostName'],
-        attendees: attendees,
-    );
+    return map;
   }
-
-  Map<String, dynamic> toJson() => {
-    'id' : id,
-    'title': title,
-    'desc': desc,
-    'location' : location,
-    'max' : max,
-    'startTime' : startTime.toIso8601String(),
-    'endTime' : endTime.toIso8601String(),
-    'hostId' : hostId,
-    'hostName' : hostName,
-    'attendees' : attendees,
-  };
 }
