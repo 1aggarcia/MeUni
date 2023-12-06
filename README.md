@@ -1,6 +1,6 @@
 # MeUni
 
-**Beta Milestone version name id: v0.1**
+**Final Release version name id: v1.0**
 
 MeUni is a mobile-based application where customers will meet new friends based on their hobbies and interests. Users can also meet based on similar school schedules or interest in school events/organization, and form study groups. Our target customers are university students who have a hard time looking for friends to do particular hobbies or activities with, or studying with others in the same classes. The goal of our product is to help them get connected with other previously-unknown fellow students who would participate in the activities. For example, let’s say a student wants to play a golf game with someone, but he or she doesn’t know anyone who would be interested in playing golf. Then he or she can make a post saying that he or she is looking for someone to play a golf game with. Given that this product is geared towards college students, it will incorporate some aspects of their academics. Users may input their class schedules to connect to other users with similar schedules, or even find other students in the same class. This way students may form study groups and organize meetings through MeUni.
 
@@ -31,8 +31,11 @@ Additionally, these features were not initially planned as must-have but would b
 
 The repo is setup as such:
 - top level weekly report directory has our progress, updates, and issues for eah week as we are developing the application
-- the api directory contains logic regarding our database and server setup
-- the mobile directory contains logic for our views and view model, where we capture information given by the user to route to the backend and present server communicated details through the UI accordingly
+- the api directory contains logic regarding our database and server setup. This code runs on Google Could Run.
+- the mobile directory contains logic for our views and view model, where we capture information given by the user to route to the backend and present server communicated details through the UI accordingly. This code is all included in the user APK.
+
+Final Release APK:
+- This APK file is the easiest way to run MeUni, allowing you to directly install the v1.0 version of MeUni to an Android System. The system will likely give you warnings saying the file is unsafe upon download, and block the app upon installation, since we are not verified developers on the Play Store. You may bypass this warning by tapping "More Details", then "Install Anyway" when opening the .apk file.
 
 How to Build, Test, and Run this System Application (Instructions are for Setup with Android Studio and IDE Emulator)
 - Install Flutter SDK compatible to your OS system (https://docs.flutter.dev/get-started/install). Follow all steps in documentation for complete setup.
