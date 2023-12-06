@@ -4,7 +4,6 @@ import '../repository/events_repo.dart';
 import 'controller.dart';
 import 'event_study_controller.dart';
 
-// may want to consider a generic name for this param
 final paramName = 'studyGroupId';
 final _studyGroupsRepo = EventsRepoImpl('study_groups', paramName);
 

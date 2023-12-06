@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-final int maxCapacity = 15;
+final int maxCapacity = 15; // maximum number of users that can join an event
+final int maxStringLength = 333; // combined total of 999 characters max per event
 
 class Event {
   String? id;
@@ -33,15 +34,16 @@ class Event {
   });
 
   /// Creates an instance event from a json map.
-  /// * requires json['title'] is String
-  /// * requires json['desc'] is String
-  /// * requires json['location'] is String
-  /// * requires json['max'] is int
+  /// * requires json['title'] is String with length 1-333
+  /// * requires json['desc'] is String with length 1-333
+  /// * requires json['location'] is String with length 1-333
+  /// * requires json['max'] is int within range 1-15
   /// * requires json['startTime'] is String formatted as ISO timestamp
   /// * requires json['endTime'] is String formatted as ISO timestamp
   /// * requires json['hostId'] is String
   /// * requires json['attendees'] is List<String> or null
   factory Event.fromJson(Map<String, dynamic> json) {
+    // Check requirements part 1: check types for required params
     if (json['title'] is! String ||
         json['desc'] is! String ||
         json['location'] is! String ||
@@ -52,12 +54,22 @@ class Event {
       throw Exception(
           'json map passed in with incorrect or missing params for Event:\n$json');
     }
+    // part 2: check that params with limited ranges are within those ranges
     if (1 > json['max'] || json['max'] > maxCapacity) {
-      throw Exception(
-          "param 'max' must be within range 1-$maxCapacity:\n$json");
+      throw Exception("param 'max' must be within range 1-$maxCapacity:\n$json");
     }
-    List<String> attendees = [];
+    if (json['title'].isEmpty || json['title'].length > maxStringLength) {
+      throw Exception('Title is too long/short: len ${json['title'].length} chars');
+    }
+    if (json['desc'].isEmpty || json['desc'].length > maxStringLength) {
+      throw Exception('Description is too long/short: ${json['desc'].length} chars');
+    }
+    if (json['location'].isEmpty || json['location'].length > maxStringLength) {
+      throw Exception('Location is too long/short: ${json['location'].length} chars');
+    }
 
+    // part 3: check type of optional attendees param
+    List<String> attendees = [];
     if (json['attendees'] is List<dynamic>) {
       attendees = List<String>.from(json['attendees']);
     } else if (json['attendees'] != null) {
@@ -65,6 +77,7 @@ class Event {
           "Optional param 'attendees' must be of type List<String> if included:\n$json");
     }
 
+    // all requirements met: create event
     return Event(
       title: json['title'],
       desc: json['desc'],
